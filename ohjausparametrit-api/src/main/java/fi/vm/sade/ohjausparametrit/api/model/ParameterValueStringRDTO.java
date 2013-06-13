@@ -22,6 +22,15 @@ public class ParameterValueStringRDTO extends ParameterValueRDTO {
 
     private String value;
 
+    public ParameterValueStringRDTO() {
+        super();
+    }
+
+    public ParameterValueStringRDTO(String value) {
+        this();
+        this.value = value;
+    }
+
     public String getValue() {
         return value;
     }

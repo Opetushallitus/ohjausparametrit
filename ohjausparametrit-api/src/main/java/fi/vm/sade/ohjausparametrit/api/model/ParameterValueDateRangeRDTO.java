@@ -20,10 +20,20 @@ import java.util.Date;
  *
  * @author mlyly
  */
-public class ParameterValueDateRangeRDTO {
+public class ParameterValueDateRangeRDTO extends ParameterValueRDTO {
 
     private Date start;
     private Date end;
+
+    public ParameterValueDateRangeRDTO() {
+        super();
+    }
+
+    public ParameterValueDateRangeRDTO(Date start, Date end) {
+        this();
+        this.start = start;
+        this.end = end;
+    }
 
     public Date getStart() {
         return start;

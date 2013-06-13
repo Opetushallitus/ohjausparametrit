@@ -42,7 +42,7 @@ public class ParameterDAOImpl implements ParameterDAO {
 
     @Override
     public List<Parameter> findAllParameters() {
-        LOG.info("findAllParameters()");
+        LOG.debug("findAllParameters()");
 
         QParameter p = QParameter.parameter;
         JPAQuery q = new JPAQuery(em).from(p);
@@ -51,7 +51,7 @@ public class ParameterDAOImpl implements ParameterDAO {
 
     @Override
     public List<ParameterValue> findAllParameterValues() {
-        LOG.info("findAllParameterValues()");
+        LOG.debug("findAllParameterValues()");
 
         QParameterValue p = QParameterValue.parameterValue;
         JPAQuery q = new JPAQuery(em).from(p);
@@ -60,15 +60,43 @@ public class ParameterDAOImpl implements ParameterDAO {
 
     @Override
     public Parameter save(Parameter p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        LOG.debug("save({})", p);
+
+        em.merge(p);
+        return p;
     }
 
     @Override
-    public Parameter save(ParameterValue pv) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ParameterValue save(ParameterValue pv) {
+        LOG.debug("save({})", pv);
+
+        em.merge(pv);
+        return pv;
     }
 
+    @Override
+    public Parameter findParemeterByPath(String path) {
+        LOG.debug("findParemeterByPath({})", path);
 
+        QParameter p = QParameter.parameter;
+        JPAQuery q = new JPAQuery(em).from(p).where(p.path.equalsIgnoreCase(path));
+        return q.uniqueResult(p);
+    }
 
+    @Override
+    public ParameterValue findParameterValueByPathAndTarget(String path, String target) {
+        LOG.debug("findParameterValueByPathAndTarget({}, {})", path, target);
+        QParameterValue p = QParameterValue.parameterValue;
+        JPAQuery q = new JPAQuery(em).from(p).where(p.id.path.eq(path).and(p.id.target.eq(target)));
+        return q.uniqueResult(p);
+    }
+
+    @Override
+    public List<ParameterValue> findParameterValuesByPath(String path) {
+        LOG.debug("findParameterValuesByPath({})", path);
+        QParameterValue p = QParameterValue.parameterValue;
+        JPAQuery q = new JPAQuery(em).from(p).where(p.id.path.eq(path));
+        return q.list(p);
+    }
 
 }

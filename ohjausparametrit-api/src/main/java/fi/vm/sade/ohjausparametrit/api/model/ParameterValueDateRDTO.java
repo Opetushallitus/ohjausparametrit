@@ -24,6 +24,15 @@ public class ParameterValueDateRDTO extends ParameterValueRDTO {
 
     private Date value;
 
+    public ParameterValueDateRDTO() {
+        super();
+    }
+
+    public ParameterValueDateRDTO(Date value) {
+        this();
+        this.value = value;
+    }
+
     public Date getValue() {
         return value;
     }

@@ -30,6 +30,12 @@ public interface ParameterDAO {
 
     public Parameter save(Parameter p);
 
-    public Parameter save(ParameterValue pv);
+    public ParameterValue save(ParameterValue pv);
+
+    public Parameter findParemeterByPath(String path);
+
+    public ParameterValue findParameterValueByPathAndTarget(String path, String target);
+
+    public List<ParameterValue> findParameterValuesByPath(String path);
 
 }

@@ -28,6 +28,9 @@ public abstract class ParameterValueRDTO implements Serializable {
     private Date modified;
     private String modifiedBy;
 
+    private String path;
+    private String target;
+
     public Date getCreated() {
         return created;
     }
@@ -58,6 +61,22 @@ public abstract class ParameterValueRDTO implements Serializable {
 
     public void setModifiedBy(String modifiedBy) {
         this.modifiedBy = modifiedBy;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 
 }

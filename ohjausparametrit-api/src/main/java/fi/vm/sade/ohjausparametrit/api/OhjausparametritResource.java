@@ -71,7 +71,7 @@ public interface OhjausparametritResource {
     @GET
     @Path("{path}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public List<ParameterRDTO> findByPath(@PathParam("path") String path);
+    public ParameterRDTO findByPath(@PathParam("path") String path);
 
     /**
      *

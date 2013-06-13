@@ -22,6 +22,15 @@ public class ParameterValueIntegerRDTO extends ParameterValueRDTO {
 
     private int value;
 
+    public ParameterValueIntegerRDTO() {
+        super();
+    }
+
+    public ParameterValueIntegerRDTO(int value) {
+        this();
+        this.value = value;
+    }
+
     public int getValue() {
         return value;
     }

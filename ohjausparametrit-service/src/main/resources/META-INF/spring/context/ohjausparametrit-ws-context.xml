@@ -78,4 +78,16 @@
         </jaxrs:providers>
     </jaxrs:server>
 
+
+    <!--
+      Conversion TO / FROM REST API - domain.
+    -->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="fi.vm.sade.ohjausparametrit.service.conversion.ConvertParameterToParameterRDTO"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>
