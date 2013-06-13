@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Base class for parameter values.
@@ -72,4 +73,5 @@ public class ParameterValue extends BaseEntity {
     public void setTarget(String v) {
         getId().setTarget(v);
     }
+
 }

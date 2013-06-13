@@ -22,32 +22,30 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  *
  * @author mlyly
  */
 @Entity
-@Table(name = Parameter.TABLE_NAME, uniqueConstraints = {
-    // @UniqueConstraint(name = "UK_haku_01", columnNames = {"oid"})
+@Table(name = Parameter.TABLE_NAME, uniqueConstraints = { // @UniqueConstraint(name = "UK_haku_01", columnNames = {"oid"})
 })
 public class Parameter extends BaseEntity {
 
     public static final String TABLE_NAME = "parametri";
-
     @Id
     @Column(nullable = false, insertable = true, updatable = false, unique = true)
     private String path;
     @Column(nullable = false)
     private String name;
-
     @Column(nullable = false)
     private boolean required = Boolean.FALSE;
 
     //    @Column(nullable = false)
     //    @Enumerated(EnumType.STRING)
     //    private ParameterTypeEnum type;
-
     public String getPath() {
         return path;
     }
@@ -71,5 +69,4 @@ public class Parameter extends BaseEntity {
     public void setRequired(boolean required) {
         this.required = required;
     }
-
 }

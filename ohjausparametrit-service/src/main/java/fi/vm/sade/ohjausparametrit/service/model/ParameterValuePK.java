@@ -27,6 +27,11 @@ public class ParameterValuePK implements Serializable {
     private String path;
     private String target;
 
+    @Override
+    public String toString() {
+        return path + "/" + target;
+    }
+
     public ParameterValuePK() {
     }
 

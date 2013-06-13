@@ -20,6 +20,8 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  *
@@ -28,12 +30,16 @@ import javax.persistence.TemporalType;
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date modified = new Date();
     @Column(nullable = false)
     private String modifiedBy;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
     private Date created = new Date();
@@ -71,5 +77,4 @@ public class BaseEntity implements Serializable {
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
-
 }
