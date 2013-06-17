@@ -14,21 +14,14 @@
  */
 package fi.vm.sade.ohjausparametrit.service.model;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 /**
  *
  * @author mlyly
  * @see Parameter
  * @see ParameterValue
  */
-@Entity
-@DiscriminatorValue(value = "b")
 public class ParameterValueBoolean extends ParameterValue {
 
-    @Column(name = "value_b", nullable = false)
     private boolean value = false;
 
     public boolean getValue() {
@@ -38,5 +31,4 @@ public class ParameterValueBoolean extends ParameterValue {
     public void setValue(boolean v) {
         value = v;
     }
-
 }

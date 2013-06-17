@@ -16,10 +16,8 @@ package fi.vm.sade.ohjausparametrit.service;
 
 import fi.vm.sade.ohjausparametrit.api.OhjausparametritResource;
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
-import fi.vm.sade.ohjausparametrit.api.model.ParameterValueRDTO;
-import fi.vm.sade.ohjausparametrit.service.dao.ParameterDAO;
+import fi.vm.sade.ohjausparametrit.service.dao.ParameterRepository;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
-import fi.vm.sade.ohjausparametrit.service.model.ParameterValue;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,23 +37,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class OhjausparametritResourceImpl implements OhjausparametritResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(OhjausparametritResourceImpl.class);
-
     @Autowired
     private ConversionService conversionService;
-
     @Autowired
-    private ParameterDAO parameterDAO;
+    private ParameterRepository parameterRepository;
 
     @Override
     public String hello() {
         LOG.debug("hello()");
 
-        for (Parameter p : parameterDAO.findAllParameters()) {
+        for (Parameter p : parameterRepository.findAll()) {
             LOG.info("  p = {}", p);
-        }
-
-        for (ParameterValue pv : parameterDAO.findAllParameterValues()) {
-            LOG.info("  pv = {}", pv);
         }
 
         return "Well heeello! " + new Date();
@@ -63,11 +55,12 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
 
     @Override
     public List<ParameterRDTO> search(String searchTerms, int count, int startIndex, Date lastModifiedBefore, Date lastModifiedSince) {
-        LOG.debug("search({}, {}, {}, {}, {}", new Object[] {searchTerms, count, startIndex, lastModifiedBefore, lastModifiedSince});
+        LOG.debug("search({}, {}, {}, {}, {}", new Object[]{searchTerms, count, startIndex, lastModifiedBefore, lastModifiedSince});
 
         List<ParameterRDTO> result = new ArrayList<ParameterRDTO>();
 
-        for (Parameter parameter : parameterDAO.findAllParameters()) {
+        // TODO use pages!
+        for (Parameter parameter : parameterRepository.findAll()) {
             result.add(conversionService.convert(parameter, ParameterRDTO.class));
         }
 
@@ -80,9 +73,11 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
     public ParameterRDTO findByPath(String path) {
         LOG.warn("findByPath({})", path);
 
-        ParameterRDTO result = conversionService.convert(parameterDAO.findParemeterByPath(path), ParameterRDTO.class);
-        if (result != null) {
-            result.setValues(convert(parameterDAO.findParameterValuesByPath(path)));
+        ParameterRDTO result = null;
+
+        Parameter p = parameterRepository.findByPath(path);
+        if (p != null) {
+            result = conversionService.convert(p, ParameterRDTO.class);
         }
 
         LOG.debug("  --> {}", result);
@@ -94,41 +89,6 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
     public ParameterRDTO findByPathAndTarget(String path, String target) {
         LOG.warn("findByPathAndTarget({}, {})", path, target);
 
-        ParameterRDTO result = conversionService.convert(parameterDAO.findParemeterByPath(path), ParameterRDTO.class);
-        if (result != null) {
-            List<ParameterValueRDTO> values = null;
-
-            // Add the spesific parameter value
-            ParameterValue pv = parameterDAO.findParameterValueByPathAndTarget(path, target);
-            if (pv != null) {
-                values = new ArrayList<ParameterValueRDTO>();
-                values.add(conversionService.convert((ParameterValue) pv, ParameterValueRDTO.class));
-            }
-
-            result.setValues(values);
-        }
-
-
-        LOG.debug("  --> {}", result);
-
-        return result;
+        return findByPath(path);
     }
-
-    private List<ParameterValueRDTO> convert(List<ParameterValue> findParameterValuesByPath) {
-        List<ParameterValueRDTO> result = null;
-
-        if (findParameterValuesByPath != null && !findParameterValuesByPath.isEmpty()) {
-            result = new ArrayList<ParameterValueRDTO>();
-
-            for (ParameterValue parameterValue : findParameterValuesByPath) {
-                result.add(conversionService.convert((ParameterValue) parameterValue, ParameterValueRDTO.class));
-            }
-        }
-
-        return result;
-    }
-
-
-
-
 }

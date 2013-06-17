@@ -16,10 +16,6 @@ package fi.vm.sade.ohjausparametrit.service.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -27,7 +23,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
  *
  * @author mlyly
  */
-@MappedSuperclass
 public class BaseEntity implements Serializable {
 
     @Override
@@ -35,15 +30,9 @@ public class BaseEntity implements Serializable {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
     private Date modified = new Date();
-    @Column(nullable = false)
     private String modifiedBy;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, updatable = false)
     private Date created = new Date();
-    @Column(nullable = false, updatable = false)
     private String createdBy;
 
     public Date getModified() {

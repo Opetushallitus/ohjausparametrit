@@ -15,7 +15,16 @@
 package fi.vm.sade.ohjausparametrit.service.conversion;
 
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
+import fi.vm.sade.ohjausparametrit.api.model.ParameterValueRDTO;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
+import fi.vm.sade.ohjausparametrit.service.model.ParameterValue;
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 
 /**
@@ -25,8 +34,15 @@ import org.springframework.core.convert.converter.Converter;
  */
 public class ConvertParameterToParameterRDTO implements Converter<Parameter, ParameterRDTO> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ConvertParameterToParameterRDTO.class);
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Override
     public ParameterRDTO convert(Parameter s) {
+        LOG.info("convert({})", s);
+
         ParameterRDTO t = new ParameterRDTO();
 
         t.setCreated(s.getCreated());
@@ -35,11 +51,23 @@ public class ConvertParameterToParameterRDTO implements Converter<Parameter, Par
         t.setModifiedBy(s.getModifiedBy());
         t.setName(s.getName());
         t.setPath(s.getPath());
+        t.setDescription(s.getDescription());
 
-        // TODO get these if needed
-        t.setDescription(null);
-        t.setValues(null);
+        {
+            // Get and convert values
+            List<ParameterValueRDTO> dtos = new ArrayList<ParameterValueRDTO>();
+            for (ParameterValue parameterValue : s.getValues()) {
+                dtos.add(getConversionService().convert(parameterValue, ParameterValueRDTO.class));
+            }
+            t.setValues(dtos);
+        }
+
+        LOG.info("  --> result = {}", t);
 
         return t;
+    }
+
+    private ConversionService getConversionService() {
+        return applicationContext.getBean(ConversionService.class);
     }
 }

@@ -15,11 +15,6 @@
 package fi.vm.sade.ohjausparametrit.service.model;
 
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -27,12 +22,8 @@ import javax.persistence.TemporalType;
  * @see Parameter
  * @see ParameterValue
  */
-@Entity
-@DiscriminatorValue(value = "d")
 public class ParameterValueDate extends ParameterValue {
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "start_ts")
     private Date start = null;
 
     public Date getValue() {
@@ -42,5 +33,4 @@ public class ParameterValueDate extends ParameterValue {
     public void setValue(Date value) {
         this.start = value;
     }
-
 }

@@ -14,21 +14,14 @@
  */
 package fi.vm.sade.ohjausparametrit.service.model;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 /**
  *
  * @author mlyly
  * @see Parameter
  * @see ParameterValue
  */
-@Entity
-@DiscriminatorValue(value = "s")
 public class ParameterValueString extends ParameterValue {
 
-    @Column(name = "value_s", length = 4096)
     private String value = null;
 
     public String getValue() {

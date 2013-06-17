@@ -14,6 +14,7 @@
  */
 package fi.vm.sade.ohjausparametrit.service.conversion;
 
+import fi.vm.sade.ohjausparametrit.api.model.ParameterValueBooleanRDTO;
 import fi.vm.sade.ohjausparametrit.api.model.ParameterValueDateRDTO;
 import fi.vm.sade.ohjausparametrit.api.model.ParameterValueDateRangeRDTO;
 import fi.vm.sade.ohjausparametrit.api.model.ParameterValueIntegerRDTO;
@@ -48,7 +49,7 @@ public class ConvertParameterValueToParameterValueRDTO implements Converter<Para
 
         if (s instanceof ParameterValueBoolean) {
             ParameterValueBoolean v = (ParameterValueBoolean) s;
-            t = null;
+            t = new ParameterValueBooleanRDTO(v.getValue());
         } else if (s instanceof ParameterValueDate) {
             ParameterValueDate v = (ParameterValueDate) s;
             t = new ParameterValueDateRDTO(v.getValue());
@@ -74,7 +75,7 @@ public class ConvertParameterValueToParameterValueRDTO implements Converter<Para
             t.setCreatedBy(s.getCreatedBy());
             t.setModified(s.getModified());
             t.setModifiedBy(s.getModifiedBy());
-            t.setPath(s.getPath());
+            t.setPath(null);
             t.setTarget(s.getTarget());
         }
 

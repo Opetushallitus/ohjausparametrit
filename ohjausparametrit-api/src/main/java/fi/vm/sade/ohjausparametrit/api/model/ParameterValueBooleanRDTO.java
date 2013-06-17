@@ -12,30 +12,30 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  */
-package fi.vm.sade.ohjausparametrit.service.dao;
-
-import fi.vm.sade.ohjausparametrit.service.model.Parameter;
-import fi.vm.sade.ohjausparametrit.service.model.ParameterValue;
-import java.util.List;
+package fi.vm.sade.ohjausparametrit.api.model;
 
 /**
  *
  * @author mlyly
  */
-public interface ParameterDAO {
+public class ParameterValueBooleanRDTO extends ParameterValueRDTO {
 
-    public List<Parameter> findAllParameters();
+    public ParameterValueBooleanRDTO() {
+        super();
+    }
 
-    public List<ParameterValue> findAllParameterValues();
+    public ParameterValueBooleanRDTO(boolean value) {
+        this();
+        this.value = value;
+    }
 
-    public Parameter save(Parameter p);
+    private boolean value = Boolean.FALSE;
 
-    public ParameterValue save(ParameterValue pv);
+    public boolean getValue() {
+        return value;
+    }
 
-    public Parameter findParemeterByPath(String path);
-
-    public ParameterValue findParameterValueByPathAndTarget(String path, String target);
-
-    public List<ParameterValue> findParameterValuesByPath(String path);
-
+    public void setValue(boolean v) {
+        value = v;
+    }
 }

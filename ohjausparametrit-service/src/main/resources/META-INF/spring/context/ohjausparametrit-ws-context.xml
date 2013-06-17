@@ -86,6 +86,7 @@
         <property name="converters">
             <list>
                 <bean class="fi.vm.sade.ohjausparametrit.service.conversion.ConvertParameterToParameterRDTO"/>
+                <bean class="fi.vm.sade.ohjausparametrit.service.conversion.ConvertParameterValueToParameterValueRDTO"/>
             </list>
         </property>
     </bean>
