@@ -43,6 +43,10 @@ public class ConvertParameterToParameterRDTO implements Converter<Parameter, Par
     public ParameterRDTO convert(Parameter s) {
         LOG.info("convert({})", s);
 
+        if (s == null) {
+            return null;
+        }
+
         ParameterRDTO t = new ParameterRDTO();
 
         t.setCreated(s.getCreated());

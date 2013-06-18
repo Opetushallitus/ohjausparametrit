@@ -21,6 +21,7 @@ import fi.vm.sade.ohjausparametrit.service.model.Parameter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import org.apache.cxf.jaxrs.cors.CrossOriginResourceSharing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,15 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
         for (Parameter p : parameterRepository.findAll()) {
             LOG.info("  p = {}", p);
         }
+
+        Parameter p = new Parameter();
+        p.getDescription().put("kieli_fi", "Suomeksi");
+        p.getDescription().put("kieli_sv", "Svensk");
+
+        p.setName("Name");
+        p.setPath("this.is." + new Random().nextInt(1000));
+
+        parameterRepository.save(p);
 
         return "Well heeello! " + new Date();
     }

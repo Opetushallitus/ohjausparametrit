@@ -14,6 +14,8 @@
  */
 package fi.vm.sade.ohjausparametrit.service.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.annotation.Id;
@@ -58,6 +60,9 @@ public class Parameter extends BaseEntity {
     }
 
     public Map<String, String> getDescription() {
+        if (description == null) {
+            description = new HashMap<String, String>();
+        }
         return description;
     }
 
@@ -66,6 +71,9 @@ public class Parameter extends BaseEntity {
     }
 
     public List<ParameterValue> getValues() {
+        if (values == null) {
+            values = new ArrayList<ParameterValue>();
+        }
         return values;
     }
 
