@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" ng-app="TEST">
+
+    <head>
+        <title>Ohjausparametrit</title>
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+
+        <script src="//code.jquery.com/jquery-latest.min.js"></script>
+        <script src="//code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+
+        <!-- LIBS -->
+        <!--
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script src="http://code.angularjs.org/1.1.5/angular.js"></script>
+        <script src="http://code.angularjs.org/1.1.5/angular-resource.js"></script>
+        -->
+
+        <!-- APP -->
+        <script src="../js/TEST.js"></script>
+
+        <!-- CSS -->
+        <!--
+        <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+        -->
+        <link href="../css/virkailija.css" rel="stylesheet" type="text/css" />
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    </head>
+
+    <body data-ng-controller="HakuListCtrl">
+
+        <script type="text/ng-template" id="DATE">
+            D {{pv.type}} -
+            {{pv.target}} -
+            {{pv.value}}
+            <input type="text" datepicker data-ng-model="pv.value"/>
+        </script>
+
+        <script type="text/ng-template" id="INTEGER">
+            I {{pv.type}} -
+            {{pv.target}} -
+            <input type="text" data-ng-model="pv.value"/>
+        </script>
+
+        <div>
+            Valitse haku:
+
+            <select data-ng-model="selectedHakuOid">
+                <option value="">Valitse haku</option>
+                <option value="{{h.oid}}" data-ng-repeat="h in hakus">{{h.name}}</option>
+            </select>
+
+            Selected: '{{selectedHakuOid}}'
+        </div>
+
+        <div>
+            Parametrit:
+
+            <ol>
+                <li data-ng-repeat="p in parameters">
+                    {{p.path}} -
+                    {{p.name}} -
+                    {{p.type}} -
+                    {{p.required}}
+
+                    <ul>
+                        <li data-ng-repeat="pv in p.values">{{pv.target}} - {{pv.type}} - {{pv.value}}</li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <div data-ng-repeat="pv in p.values" data-ng-include="pv.type">
+                            </div>
+                        </li>
+                    </ul>
+
+                </li>
+            </ol>
+        </div>
+
+    </body>
+</html>

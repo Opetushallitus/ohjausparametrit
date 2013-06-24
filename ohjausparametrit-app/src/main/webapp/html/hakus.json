@@ -1,0 +1,12 @@
+[
+    {"name": "Yhteishaku 1",
+        "oid": "1.2.3.4.1"},
+    {"name": "Yhteishaku 2",
+        "oid": "1.2.3.4.2"},
+    {"name": "Yhteishaku 3",
+        "oid": "1.2.3.4.3"},
+    {"name": "Täydennyshaku 1",
+        "oid": "1.2.3.4.4"},
+    {"name": "Täydennyshaku 2",
+        "oid": "1.2.3.4.5"}
+]

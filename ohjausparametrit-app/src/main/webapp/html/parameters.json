@@ -1,0 +1,70 @@
+[ {
+  "created" : 1371568588640,
+  "modified" : 1371568588640,
+  "path" : "this.is.735",
+  "name" : "Name",
+  "required" : false,
+  "type" : "DATE",
+  "description" : {
+    "kieli_sv" : "Svensk",
+    "kieli_fi" : "Suomeksi"
+  },
+  "values" : [ {
+    "created" : 1371568588641,
+    "modified" : 1371568588641,
+    "target" : "1.2.3.4.1",
+    "type" : "DATE",
+    "value" : 1369765035751
+  }, {
+    "created" : 1371568588641,
+    "modified" : 1371568588641,
+    "type" : "DATE",
+    "value" : 1369765035751
+  } ]
+}, {
+  "created" : 1371568990371,
+  "modified" : 1371568990371,
+  "path" : "this.is.184",
+  "name" : "Name",
+  "required" : false,
+  "type" : "DATE",
+  "description" : {
+    "kieli_sv" : "Svensk",
+    "kieli_fi" : "Suomeksi"
+  },
+  "values" : [ {
+    "created" : 1371568990371,
+    "modified" : 1371568990371,
+    "target" : "1.2.3.4.1",
+    "type" : "DATE",
+    "value" : 1369765035751
+  }, {
+    "created" : 1371568990371,
+    "modified" : 1371568990371,
+    "type" : "DATE",
+    "value" : 1373405145095
+  } ]
+}, {
+  "created" : 1371568990375,
+  "modified" : 1371568990375,
+  "path" : "this.is.329",
+  "name" : "Name",
+  "required" : false,
+  "type" : "INTEGER",
+  "description" : {
+    "kieli_sv" : "Svensk",
+    "kieli_fi" : "Suomeksi"
+  },
+  "values" : [ {
+    "created" : 1371568990376,
+    "modified" : 1371568990376,
+    "target" : "1.2.3.4.1",
+    "type" : "INTEGER",
+    "value" : 1965725349
+  }, {
+    "created" : 1371568990376,
+    "modified" : 1371568990376,
+    "type" : "INTEGER",
+    "value" : -815255025
+  } ]
+} ]
