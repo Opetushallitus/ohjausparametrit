@@ -33,6 +33,8 @@ import javax.ws.rs.core.MediaType;
  * /.../parametri/tarjonta/1.2.3.4.5
  * /.../parametri/organisaatiot
  * /.../parametri/organisaatiot/1.2.3.4.5
+ *
+ * ie.
  * /.../parametri/category
  * /.../parametri/category/target
  * </pre>
