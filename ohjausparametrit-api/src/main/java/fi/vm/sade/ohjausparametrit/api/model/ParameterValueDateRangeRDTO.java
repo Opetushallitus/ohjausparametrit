@@ -27,6 +27,7 @@ public class ParameterValueDateRangeRDTO extends ParameterValueRDTO {
 
     public ParameterValueDateRangeRDTO() {
         super();
+        setType("DATE_RANGE");
     }
 
     public ParameterValueDateRangeRDTO(Date start, Date end) {

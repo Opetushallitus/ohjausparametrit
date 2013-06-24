@@ -26,6 +26,7 @@ public class ParameterValueDateRDTO extends ParameterValueRDTO {
 
     public ParameterValueDateRDTO() {
         super();
+        setType("DATE");
     }
 
     public ParameterValueDateRDTO(Date value) {

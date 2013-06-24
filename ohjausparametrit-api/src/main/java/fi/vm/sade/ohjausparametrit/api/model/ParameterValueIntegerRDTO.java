@@ -24,6 +24,7 @@ public class ParameterValueIntegerRDTO extends ParameterValueRDTO {
 
     public ParameterValueIntegerRDTO() {
         super();
+        setType("INTEGER");
     }
 
     public ParameterValueIntegerRDTO(int value) {

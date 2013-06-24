@@ -22,6 +22,7 @@ public class ParameterValueBooleanRDTO extends ParameterValueRDTO {
 
     public ParameterValueBooleanRDTO() {
         super();
+        setType("BOOLEAN");
     }
 
     public ParameterValueBooleanRDTO(boolean value) {

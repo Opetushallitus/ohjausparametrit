@@ -31,6 +31,7 @@ public abstract class ParameterValueRDTO implements Serializable {
 
     private String path;
     private String target;
+    private String type = "UNKNOWN";
 
     public Date getCreated() {
         return created;
@@ -80,4 +81,11 @@ public abstract class ParameterValueRDTO implements Serializable {
         this.target = target;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

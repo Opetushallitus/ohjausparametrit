@@ -15,21 +15,26 @@
 package fi.vm.sade.ohjausparametrit.api;
 
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
-import java.util.Date;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
+ * Usage examples.
+ *
  * <pre>
  * /.../parametri
  * /.../parametri/hello
- * /.../parametri/this.is.a.test.param
- * /.../parametri/this.is.a.test.param/haku_1.2.3.4.5.874987418742938
+ *
+ * /.../parametri/tarjonta
+ * /.../parametri/tarjonta/1.2.3.4.5
+ * /.../parametri/organisaatiot
+ * /.../parametri/organisaatiot/1.2.3.4.5
+ * /.../parametri/category
+ * /.../parametri/category/target
  * </pre>
  *
  * @author mlyly
@@ -38,6 +43,7 @@ import javax.ws.rs.core.MediaType;
 public interface OhjausparametritResource {
 
     /**
+     * Test method.
      *
      * @return
      */
@@ -47,40 +53,34 @@ public interface OhjausparametritResource {
     public String hello();
 
     /**
+     * List all params (and values).
      *
-     * @param searchTerms
-     * @param count
-     * @param startIndex
-     * @param lastModifiedBefore
-     * @param lastModifiedSince
      * @return
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public List<ParameterRDTO> search(@QueryParam("searchTerms") String searchTerms,
-            @QueryParam("count") int count,
-            @QueryParam("startIndex") int startIndex,
-            @QueryParam("lastModifiedBefore") Date lastModifiedBefore,
-            @QueryParam("lastModifiedSince") Date lastModifiedSince);
+    public List<ParameterRDTO> list();
 
     /**
+     * List all parameters (and values) in given "sub" category.
      *
-     * @param path
+     * @param category "prefix"/category
      * @return
      */
     @GET
-    @Path("{path}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public ParameterRDTO findByPath(@PathParam("path") String path);
+    @Path("{cat}")
+    public List<ParameterRDTO> listByCategory(@PathParam("cat") String category);
 
     /**
+     * Get given parameters and values for given target.
      *
-     * @param path
-     * @param target
+     * @param category "prefix" / category
+     * @param target if NONE then the "default"/empty categoty is used
      * @return
      */
     @GET
-    @Path("{path}/{target}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public ParameterRDTO findByPathAndTarget(@PathParam("path") String path, @PathParam("target") String target);
+    @Path("{cat}/{target}")
+    public List<ParameterRDTO> getParameterByCategoryAndtarget(@PathParam("cat") String category, @PathParam("target") String target);
 }

@@ -24,6 +24,7 @@ public class ParameterValueStringRDTO extends ParameterValueRDTO {
 
     public ParameterValueStringRDTO() {
         super();
+        setType("STRING");
     }
 
     public ParameterValueStringRDTO(String value) {

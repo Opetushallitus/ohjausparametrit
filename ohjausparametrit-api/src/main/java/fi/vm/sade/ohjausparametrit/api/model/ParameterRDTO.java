@@ -33,7 +33,7 @@ public class ParameterRDTO implements Serializable {
     private String path;
     private String name;
     private boolean required;
-    private String type;
+    private String type = "UNKNOWN";
 
     private Map<String, String> description;
 
