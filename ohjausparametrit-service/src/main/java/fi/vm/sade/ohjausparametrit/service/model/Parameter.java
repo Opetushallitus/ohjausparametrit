@@ -28,9 +28,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="parameters")
 public class Parameter extends BaseEntity {
 
+    public enum Type {
+        UNKNOWN, BOOLEAN, INTEGER, STRING, DATE, DATE_RANGE;
+    };
+
     @Id
     private String path;
+
     private String name;
+    private Type type = Type.UNKNOWN;
     private boolean required = Boolean.FALSE;
     private Map<String, String> description;
     private List<ParameterValue> values;
@@ -81,4 +87,11 @@ public class Parameter extends BaseEntity {
         this.values = values;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
 }

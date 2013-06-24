@@ -16,10 +16,15 @@ package fi.vm.sade.ohjausparametrit.service;
 
 import fi.vm.sade.ohjausparametrit.api.OhjausparametritResource;
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
+import fi.vm.sade.ohjausparametrit.api.model.ParameterValueRDTO;
 import fi.vm.sade.ohjausparametrit.service.dao.ParameterRepository;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
+import fi.vm.sade.ohjausparametrit.service.model.ParameterValue;
+import fi.vm.sade.ohjausparametrit.service.model.ParameterValueDate;
+import fi.vm.sade.ohjausparametrit.service.model.ParameterValueInteger;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import org.apache.cxf.jaxrs.cors.CrossOriginResourceSharing;
@@ -51,25 +56,74 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
             LOG.info("  p = {}", p);
         }
 
-        Parameter p = new Parameter();
-        p.getDescription().put("kieli_fi", "Suomeksi");
-        p.getDescription().put("kieli_sv", "Svensk");
+        LOG.error("*** GENERATING DEMO DATA ***");
 
-        p.setName("Name");
-        p.setPath("this.is." + new Random().nextInt(1000));
+        {
+            Parameter p = new Parameter();
+            p.getDescription().put("kieli_fi", "Suomeksi");
+            p.getDescription().put("kieli_sv", "Svensk");
 
-        parameterRepository.save(p);
+            p.setName("Name");
+            p.setPath("this.is." + new Random().nextInt(1000));
+            p.setType(Parameter.Type.DATE);
+
+            {
+                // Spesific target value
+                ParameterValueDate pv = new ParameterValueDate();
+                pv.setTarget("1.2.3.4.1");
+                pv.setValue(new Date(System.currentTimeMillis() - new Random().nextInt()));
+                p.getValues().add(pv);
+            }
+
+            {
+                // Generic common value
+                ParameterValueDate pv = new ParameterValueDate();
+                pv.setTarget(null);
+                pv.setValue(new Date(System.currentTimeMillis() - new Random().nextInt()));
+                p.getValues().add(pv);
+            }
+
+            parameterRepository.save(p);
+        }
+
+        {
+            Parameter p = new Parameter();
+            p.getDescription().put("kieli_fi", "Suomeksi");
+            p.getDescription().put("kieli_sv", "Svensk");
+
+            p.setName("Name");
+            p.setPath("that.is." + new Random().nextInt(1000));
+            p.setType(Parameter.Type.INTEGER);
+
+            {
+                ParameterValueInteger pv = new ParameterValueInteger();
+                pv.setTarget("1.2.3.4.1");
+                pv.setValue(new Random().nextInt());
+                p.getValues().add(pv);
+           }
+            {
+                ParameterValueInteger pv = new ParameterValueInteger();
+                pv.setTarget(null);
+                pv.setValue(new Random().nextInt());
+                p.getValues().add(pv);
+            }
+
+            parameterRepository.save(p);
+        }
+
+
 
         return "Well heeello! " + new Date();
     }
 
+
+    // GET /
     @Override
-    public List<ParameterRDTO> search(String searchTerms, int count, int startIndex, Date lastModifiedBefore, Date lastModifiedSince) {
-        LOG.debug("search({}, {}, {}, {}, {}", new Object[]{searchTerms, count, startIndex, lastModifiedBefore, lastModifiedSince});
+    public List<ParameterRDTO> list() {
+        LOG.debug("list()");
 
         List<ParameterRDTO> result = new ArrayList<ParameterRDTO>();
 
-        // TODO use pages!
         for (Parameter parameter : parameterRepository.findAll()) {
             result.add(conversionService.convert(parameter, ParameterRDTO.class));
         }
@@ -79,15 +133,19 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
         return result;
     }
 
+    // GET /haku, /tarjonta /stuff.that.is.under.me
     @Override
-    public ParameterRDTO findByPath(String path) {
-        LOG.warn("findByPath({})", path);
+    public List<ParameterRDTO> listByCategory(String category) {
+        LOG.debug("listByCategory('{}')", category);
 
-        ParameterRDTO result = null;
+        if (isEmpty(category)) {
+            return list();
+        }
 
-        Parameter p = parameterRepository.findByPath(path);
-        if (p != null) {
-            result = conversionService.convert(p, ParameterRDTO.class);
+        List<ParameterRDTO> result = new ArrayList<ParameterRDTO>();
+
+        for (Parameter parameter : parameterRepository.findByPathRegexp("^" + category)) {
+            result.add(conversionService.convert(parameter, ParameterRDTO.class));
         }
 
         LOG.debug("  --> {}", result);
@@ -95,10 +153,58 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
         return result;
     }
 
+    // GET /haku/1.2.3.4.1234
     @Override
-    public ParameterRDTO findByPathAndTarget(String path, String target) {
-        LOG.warn("findByPathAndTarget({}, {})", path, target);
+    public List<ParameterRDTO> getParameterByCategoryAndtarget(String category, String target) {
+        LOG.debug("getParameterByCategoryAndtarget('{}', '{}')", category, target);
 
-        return findByPath(path);
+        // The generic "no target / anything goes" category
+        if (isEmpty(target) || "NONE".equalsIgnoreCase(target)) {
+            target = null;
+        }
+
+        List<ParameterRDTO> result = new ArrayList<ParameterRDTO>();
+
+        for (Parameter parameter : parameterRepository.findByPathRegexp("^" + category)) {
+            ParameterRDTO tmp = conversionService.convert(parameter, ParameterRDTO.class);
+            result.add(tmp);
+
+            // Remove other that desired values from parameter
+            for (Iterator<ParameterValueRDTO> it = tmp.getValues().iterator(); it.hasNext();) {
+                ParameterValueRDTO parameterValueRDTO = it.next();
+
+                if (isTargetMatch(parameterValueRDTO.getTarget(), target)) {
+                    // OK! Leave match to list
+                } else {
+                    // No match, remove from values collection.
+                    it.remove();
+                }
+            }
+        }
+
+        LOG.debug("  --> {}", result);
+
+        return result;
+    }
+
+    /**
+     * Match given target to values target.
+     *
+     * @param valueTarget
+     * @param requiredTarget
+     * @return
+     */
+    private boolean isTargetMatch(String valueTarget, String requiredTarget) {
+        return isEmpty(requiredTarget) ? isEmpty(valueTarget) : (!isEmpty(valueTarget) && valueTarget.equals(requiredTarget));
+    }
+
+    /**
+     * Null or empty value.
+     *
+     * @param value
+     * @return
+     */
+    private boolean isEmpty(String value) {
+        return (value == null || value.isEmpty());
     }
 }

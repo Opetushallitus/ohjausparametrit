@@ -45,7 +45,7 @@ public class ConvertParameterValueToParameterValueRDTO implements Converter<Para
             return null;
         }
 
-        ParameterValueRDTO t = null;
+        ParameterValueRDTO t;
 
         if (s instanceof ParameterValueBoolean) {
             ParameterValueBoolean v = (ParameterValueBoolean) s;
@@ -65,19 +65,18 @@ public class ConvertParameterValueToParameterValueRDTO implements Converter<Para
         } else {
             t = null;
             LOG.error("Failed to convert: {} to ParameterValueRDTO...", s);
+            throw new IllegalStateException("Failed to convert: " + s.toString());
         }
 
         //
         // Common values
         //
-        if (t != null) {
-            t.setCreated(s.getCreated());
-            t.setCreatedBy(s.getCreatedBy());
-            t.setModified(s.getModified());
-            t.setModifiedBy(s.getModifiedBy());
-            t.setPath(null);
-            t.setTarget(s.getTarget());
-        }
+        t.setCreated(s.getCreated());
+        t.setCreatedBy(s.getCreatedBy());
+        t.setModified(s.getModified());
+        t.setModifiedBy(s.getModifiedBy());
+        t.setPath(null);
+        t.setTarget(s.getTarget());
 
         return t;
     }

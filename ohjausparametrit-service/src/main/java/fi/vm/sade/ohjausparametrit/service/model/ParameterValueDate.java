@@ -24,6 +24,15 @@ import java.util.Date;
  */
 public class ParameterValueDate extends ParameterValue {
 
+    public ParameterValueDate() {
+        super();
+    }
+
+    public ParameterValueDate(Date v) {
+        this();
+        start = v;
+    }
+
     private Date start = null;
 
     public Date getValue() {

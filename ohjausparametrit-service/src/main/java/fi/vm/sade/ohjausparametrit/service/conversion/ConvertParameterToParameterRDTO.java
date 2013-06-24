@@ -41,7 +41,7 @@ public class ConvertParameterToParameterRDTO implements Converter<Parameter, Par
 
     @Override
     public ParameterRDTO convert(Parameter s) {
-        LOG.info("convert({})", s);
+        LOG.debug("convert({})", s);
 
         if (s == null) {
             return null;
@@ -56,6 +56,7 @@ public class ConvertParameterToParameterRDTO implements Converter<Parameter, Par
         t.setName(s.getName());
         t.setPath(s.getPath());
         t.setDescription(s.getDescription());
+        t.setType(s.getType() != null ? s.getType().name() : Parameter.Type.UNKNOWN.name());
 
         {
             // Get and convert values
@@ -66,7 +67,7 @@ public class ConvertParameterToParameterRDTO implements Converter<Parameter, Par
             t.setValues(dtos);
         }
 
-        LOG.info("  --> result = {}", t);
+        LOG.debug("  --> result = {}", t);
 
         return t;
     }

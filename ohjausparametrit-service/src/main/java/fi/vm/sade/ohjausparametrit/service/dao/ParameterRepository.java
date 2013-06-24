@@ -15,26 +15,37 @@
 package fi.vm.sade.ohjausparametrit.service.dao;
 
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
+import java.util.Collection;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
+ * Define the finders for Parameter repo.
+ *
+ * http://static.springsource.org/spring-data/mongodb/docs/1.2.x/reference/html/mongo.repositories.html
  *
  * @author mlyly
  */
 public interface ParameterRepository extends PagingAndSortingRepository<Parameter, String> {
 
+    /**
+     * Find Parameter by exact path.
+     *
+     * @param path
+     * @return
+     */
+    // @Query(value = "{ 'path' : ?0 }")
     public Parameter findByPath(String path);
 
-    // + path + target
-
-
+    /**
+     * Find by path regexp.
+     *
+     * @param path regexp
+     * @return
+     */
+    @Query(value = "{ 'path' : { '$regex' : ?0 } }")
+    public Collection<Parameter> findByPathRegexp(String path);
 
 //    @Query(value = "{ 'age' : { $lte : ?0 } }", fields = "{ 'lastname' : 1, 'age' : 1}")
-//    public Page<User> findByAgeLTLight(int age, Pageable pageable);
-//    public Collection<User> findByFirstname(String name);
 //    @Query(value = "{ 'firstname' : ?0 }", fields = "{ 'lastname' : 1, 'age' : 1}")
-//    public Collection<User> findByFirstnameLight(String firstname);
-//    public Collection<User> findByLastname(String name);
-//    public User findByUsername(String username);
-//
 }
