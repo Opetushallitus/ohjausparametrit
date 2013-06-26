@@ -35,7 +35,7 @@ app.controller('HakuListCtrl', function($scope, $http) {
         $scope.parameters = data;
     });
 
-    $scope.selectedHakuOid = '';
+    $scope.selectedHakuOid = 'NONE';
 
     // Date stuff
     // scope.v.Dt = Date.parse(scope.v.Dt);

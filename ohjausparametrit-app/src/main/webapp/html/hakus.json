@@ -1,12 +1,12 @@
 [
-    {"name": "Yhteishaku 1",
+    {"name": "Yhteishaku, syksy 2013",
         "oid": "1.2.3.4.1"},
-    {"name": "Yhteishaku 2",
+    {"name": "Yhteishaku, kevät 2014",
         "oid": "1.2.3.4.2"},
-    {"name": "Yhteishaku 3",
+    {"name": "Yhteishaku, syksy 2014",
         "oid": "1.2.3.4.3"},
-    {"name": "Täydennyshaku 1",
+    {"name": "Täydennyshaku, syksy 2013",
         "oid": "1.2.3.4.4"},
-    {"name": "Täydennyshaku 2",
+    {"name": "Täydennyshaku, kevät 2014",
         "oid": "1.2.3.4.5"}
 ]
