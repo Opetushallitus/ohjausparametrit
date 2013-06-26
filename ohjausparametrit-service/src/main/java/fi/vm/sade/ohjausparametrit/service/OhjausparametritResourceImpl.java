@@ -20,13 +20,14 @@ import fi.vm.sade.ohjausparametrit.api.model.ParameterValueRDTO;
 import fi.vm.sade.ohjausparametrit.service.dao.ParameterRepository;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
 import fi.vm.sade.ohjausparametrit.service.model.ParameterValue;
+import fi.vm.sade.ohjausparametrit.service.model.ParameterValueBoolean;
 import fi.vm.sade.ohjausparametrit.service.model.ParameterValueDate;
+import fi.vm.sade.ohjausparametrit.service.model.ParameterValueDateRange;
 import fi.vm.sade.ohjausparametrit.service.model.ParameterValueInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import org.apache.cxf.jaxrs.cors.CrossOriginResourceSharing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,66 +53,27 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
     public String hello() {
         LOG.debug("hello()");
 
-        for (Parameter p : parameterRepository.findAll()) {
-            LOG.info("  p = {}", p);
-        }
-
-        LOG.error("*** GENERATING DEMO DATA ***");
-
-        {
-            Parameter p = new Parameter();
-            p.getDescription().put("kieli_fi", "Suomeksi");
-            p.getDescription().put("kieli_sv", "Svensk");
-
-            p.setName("Name");
-            p.setPath("this.is." + new Random().nextInt(1000));
-            p.setType(Parameter.Type.DATE);
-
-            {
-                // Spesific target value
-                ParameterValueDate pv = new ParameterValueDate();
-                pv.setTarget("1.2.3.4.1");
-                pv.setValue(new Date(System.currentTimeMillis() - new Random().nextInt()));
-                p.getValues().add(pv);
+        if (true) {
+            for (Parameter p : parameterRepository.findAll()) {
+                LOG.info("  p = {}", p);
             }
+            LOG.error("*** GENERATING DEMO DATA ***");
 
-            {
-                // Generic common value
-                ParameterValueDate pv = new ParameterValueDate();
-                pv.setTarget(null);
-                pv.setValue(new Date(System.currentTimeMillis() - new Random().nextInt()));
-                p.getValues().add(pv);
-            }
+            createDemoParameter("tarjonta.tarjontaValmis", "1.2.3.4.1", new Date(), null);
+            createDemoParameter("tarjonta.hakuAvoinna", "1.2.3.4.1", new Date(), new Date());
 
-            parameterRepository.save(p);
+            createDemoParameter("tarjonta.tarjontaValmis", "1.2.3.4.2", new Date(), null);
+            createDemoParameter("tarjonta.hakuAvoinna", "1.2.3.4.2", new Date(), new Date());
+
+            createDemoParameter("tarjonta.tarjontaValmis", "1.2.3.4.3", new Date(), null);
+            createDemoParameter("tarjonta.hakuAvoinna", "1.2.3.4.3", new Date(), new Date());
+
+            createDemoParameter("security.maxConcurrentUsers", ParameterValue.NO_TARGET, 500);
+            createDemoParameter("security.loginsAllowedBetween", ParameterValue.NO_TARGET, new Date(), new Date());
+            createDemoParameter("security.maxSessionTimeMs", ParameterValue.NO_TARGET, 2 * 60 * 60 * 1000);
+            createDemoParameter("security.maxInvalidLoginsAllowed", ParameterValue.NO_TARGET, 3);
+            createDemoParameter("security.loginsAllowed", ParameterValue.NO_TARGET, false);
         }
-
-        {
-            Parameter p = new Parameter();
-            p.getDescription().put("kieli_fi", "Suomeksi");
-            p.getDescription().put("kieli_sv", "Svensk");
-
-            p.setName("Name");
-            p.setPath("that.is." + new Random().nextInt(1000));
-            p.setType(Parameter.Type.INTEGER);
-
-            {
-                ParameterValueInteger pv = new ParameterValueInteger();
-                pv.setTarget("1.2.3.4.1");
-                pv.setValue(new Random().nextInt());
-                p.getValues().add(pv);
-           }
-            {
-                ParameterValueInteger pv = new ParameterValueInteger();
-                pv.setTarget(null);
-                pv.setValue(new Random().nextInt());
-                p.getValues().add(pv);
-            }
-
-            parameterRepository.save(p);
-        }
-
-
 
         return "Well heeello! " + new Date();
     }
@@ -159,8 +121,8 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
         LOG.debug("getParameterByCategoryAndtarget('{}', '{}')", category, target);
 
         // The generic "no target / anything goes" category
-        if (isEmpty(target) || "NONE".equalsIgnoreCase(target)) {
-            target = null;
+        if (isEmpty(target)) {
+            target = ParameterValue.NO_TARGET;
         }
 
         List<ParameterRDTO> result = new ArrayList<ParameterRDTO>();
@@ -206,5 +168,90 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
      */
     private boolean isEmpty(String value) {
         return (value == null || value.isEmpty());
+    }
+
+    private void createDemoParameter(String path, String target, int value) {
+
+        Parameter p = parameterRepository.findByPath(path);
+
+        if (p == null) {
+            p = new Parameter();
+            p.getDescription().put("kieli_fi", "Suomeksi");
+            p.getDescription().put("kieli_sv", "Svensk");
+
+            p.setName("Name!");
+            p.setPath(path);
+            p.setType(Parameter.Type.INTEGER);
+        }
+
+        ParameterValueInteger pv = new ParameterValueInteger();
+        pv.setTarget(target);
+        pv.setValue(value);
+
+        p.getValues().add(pv);
+
+        parameterRepository.save(p);
+    }
+
+    private void createDemoParameter(String path, String target, boolean value) {
+
+        Parameter p = parameterRepository.findByPath(path);
+
+        if (p == null) {
+            p = new Parameter();
+            p.getDescription().put("kieli_fi", "Suomeksi");
+            p.getDescription().put("kieli_sv", "Svensk");
+
+            p.setName("Name!");
+            p.setPath(path);
+            p.setType(Parameter.Type.BOOLEAN);
+        }
+
+        ParameterValueBoolean pv = new ParameterValueBoolean();
+        pv.setTarget(target);
+        pv.setValue(value);
+
+        p.getValues().add(pv);
+
+        parameterRepository.save(p);
+    }
+
+    private void createDemoParameter(String path, String target, Date start, Date end) {
+
+        Parameter p = parameterRepository.findByPath(path);
+
+        if (p == null) {
+            p = new Parameter();
+            p.getDescription().put("kieli_fi", "Suomeksi");
+            p.getDescription().put("kieli_sv", "Svensk");
+
+            p.setName("Name!");
+            p.setPath(path);
+
+            if (end == null) {
+                p.setType(Parameter.Type.DATE);
+            } else {
+                p.setType(Parameter.Type.DATE_RANGE);
+            }
+        }
+
+        ParameterValue pv;
+
+        if (end == null) {
+            ParameterValueDate pvx = new ParameterValueDate();
+            pvx.setValue(start);
+            pv = pvx;
+        } else {
+            ParameterValueDateRange pvx = new ParameterValueDateRange();
+            pvx.setStart(start);
+            pvx.setEnd(end);
+            pv = pvx;
+        }
+
+        pv.setTarget(target);
+
+        p.getValues().add(pv);
+
+        parameterRepository.save(p);
     }
 }

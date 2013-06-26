@@ -36,13 +36,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 // @Document(collection = "parameter_values")
 public abstract class ParameterValue extends BaseEntity {
 
-    private String target;
+    public static final String NO_TARGET = "NONE";
+
+    /**
+     * By default no target.
+     */
+    private String target = NO_TARGET;
 
     public String getTarget() {
         return target;
     }
 
     public void setTarget(String target) {
+        if (target == null || target.isEmpty()) {
+            target = NO_TARGET;
+        }
         this.target = target;
     }
 
