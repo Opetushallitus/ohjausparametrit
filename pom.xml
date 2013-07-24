@@ -4,21 +4,21 @@
 
     <groupId>fi.vm.sade.ohjausparametrit</groupId>
     <artifactId>pom</artifactId>
-    <version>5.0-SNAPSHOT</version>
+    <version>6.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Ohjausparametrit :: Parent</name>
 
     <parent>
         <groupId>fi.vm.sade.generic</groupId>
         <artifactId>build-parent</artifactId>
-        <version>5.0-SNAPSHOT</version>
+        <version>${project.version}</version>
     </parent>
 
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-      <authentication.api.version>5.0-SNAPSHOT</authentication.api.version>
-      <generic.version>5.0-SNAPSHOT</generic.version>
+      <authentication.api.version>${project.version}</authentication.api.version>
+      <generic.version>${project.version}</generic.version>
     </properties>
 
     <modules>
