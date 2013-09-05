@@ -1,6 +1,6 @@
 [ {
-  "created" : 1372256599851,
-  "modified" : 1372256599851,
+  "created" : 1376914106347,
+  "modified" : 1376914106347,
   "path" : "tarjonta.tarjontaValmis",
   "name" : "Name!",
   "required" : false,
@@ -10,27 +10,27 @@
     "kieli_fi" : "Suomeksi"
   },
   "values" : [ {
-    "created" : 1372256599851,
-    "modified" : 1372256599851,
+    "created" : 1376914106347,
+    "modified" : 1376914106347,
     "target" : "1.2.3.4.1",
     "type" : "DATE",
-    "value" : 1372256599840
+    "value" : 1376914106332
   }, {
-    "created" : 1372256599877,
-    "modified" : 1372256599877,
+    "created" : 1376914106617,
+    "modified" : 1376914106617,
     "target" : "1.2.3.4.2",
     "type" : "DATE",
-    "value" : 1372256599871
+    "value" : 1376914106609
   }, {
-    "created" : 1372256599883,
-    "modified" : 1372256599883,
+    "created" : 1376914106625,
+    "modified" : 1376914106625,
     "target" : "1.2.3.4.3",
     "type" : "DATE",
-    "value" : 1372256599881
+    "value" : 1376914106623
   } ]
 }, {
-  "created" : 1372256599867,
-  "modified" : 1372256599867,
+  "created" : 1376914106603,
+  "modified" : 1376914106603,
   "path" : "tarjonta.hakuAvoinna",
   "name" : "Name!",
   "required" : false,
@@ -40,30 +40,30 @@
     "kieli_fi" : "Suomeksi"
   },
   "values" : [ {
-    "created" : 1372256599867,
-    "modified" : 1372256599867,
+    "created" : 1376914106603,
+    "modified" : 1376914106603,
     "target" : "1.2.3.4.1",
     "type" : "DATE_RANGE",
-    "start" : 1372256599864,
-    "end" : 1372256599864
+    "start" : 1376914106358,
+    "end" : 1376914106358
   }, {
-    "created" : 1372256599880,
-    "modified" : 1372256599880,
+    "created" : 1376914106621,
+    "modified" : 1376914106621,
     "target" : "1.2.3.4.2",
     "type" : "DATE_RANGE",
-    "start" : 1372256599879,
-    "end" : 1372256599879
+    "start" : 1376914106619,
+    "end" : 1376914106619
   }, {
-    "created" : 1372256599885,
-    "modified" : 1372256599885,
+    "created" : 1376914106629,
+    "modified" : 1376914106629,
     "target" : "1.2.3.4.3",
     "type" : "DATE_RANGE",
-    "start" : 1372256599884,
-    "end" : 1372256599884
+    "start" : 1376914106626,
+    "end" : 1376914106626
   } ]
 }, {
-  "created" : 1372256599887,
-  "modified" : 1372256599887,
+  "created" : 1376914106633,
+  "modified" : 1376914106633,
   "path" : "security.maxConcurrentUsers",
   "name" : "Name!",
   "required" : false,
@@ -73,15 +73,15 @@
     "kieli_fi" : "Suomeksi"
   },
   "values" : [ {
-    "created" : 1372256599888,
-    "modified" : 1372256599888,
+    "created" : 1376914106634,
+    "modified" : 1376914106634,
     "target" : "NONE",
     "type" : "INTEGER",
     "value" : 500
   } ]
 }, {
-  "created" : 1372256599892,
-  "modified" : 1372256599892,
+  "created" : 1376914106640,
+  "modified" : 1376914106640,
   "path" : "security.loginsAllowedBetween",
   "name" : "Name!",
   "required" : false,
@@ -91,16 +91,16 @@
     "kieli_fi" : "Suomeksi"
   },
   "values" : [ {
-    "created" : 1372256599892,
-    "modified" : 1372256599892,
+    "created" : 1376914106640,
+    "modified" : 1376914106640,
     "target" : "NONE",
     "type" : "DATE_RANGE",
-    "start" : 1372256599891,
-    "end" : 1372256599891
+    "start" : 1376914106639,
+    "end" : 1376914106639
   } ]
 }, {
-  "created" : 1372256599894,
-  "modified" : 1372256599894,
+  "created" : 1376914106643,
+  "modified" : 1376914106643,
   "path" : "security.maxSessionTimeMs",
   "name" : "Name!",
   "required" : false,
@@ -110,15 +110,15 @@
     "kieli_fi" : "Suomeksi"
   },
   "values" : [ {
-    "created" : 1372256599894,
-    "modified" : 1372256599894,
+    "created" : 1376914106643,
+    "modified" : 1376914106643,
     "target" : "NONE",
     "type" : "INTEGER",
     "value" : 7200000
   } ]
 }, {
-  "created" : 1372256599895,
-  "modified" : 1372256599895,
+  "created" : 1376914106646,
+  "modified" : 1376914106646,
   "path" : "security.maxInvalidLoginsAllowed",
   "name" : "Name!",
   "required" : false,
@@ -128,15 +128,15 @@
     "kieli_fi" : "Suomeksi"
   },
   "values" : [ {
-    "created" : 1372256599895,
-    "modified" : 1372256599895,
+    "created" : 1376914106646,
+    "modified" : 1376914106646,
     "target" : "NONE",
     "type" : "INTEGER",
     "value" : 3
   } ]
 }, {
-  "created" : 1372256599896,
-  "modified" : 1372256599896,
+  "created" : 1376914106648,
+  "modified" : 1376914106648,
   "path" : "security.loginsAllowed",
   "name" : "Name!",
   "required" : false,
@@ -146,8 +146,8 @@
     "kieli_fi" : "Suomeksi"
   },
   "values" : [ {
-    "created" : 1372256599897,
-    "modified" : 1372256599897,
+    "created" : 1376914106649,
+    "modified" : 1376914106649,
     "target" : "NONE",
     "type" : "BOOLEAN",
     "value" : false

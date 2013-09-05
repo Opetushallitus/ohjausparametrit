@@ -1,0 +1,112 @@
+<!doctype html>
+<html ng-app="parameters">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
+        <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.5.0.js"></script>
+
+        <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+        <script src='https://cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js'></script>
+
+        <!--
+                <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+                <script src="../js/tinymce-angular.js"></script>
+        -->
+
+        <script src="//code.jquery.com/jquery-latest.min.js"></script>
+        <script src="//code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+
+        <script src="../js/parameters.js"></script>
+
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="containerbox">
+
+            <script type="text/ng-template" id="list.html">
+                <div class="container-fluid">
+                <h2>Parametrit</h2>
+
+                <input type="text" ng-model="filterParams" placeholder="Suodata..." />
+                Selected: '{{ selectedParameter }}'
+
+                count: {{count}}
+
+                <button ng-click="count = count + 1" ng-init="count=0">
+                Increment
+                </button>
+
+                <table>
+                <tr ng-repeat="p in parameters | filter: filterParams">
+                <td><button ng-click="selectedParameter = p">Select</button></td>
+                <td ng-click="selectedParameter = p">
+                {{ p.path }}
+                </td>
+                <td>
+                {{p.name}}
+                </td>
+                <td>
+                <a href="#/edit/{{p.path}}" ng-click="selectedParameter = p">edit</a>
+                </td>
+                </tr>
+                </table>
+
+                </div>
+            </script>
+
+            <script type="text/ng-template" id="details.html">
+                <div class="container-fluid">
+                <h2>Muokkaa</h2>
+
+                {{ selectedParameter.path }}
+
+                Project id = {{ scope.projectId  }}
+                </div>
+            </script>
+
+            <script type="text/ng-template" id="TEST">
+                <div class="container-fluid">
+                TEST - path: {{ selectedParameter.path }}
+                A: <input type="text" ng-model="value1"/>
+                B: <input type="text" ng-model="value2"/>
+                C: <input type="text" ng-model="value3"/>
+                D: <input type="text" ng-model="value4"/>
+                </div>
+            </script>
+
+            <script type="text/ng-template" id="TEST2">
+                <div class="container-fluid">
+                <ul>
+                <li ng-repeat="p in parameters"><a ng-click="doSelect(p)">{{ p.path }}</a>
+                <ul>
+                <li ng-repeat="v in p.values">{{ v.target }} {{ v.type }} {{ v.value }}</li>
+                </ul>
+                </li>
+                </ul>
+                </div>
+
+                <div modal="shouldBeOpen" >
+                <div class="modal-header">
+                <h3>I'm a modal!</h3>
+                </div>
+                <div class="modal-body">
+                <ul>
+                <li>{{ selectedParameter.path }}</li>
+                </ul>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-warning cancel" ng-click="close()">Cancel</button>
+                </div>
+                </div>
+
+            </script>
+
+            <div ng-view></div>
+
+        </div>
+
+    </body>
+</html>
