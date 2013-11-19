@@ -2,13 +2,47 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
-       xsi:schemaLocation="
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-">
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <import resource="classpath:META-INF/spring/bundle-context.xml"/>
+    <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <util:properties local-override="true">
+                <prop key="cas_key">ohjausparametrit-service</prop>
+                <prop key="cas_service">${cas.service.ohjausparametrit-service}</prop>
+                <prop key="spring_security_default_access">permitAll</prop>
+            </util:properties>
+        </property>
+    </bean>
+
+    <context:property-placeholder
+        location="classpath:ohjausparametrit-service.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/ohjausparametrit-service.properties"
+        ignore-resource-not-found="true" properties-ref="defaultProps"/>
+
+    <!--
+    <import resource="file:///${user.home:''}/oph-configuration/security-context-backend.xml"/>
+    -->
+
+    <context:annotation-config />
+    <context:component-scan base-package="fi.vm.sade.ohjausparametrit" />
+
+    <!-- service configuration -->
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-service-context.xml"/>
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-dao-context.xml"/>
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-ws-context.xml"/>
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-cache-context.xml"/>
+
+    <!-- Activiti DS -->
+    <bean id="activitiDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="org.h2.Driver" />
+        <property name="url" value="jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000" />
+        <property name="username" value="sa" />
+        <property name="password" value="" />
+    </bean>
+
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
 
 </beans>

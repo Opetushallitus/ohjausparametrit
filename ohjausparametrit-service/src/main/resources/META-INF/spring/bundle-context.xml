@@ -32,6 +32,8 @@
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-dao-context.xml"/>
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-ws-context.xml"/>
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-cache-context.xml"/>
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-ds-context.xml"/>
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
 
 </beans>
 

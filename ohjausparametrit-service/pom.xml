@@ -3,7 +3,7 @@
     <parent>
         <artifactId>pom</artifactId>
         <groupId>fi.vm.sade.ohjausparametrit</groupId>
-        <version>7.0-SNAPSHOT</version>
+        <version>8.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -32,30 +32,35 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- Query DSL -->
-<!--
+        <!-- Activiti -->
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>3.1.1</version>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring</artifactId>
+            <version>5.13</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-jdbc</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-orm</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>3.1.1</version>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-engine</artifactId>
+            <version>5.13</version>
         </dependency>
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-codegen</artifactId>
-            <version>3.1.1</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.173</version>
         </dependency>
-        <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-core</artifactId>
-            <version>3.1.1</version>
-        </dependency>
--->
 
+
+        <!-- Antisamy / XSS prevention -->
         <dependency>
             <groupId>org.owasp.antisamy</groupId>
             <artifactId>antisamy</artifactId>
@@ -90,15 +95,8 @@
             <artifactId>spring-aspects</artifactId>
             <type>jar</type>
         </dependency>
-<!--
+
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
-            <scope>provided</scope>
-        </dependency>
--->
-       <dependency>
             <groupId>fi.vm.sade.generic</groupId>
             <artifactId>generic-common</artifactId>
             <version>${generic.version}</version>
@@ -111,30 +109,24 @@
             <type>pom</type>
         </dependency>
 
-<!--
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <scope>test</scope>
-        </dependency>
--->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--
-        <dependency>
-            <groupId>fi.vm.sade.generic</groupId>
-            <artifactId>dbunit-support</artifactId>
-            <scope>test</scope>
-        </dependency>
--->
+        <!--
+                <dependency>
+                    <groupId>fi.vm.sade.generic</groupId>
+                    <artifactId>dbunit-support</artifactId>
+                    <scope>test</scope>
+                </dependency>
+        -->
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
@@ -148,7 +140,7 @@
             <scope>test</scope>
         </dependency>
 
-       <dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>

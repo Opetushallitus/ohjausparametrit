@@ -4,7 +4,7 @@
 
     <groupId>fi.vm.sade.ohjausparametrit</groupId>
     <artifactId>pom</artifactId>
-    <version>7.0-SNAPSHOT</version>
+    <version>8.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Ohjausparametrit :: Parent</name>
 
@@ -15,21 +15,21 @@
     </parent>
 
     <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-      <authentication.api.version>${project.version}</authentication.api.version>
-      <generic.version>${project.version}</generic.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+        <authentication.api.version>8.0-SNAPSHOT</authentication.api.version>
+        <generic.version>8.0-SNAPSHOT</generic.version>
     </properties>
 
     <modules>
-      <module>ohjausparametrit-api</module>
-      <module>ohjausparametrit-shared</module>
-      <module>ohjausparametrit-service</module>
-      <module>ohjausparametrit-app</module>
-  </modules>
-    
+        <module>ohjausparametrit-api</module>
+        <module>ohjausparametrit-shared</module>
+        <module>ohjausparametrit-service</module>
+        <module>ohjausparametrit-app</module>
+    </modules>
+
     <repositories>
-       <repository>
+        <repository>
             <id>oph-sade-artifactory-snapshots</id>
             <url>http://penaali.hard.ware.fi/artifactory/oph-sade-snapshot-local</url>
             <snapshots>
@@ -40,6 +40,20 @@
             <id>oph-sade-artifactory-releases</id>
             <url>http://penaali.hard.ware.fi/artifactory/oph-sade-release-local</url>
         </repository>
+
+        <repository>
+            <id>Alfresco Maven Repository</id>
+            <url>https://maven.alfresco.com/nexus/content/groups/public/</url>
+        </repository>
+
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>oph-sade-artifactory</id>
+            <name>oph-sade-artifactory-releases</name>
+            <url>http://penaali.hard.ware.fi/artifactory/libs-3rd-party</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

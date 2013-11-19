@@ -73,6 +73,8 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
             createDemoParameter("security.maxSessionTimeMs", ParameterValue.NO_TARGET, 2 * 60 * 60 * 1000);
             createDemoParameter("security.maxInvalidLoginsAllowed", ParameterValue.NO_TARGET, 3);
             createDemoParameter("security.loginsAllowed", ParameterValue.NO_TARGET, false);
+
+            return "CREATED DEMO DATA!  " + new Date();
         }
 
         return "Well heeello! " + new Date();
