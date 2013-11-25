@@ -24,6 +24,7 @@ import fi.vm.sade.ohjausparametrit.service.model.ParameterValueBoolean;
 import fi.vm.sade.ohjausparametrit.service.model.ParameterValueDate;
 import fi.vm.sade.ohjausparametrit.service.model.ParameterValueDateRange;
 import fi.vm.sade.ohjausparametrit.service.model.ParameterValueInteger;
+import fi.vm.sade.ohjausparametrit.service.model.ParameterValueString;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -59,27 +60,61 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
             }
             LOG.error("*** GENERATING DEMO DATA ***");
 
-            createDemoParameter("tarjonta.tarjontaValmis", "1.2.3.4.1", new Date(), null);
-            createDemoParameter("tarjonta.hakuAvoinna", "1.2.3.4.1", new Date(), new Date());
+            createDemoParameter("tarjonta.julkaisunTakaraja", ParameterValue.NO_TARGET, new Date(), null);
+            createDemoParameter("tarjonta.aloituspaikkojenMuokkauksenTakaraja", ParameterValue.NO_TARGET, new Date(), null);
 
-            createDemoParameter("tarjonta.tarjontaValmis", "1.2.3.4.2", new Date(), null);
-            createDemoParameter("tarjonta.hakuAvoinna", "1.2.3.4.2", new Date(), new Date());
+            for (String hakukausi : new String[]{"hakukausi_kevat_2014", "hakukausi_syksy_2014"}) {
+                createDemoParameter("hakukausi.aikaraja", hakukausi, new Date(), new Date());
 
-            createDemoParameter("tarjonta.tarjontaValmis", "1.2.3.4.3", new Date(), null);
-            createDemoParameter("tarjonta.hakuAvoinna", "1.2.3.4.3", new Date(), new Date());
+                createDemoParameter("hakukausi.perustiedot.siirto", hakukausi, new Date(), new Date());
+                createDemoParameter("hakukausi.arvosanat.siirto", hakukausi, new Date(), new Date());
+                createDemoParameter("hakukausi.lukionpaattoarvosanat.siirto", hakukausi, new Date(), new Date());
+
+                createDemoParameter("hakukausi.kela.tarjonta.siirto", hakukausi, new Date(), null);
+                createDemoParameter("hakukausi.kela.valinnat.toinenaste.siirto", hakukausi, new Date(), new Date());
+                createDemoParameter("hakukausi.kela.valinnat.korkeakouluaste.siirto", hakukausi, new Date(), new Date());
+
+                createDemoParameter("hakukausi.kela.tiedonsiirtoAinaValintojenMuuttuessa", hakukausi, true);
+                createDemoParameter("hakukausi.kela.tiedonsiirtoTiheys", hakukausi, 7);
+                createDemoParameter("hakukausi.kela.tiedonsiirtoTiheys.kellonaika", hakukausi, "00:00:00");
+
+                createDemoParameter("hakukausi.tem.valinnat.toinenaste.siirto", hakukausi, new Date(), null);
+                createDemoParameter("hakukausi.tem.valinnat.korkeakouluaste.siirto", hakukausi, new Date(), null);
+                createDemoParameter("hakukausi.tem.tiedonsiirtoAinaValintojenMuuttuessa", hakukausi, true);
+                createDemoParameter("hakukausi.tem.tiedonsiirtoTiheys", hakukausi, 7);
+                createDemoParameter("hakukausi.tem.tiedonsiirtoTiheys.kellonaika", hakukausi, "00:00:00");
+            }
+
+            for (String hakuOid : new String[]{"haku_1.2.3.4.5", "haku_1.2.3.4.55"}) {
+                createDemoParameter("tarjonta.julkaisunTakaraja", hakuOid, new Date(), null);
+                createDemoParameter("tarjonta.aloituspaikkojenMuokkauksenTakaraja", hakuOid, new Date(), null);
+
+                createDemoParameter("valinnat.koekutsujenMuodostaminen", hakuOid, new Date(), new Date());
+                createDemoParameter("valinnat.harkinnanvaraisetPaatoksetTallennusTakaraja", hakuOid, new Date(), null);
+                createDemoParameter("valinnat.koetulostenTallentaminen", hakuOid, new Date(), new Date());
+                createDemoParameter("valinnat.oppilaitostenVirkailijoidenValitapalveluEstetty", hakuOid, new Date(), new Date());
+                createDemoParameter("valinnat.valintalaskennanSuorittaminen", hakuOid, new Date(), new Date());
+                createDemoParameter("valinnat.sijoittelunSuorittaminen", hakuOid, new Date(), new Date());
+
+                createDemoParameter("valinnat.suoritetaanSijoitteluAinaValintatietojenMuuttuessa", hakuOid, false);
+                createDemoParameter("valinnat.sijoittelunSuorittamistiheys", hakuOid, 48);
+                createDemoParameter("valinnat.sijoittelunSuorittamisaika", hakuOid, "00:00:00");
+
+                createDemoParameter("valinnat.jalkiohjauskirjeidenLahetys", hakuOid, new Date(), null);
+                createDemoParameter("valinnat.hakukierrosPaattyy", hakuOid, new Date(), null);
+            }
 
             createDemoParameter("security.maxConcurrentUsers", ParameterValue.NO_TARGET, 500);
             createDemoParameter("security.loginsAllowedBetween", ParameterValue.NO_TARGET, new Date(), new Date());
             createDemoParameter("security.maxSessionTimeMs", ParameterValue.NO_TARGET, 2 * 60 * 60 * 1000);
             createDemoParameter("security.maxInvalidLoginsAllowed", ParameterValue.NO_TARGET, 3);
-            createDemoParameter("security.loginsAllowed", ParameterValue.NO_TARGET, false);
+            createDemoParameter("security.loginsAllowed", ParameterValue.NO_TARGET, true);
 
             return "CREATED DEMO DATA!  " + new Date();
         }
 
         return "Well heeello! " + new Date();
     }
-
 
     // GET /
     @Override
@@ -170,6 +205,31 @@ public class OhjausparametritResourceImpl implements OhjausparametritResource {
      */
     private boolean isEmpty(String value) {
         return (value == null || value.isEmpty());
+    }
+
+
+
+    private void createDemoParameter(String path, String target, String value) {
+
+        Parameter p = parameterRepository.findByPath(path);
+
+        if (p == null) {
+            p = new Parameter();
+            p.getDescription().put("kieli_fi", "Suomeksi");
+            p.getDescription().put("kieli_sv", "Svensk");
+
+            p.setName("Name!");
+            p.setPath(path);
+            p.setType(Parameter.Type.STRING);
+        }
+
+        ParameterValueString pv = new ParameterValueString();
+        pv.setTarget(target);
+        pv.setValue(value);
+
+        p.getValues().add(pv);
+
+        parameterRepository.save(p);
     }
 
     private void createDemoParameter(String path, String target, int value) {
