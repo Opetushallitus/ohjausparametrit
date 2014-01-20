@@ -13,9 +13,8 @@ import fi.vm.sade.ohjausparametrit.service.model.Parameter;
 public interface ParamRepository extends
         PagingAndSortingRepository<Parameter, Long> {
 
-    List<Parameter> findByPath(String path);
-    List<Parameter> findByName(String path);
     Parameter findByPathAndName(String path, String name);
-    
-    
+
+    List<Parameter> findByPathStartingWith(String path);
+
 }

@@ -21,6 +21,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ import fi.vm.sade.ohjausparametrit.service.dao.ParamRepository;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
 
 /**
- * 
+ * TODO add swagger annotate api
  * @author mlyly
  * 
  *         Usage examples.
@@ -59,7 +60,6 @@ import fi.vm.sade.ohjausparametrit.service.model.Parameter;
  */
 @Path("/parametri")
 @Transactional(readOnly = true)
-
 public class OhjausparametritResource {
 
     private static final String NO_TARGET = "_no_target_";
@@ -93,16 +93,8 @@ public class OhjausparametritResource {
             logger.error("*** GENERATING DEMO DATA ***");
 
             createDemoParameter("security.maxConcurrentUsers", NO_TARGET, 500);
-            // createDemoParameter("security.loginsAllowedBetween",
-            // NO_TARGET, new Date(), new Date());
-            // createDemoParameter("security.maxSessionTimeMs",
-            // NO_TARGET, 2 * 60 * 60 * 1000);
-            // createDemoParameter("security.maxInvalidLoginsAllowed",
-            // NO_TARGET, 3);
-            // createDemoParameter("security.loginsAllowed",
-            // ParameterValue.NO_TARGET,
-            // true);
-            //
+            createDemoParameter("haku:hakuaikatarjonta.julkhakukausi",
+                    NO_TARGET, 500);
         }
         return "Well heeello! " + new Date();
 
@@ -134,22 +126,31 @@ public class OhjausparametritResource {
     @GET
     @Produces("application/json;charset=UTF-8")
     public Iterable<ParameterRDTO> list() {
+        logger.info("list all");
         return Iterables.transform(paramRepository.findAll(), converter);
+    }
+
+    @GET
+    @Produces("application/json;charset=UTF-8")
+    @Path("{path}/{name}")
+    public Response getParameterByCategoryAndtarget(
+            @PathParam("path") String path, @PathParam("name") String name) {
+        Parameter p = paramRepository.findByPathAndName(path, name);
+        if(p==null) {
+            logger.debug("not found:" + path + "," + name);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        
+        return Response.ok(p).build();
     }
 
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("{path}")
     public Iterable<ParameterRDTO> listByPath(@PathParam("path") String path) {
-        return Iterables.transform(paramRepository.findByPath(path), converter);
-    }
-
-    @GET
-    @Produces("application/json;charset=UTF-8")
-    @Path("{path}/{name}")
-    public ParameterRDTO getParameterByCategoryAndtarget(
-            @PathParam("path") String path, @PathParam("name") String name) {
-        return converter.apply(paramRepository.findByPathAndName(path, name));
+        logger.info("list path starting with:" + path);
+        return Iterables.transform(
+                paramRepository.findByPathStartingWith(path), converter);
     }
 
 }
