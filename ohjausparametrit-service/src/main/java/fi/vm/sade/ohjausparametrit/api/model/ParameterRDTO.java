@@ -16,13 +16,13 @@ package fi.vm.sade.ohjausparametrit.api.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
- * Base class.
  *
  * @author mlyly
  */
-public abstract class ParameterValueRDTO implements Serializable {
+public class ParameterRDTO implements Serializable {
 
     private Date created;
     private String createdBy;
@@ -30,8 +30,11 @@ public abstract class ParameterValueRDTO implements Serializable {
     private String modifiedBy;
 
     private String path;
-    private String target;
+    private String name;
+    private boolean required;
     private String type = "UNKNOWN";
+
+    private Map<String, String> description;
 
     public Date getCreated() {
         return created;
@@ -73,12 +76,20 @@ public abstract class ParameterValueRDTO implements Serializable {
         this.path = path;
     }
 
-    public String getTarget() {
-        return target;
+    public String getName() {
+        return name;
     }
 
-    public void setTarget(String target) {
-        this.target = target;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     public String getType() {
@@ -88,4 +99,13 @@ public abstract class ParameterValueRDTO implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+
+    public Map<String, String> getDescription() {
+        return description;
+    }
+
+    public void setDescription(Map<String, String> description) {
+        this.description = description;
+    }
+
 }

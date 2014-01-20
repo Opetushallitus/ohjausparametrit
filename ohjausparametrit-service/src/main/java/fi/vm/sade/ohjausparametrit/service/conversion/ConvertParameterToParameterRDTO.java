@@ -14,34 +14,23 @@
  */
 package fi.vm.sade.ohjausparametrit.service.conversion;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
-import fi.vm.sade.ohjausparametrit.api.model.ParameterValueRDTO;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
-import fi.vm.sade.ohjausparametrit.service.model.ParameterValue;
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.converter.Converter;
 
 /**
  * Kind of stupid since it's 1-1... but just in case.
- *
+ * 
  * @author mlyly
  */
-public class ConvertParameterToParameterRDTO implements Converter<Parameter, ParameterRDTO> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ConvertParameterToParameterRDTO.class);
-
-    @Autowired
-    private ApplicationContext applicationContext;
+public class ConvertParameterToParameterRDTO implements
+        Function<Parameter, ParameterRDTO> {
 
     @Override
-    public ParameterRDTO convert(Parameter s) {
-        LOG.debug("convert({})", s);
+    public ParameterRDTO apply(@Nullable Parameter s) {
 
         if (s == null) {
             return null;
@@ -55,24 +44,22 @@ public class ConvertParameterToParameterRDTO implements Converter<Parameter, Par
         t.setModifiedBy(s.getModifiedBy());
         t.setName(s.getName());
         t.setPath(s.getPath());
-        t.setDescription(s.getDescription());
-        t.setType(s.getType() != null ? s.getType().name() : Parameter.Type.UNKNOWN.name());
+        // t.setDescription(s.getDescription());
+        // t.setType(s.getType() != null ? s.getType().name() :
+        // Parameter.Type.UNKNOWN.name());
 
         {
             // Get and convert values
-            List<ParameterValueRDTO> dtos = new ArrayList<ParameterValueRDTO>();
-            for (ParameterValue parameterValue : s.getValues()) {
-                dtos.add(getConversionService().convert(parameterValue, ParameterValueRDTO.class));
-            }
-            t.setValues(dtos);
+            // List<ParameterValueRDTO> dtos = new
+            // ArrayList<ParameterValueRDTO>();
+            // for (ParameterValue parameterValue : s.getValues()) {
+            // dtos.add(getConversionService().convert(parameterValue,
+            // ParameterValueRDTO.class));
+            // }
+            // t.setValues(dtos);
         }
-
-        LOG.debug("  --> result = {}", t);
 
         return t;
     }
 
-    private ConversionService getConversionService() {
-        return applicationContext.getBean(ConversionService.class);
-    }
 }

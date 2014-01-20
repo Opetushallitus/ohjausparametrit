@@ -22,8 +22,6 @@
     </properties>
 
     <modules>
-        <module>ohjausparametrit-api</module>
-        <module>ohjausparametrit-shared</module>
         <module>ohjausparametrit-service</module>
         <module>ohjausparametrit-app</module>
     </modules>

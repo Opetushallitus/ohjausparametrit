@@ -14,82 +14,62 @@
  */
 package fi.vm.sade.ohjausparametrit.service.dao;
 
-import com.mongodb.Mongo;
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodProcess;
-import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.runtime.Network;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.util.List;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- *
- * @author mlyly
- */
+import com.google.common.collect.Lists;
+
+import fi.vm.sade.ohjausparametrit.service.model.Parameter;
+import fi.vm.sade.ohjausparametrit.service.model.Parameter.Type;
+
 @ContextConfiguration(locations = {"classpath:test-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles("test")
 public class ParameterRepositoryTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ParameterRepositoryTest.class);
-
     @Autowired
-    private ParameterRepository parameterRepository;
-
-    private static Integer MONGO_PORT = 12345;
-
-    // Start stop mongo
-    private static MongodExecutable _mongodExe;
-    private static MongodProcess _mongod;
-    private Mongo _mongo;
-
-    @BeforeClass
-    public static void setUpClass() throws UnknownHostException, IOException {
-        LOG.info("setUpClass()...");
-        MongodStarter runtime = MongodStarter.getDefaultInstance();
-        _mongodExe = runtime.prepare(new MongodConfig(Version.Main.PRODUCTION, MONGO_PORT, Network.localhostIsIPv6()));
-        _mongod = _mongodExe.start();
-        LOG.info("setUpClass()... done.");
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws InterruptedException {
-        LOG.info("tearDownClass()...");
-        _mongod.stop();
-        _mongod.waitFor();
-        _mongodExe.stop();
-
-        LOG.info("tearDownClass()... done.");
-    }
-
-    @Before
-    public void setUp() throws UnknownHostException {
-        _mongo = new Mongo("localhost", 12345);
-    }
-
-    @After
-    public void tearDown() {
-        _mongo.dropDatabase("test");
-    }
+    private ParamRepository paramRepository;
 
     @Test
-    public void testSomeMethod() {
-        LOG.info("testSomeMethod()...");
+    public void testCrud() {
+        Parameter param = new Parameter();
+        param.setCreatedBy("user1");
+        param.setPath("path");
+        param.setValue("value");
+        param.setType(Type.STRING);
+        param.setName("name");
+        Parameter param2 = new Parameter();
+        param2.setCreatedBy("user2");
+        param2.setPath("path");
+        param2.setValue("value");
+        param2.setType(Type.STRING);
+        param2.setName("name1");
 
-        LOG.info("  repo = {}", parameterRepository);
-
-        LOG.info("testSomeMethod()... done.");
+        Parameter saved = paramRepository.save(param);
+        long id = saved.getId();
+        List<Parameter> params = Lists.newArrayList(paramRepository.findAll());
+        Assert.assertEquals(1,params.size());
+        Assert.assertEquals("user1", params.get(0).getCreatedBy());
+        saved.setCreatedBy("user2");
+        paramRepository.save(param);
+        params = Lists.newArrayList(paramRepository.findAll());
+        Assert.assertEquals(1,params.size());
+        saved = paramRepository.findOne(id);
+        Assert.assertEquals("user2", params.get(0).getCreatedBy());
+        saved = paramRepository.save(param2);
+        saved = paramRepository.findOne(saved.getId());
+        Assert.assertEquals("user2", saved.getCreatedBy());
+        params = Lists.newArrayList(paramRepository.findAll());
+        Assert.assertEquals(2,params.size());
+        
+        
     }
 }

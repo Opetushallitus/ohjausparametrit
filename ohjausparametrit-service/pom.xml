@@ -21,16 +21,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <artifactId>ohjausparametrit-api</artifactId>
-            <groupId>fi.vm.sade.ohjausparametrit</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>ohjausparametrit-shared</artifactId>
-            <groupId>fi.vm.sade.ohjausparametrit</groupId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- Activiti -->
         <dependency>
@@ -75,15 +65,15 @@
 
         <dependency>
             <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-            <version>1.2.1.RELEASE</version>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>1.4.2.RELEASE</version>
         </dependency>
 
         <!-- REST -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-security-cors</artifactId>
-            <version>2.7.5</version>
+            <version>2.7.8</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -181,10 +171,85 @@
             <version>2.2.4</version>
             <type>jar</type>
         </dependency>
+        
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+ <dependency>
+            <groupId>fi.vm.sade.generic</groupId>
+            <artifactId>dependencies-service</artifactId>
+            <version>${generic.version}</version>
+            <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
     </dependencies>
 
     <build>
         <finalName>ohjausparametrit-service</finalName>
+        
+        <plugins>
+                    <plugin>
+                <groupId>de.smartics.maven.plugin</groupId>
+                <artifactId>hibernate4-maven-plugin</artifactId>
+                <version>0.1.1</version>
+                <executions>
+                    <execution>
+                        <id>export</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>hbm2ddl</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <unitName>ohjausparametrit</unitName>
+                    <createOutputFile>${project.build.directory}/hibernate3/sql/schema.ddl</createOutputFile>
+                    <dropOutputFile>${project.build.directory}/hibernate3/sql/drop.ddl</dropOutputFile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-core</artifactId>
+                        <version>${hibernate.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-ehcache</artifactId>
+                        <version>${hibernate.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            </plugins>
+        
     </build>
+
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>smartics</id>
+            <url>http://www.smartics.eu/nexus/content/groups/public-group</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 
 </project>

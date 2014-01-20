@@ -32,7 +32,7 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
     <!-- CORS (cross domain) support for rest services -->
-    <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/>
+<!--     <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/> -->
 
     <!-- Resource impls -->
     <bean id="ohjausparametritResource" class="fi.vm.sade.ohjausparametrit.service.OhjausparametritResourceImpl" />
@@ -72,23 +72,10 @@
             <ref bean="ohjausparametritResource"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <ref bean="cors-filter" />
+<!--             <ref bean="cors-filter" /> -->
             <ref bean="restExceptionMapper"/>
             <ref bean="restJacksonJsonProvider" />
         </jaxrs:providers>
     </jaxrs:server>
-
-
-    <!--
-      Conversion TO / FROM REST API - domain.
-    -->
-    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <list>
-                <bean class="fi.vm.sade.ohjausparametrit.service.conversion.ConvertParameterToParameterRDTO"/>
-                <bean class="fi.vm.sade.ohjausparametrit.service.conversion.ConvertParameterValueToParameterValueRDTO"/>
-            </list>
-        </property>
-    </bean>
 
 </beans>

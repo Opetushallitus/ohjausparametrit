@@ -14,17 +14,15 @@
  */
 package fi.vm.sade.ohjausparametrit.healthcheck;
 
+import java.util.Map;
+
 import com.google.gson.GsonBuilder;
-import com.mongodb.DBCollection;
+
 import fi.vm.sade.generic.healthcheck.HealthChecker;
 import fi.vm.sade.generic.healthcheck.SpringAwareHealthCheckServlet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 /**
- *
+ * 
  * @author mlyly
  */
 public class HealthCheck extends SpringAwareHealthCheckServlet {
@@ -32,41 +30,18 @@ public class HealthCheck extends SpringAwareHealthCheckServlet {
     /* Just make sure the correct artifact gets added... */
     private GsonBuilder _gsonbuiler;
 
-    @Autowired(required = false)
-    private MongoTemplate _mongoTemplate;
-
     @Override
     protected Map<String, HealthChecker> registerHealthCheckers() {
         Map<String, HealthChecker> result = super.registerHealthCheckers();
 
-        result.put("mongo", new HealthChecker() {
+        result.put("foo", new HealthChecker() {
 
             @Override
             public Object checkHealth() throws Throwable {
-                Map<String, Object> result = new LinkedHashMap<String, Object>();
-
-                if (_mongoTemplate == null) {
-                    throw new IllegalStateException("I need my daily Mongo! (mongotemplate not available)");
-                }
-
-                result.put("mongotemplate", "OK");
-
-                // Loop over collections
-                for (String collectionName : _mongoTemplate.getCollectionNames()) {
-                    LinkedHashMap<String, String> cmap = new LinkedHashMap<String, String>();
-
-                    DBCollection coll = _mongoTemplate.getCollection(collectionName);
-                    cmap.put("count", "" + coll.count());
-
-                    result.put("collection_" + collectionName, cmap);
-                }
-
-                return result;
+                return "OK";
             }
         });
-
         return result;
     }
-
 
 }
