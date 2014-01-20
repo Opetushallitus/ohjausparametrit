@@ -44,21 +44,7 @@ public class ConvertParameterToParameterRDTO implements
         t.setModifiedBy(s.getModifiedBy());
         t.setName(s.getName());
         t.setPath(s.getPath());
-        // t.setDescription(s.getDescription());
-        // t.setType(s.getType() != null ? s.getType().name() :
-        // Parameter.Type.UNKNOWN.name());
-
-        {
-            // Get and convert values
-            // List<ParameterValueRDTO> dtos = new
-            // ArrayList<ParameterValueRDTO>();
-            // for (ParameterValue parameterValue : s.getValues()) {
-            // dtos.add(getConversionService().convert(parameterValue,
-            // ParameterValueRDTO.class));
-            // }
-            // t.setValues(dtos);
-        }
-
+        t.setValue(s.getValue());
         return t;
     }
 

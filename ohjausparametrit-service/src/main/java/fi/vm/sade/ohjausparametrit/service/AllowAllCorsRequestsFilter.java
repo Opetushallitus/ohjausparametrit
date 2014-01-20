@@ -43,14 +43,14 @@ public class AllowAllCorsRequestsFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        LOG.info("doFilter()");
+        LOG.debug("doFilter()");
 
         if (response instanceof HttpServletResponse) {
             HttpServletRequest req = (HttpServletRequest) request;
             String headerOrigin = req.getHeader("Origin");
 
             if (headerOrigin != null) {
-                LOG.info("  fixing CORS --> allow: '{}'", headerOrigin);
+                LOG.debug("  fixing CORS --> allow: '{}'", headerOrigin);
 
                 HttpServletResponse res = (HttpServletResponse) response;
                 res.addHeader("Access-Control-Allow-Origin", headerOrigin);

@@ -5,7 +5,6 @@ create table parameter (
     createdBy varchar(255),
     modified timestamp,
     modifiedBy varchar(255),
-    cat varchar(255) not null,
     name varchar(255) not null,
     path varchar(255) not null,
     type varchar(255) not null,
@@ -15,3 +14,6 @@ create table parameter (
 );
 
 create sequence hibernate_sequence;
+
+create index pathname on parameter(path, name);
+

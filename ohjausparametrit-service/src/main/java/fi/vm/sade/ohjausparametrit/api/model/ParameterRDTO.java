@@ -19,10 +19,12 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- *
+ * 
  * @author mlyly
  */
 public class ParameterRDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Date created;
     private String createdBy;
@@ -31,8 +33,8 @@ public class ParameterRDTO implements Serializable {
 
     private String path;
     private String name;
-    private boolean required;
-    private String type = "UNKNOWN";
+    private String type;
+    private String value;
 
     private Map<String, String> description;
 
@@ -40,72 +42,72 @@ public class ParameterRDTO implements Serializable {
         return created;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public String getCreatedBy() {
         return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isRequired() {
-        return required;
-    }
-
-    public void setRequired(boolean required) {
-        this.required = required;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Map<String, String> getDescription() {
         return description;
     }
 
+    public Date getModified() {
+        return modified;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public void setDescription(Map<String, String> description) {
         this.description = description;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
 }

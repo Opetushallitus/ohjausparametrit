@@ -31,11 +31,10 @@
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-    <!-- CORS (cross domain) support for rest services -->
-<!--     <bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter"/> -->
-
     <!-- Resource impls -->
-    <bean id="ohjausparametritResource" class="fi.vm.sade.ohjausparametrit.service.OhjausparametritResourceImpl" />
+    <bean id="ohjausparametritResource" class="fi.vm.sade.ohjausparametrit.service.OhjausparametritResource" />
+    
+    
     <bean id="restExceptionMapper" class="fi.vm.sade.ohjausparametrit.service.RESTExceptionMapperImpl" />
 
     <!--  Needed to convert wsdl generated dtos to json. (no @XmlRootElement annotation) -->
@@ -72,7 +71,6 @@
             <ref bean="ohjausparametritResource"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-<!--             <ref bean="cors-filter" /> -->
             <ref bean="restExceptionMapper"/>
             <ref bean="restJacksonJsonProvider" />
         </jaxrs:providers>

@@ -17,26 +17,27 @@ package fi.vm.sade.ohjausparametrit.service;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Mapping from service exceptions to JAX-RS response objects.
- *
+ * 
  * @author Jukka Raanamo
  * @author mlyly
  */
 @Provider
 public class RESTExceptionMapperImpl implements ExceptionMapper<Exception> {
 
-    private static final Logger log = LoggerFactory.getLogger(RESTExceptionMapperImpl.class);
+    private static final Logger log = LoggerFactory
+            .getLogger(RESTExceptionMapperImpl.class);
 
     @Override
     public Response toResponse(Exception e) {
         log.error("unexpected service error", e);
         // last case scenario
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
-                entity(e.getMessage()).
-                build();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
     }
 }
