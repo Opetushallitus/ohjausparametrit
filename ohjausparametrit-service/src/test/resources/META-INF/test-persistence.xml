@@ -10,7 +10,7 @@
 
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>fi.vm.sade.ohjausparametrit.service.model.Parameter</class>
-
+		<class>fi.vm.sade.ohjausparametrit.service.model.Template</class>
 
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />

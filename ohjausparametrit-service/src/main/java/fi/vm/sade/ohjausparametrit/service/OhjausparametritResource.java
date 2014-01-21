@@ -34,7 +34,9 @@ import com.google.common.collect.Iterables;
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
 import fi.vm.sade.ohjausparametrit.service.conversion.ConvertParameterToParameterRDTO;
 import fi.vm.sade.ohjausparametrit.service.dao.ParamRepository;
+import fi.vm.sade.ohjausparametrit.service.dao.TemplateRepository;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
+import fi.vm.sade.ohjausparametrit.service.model.Template;
 
 /**
  * TODO add swagger annotate api
@@ -69,16 +71,19 @@ public class OhjausparametritResource {
 
     private ConvertParameterToParameterRDTO converter = new ConvertParameterToParameterRDTO();
 
-    private final Map<Class<?>, Parameter.Type> typeMap;
+    private final Map<Class<?>, Template.Type> typeMap;
 
     @Autowired
     private ParamRepository paramRepository;
 
+    @Autowired
+    private TemplateRepository templateRepository;
+
     public OhjausparametritResource() {
-        typeMap = ImmutableMap.<Class<?>, Parameter.Type> builder()
-                .put(String.class, Parameter.Type.STRING)
-                .put(Integer.class, Parameter.Type.INT)
-                .put(Boolean.class, Parameter.Type.BOOLEAN).build();
+        typeMap = ImmutableMap.<Class<?>, Template.Type> builder()
+                .put(String.class, Template.Type.STRING)
+                .put(Integer.class, Template.Type.INT)
+                .put(Boolean.class, Template.Type.BOOLEAN).build();
     }
 
     @GET
@@ -92,30 +97,40 @@ public class OhjausparametritResource {
             }
             logger.error("*** GENERATING DEMO DATA ***");
 
-            createDemoParameter("security.maxConcurrentUsers", NO_TARGET, 500);
+            createDemoParameter("security.maxConcurrentUsers", NO_TARGET, 500, true);
             createDemoParameter("haku:hakuaikatarjonta.julkhakukausi",
-                    NO_TARGET, 500);
+                    NO_TARGET, 500, true);
         }
         return "Well heeello! " + new Date();
 
     }
 
-    private void createDemoParameter(String path, String target, Object value) {
+    private void createDemoParameter(String path, String target, Object value, boolean required) {
 
         Parameter p = paramRepository.findByPathAndName(path, target);
 
         if (p == null) {
-            p = new Parameter();
-
-            p.setName(target);
-            p.setPath(path);
-            Parameter.Type type = typeMap.get(value.getClass());
+            Template t = templateRepository.findByPath(path);
+            if(t==null){
+                t= new Template();
+                t.setRequired(required);
+                t.setPath(path);
+            }
+            
+            Template.Type type = typeMap.get(value.getClass());
             if (type == null) {
                 throw new RuntimeException("Unknown parameter type:"
                         + value.getClass());
             }
 
-            p.setType(type);
+            t.setType(type);
+            
+            templateRepository.save(t);
+
+            p = new Parameter();
+
+            p.setName(target);
+            p.setPath(path);
 
             p.setValue(value.toString());
 

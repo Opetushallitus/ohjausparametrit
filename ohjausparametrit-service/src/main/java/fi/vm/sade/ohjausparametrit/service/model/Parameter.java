@@ -16,8 +16,8 @@ package fi.vm.sade.ohjausparametrit.service.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -26,14 +26,9 @@ import javax.persistence.UniqueConstraint;
         Parameter.PATH, Parameter.NAME }))
 public class Parameter extends BaseEntity {
 
-    public enum Type {
-        BOOLEAN, INT, STRING, DATE
-    }
-
     private static final long serialVersionUID = 1L;
     public static final String NAME = "name";
     public static final String PATH = "path";
-    public static final String TYPE = "type";
     public static final String VALUE = "value";
 
     public static final String TABLE_NAME = "parameter";
@@ -44,13 +39,13 @@ public class Parameter extends BaseEntity {
     @Column(name = NAME, nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = TYPE, nullable = false)
-    private Type type;
-
     @Column(name = VALUE, nullable = false)
     private String value;
 
+    @ManyToOne
+    @JoinColumn(name=PATH, insertable=false, updatable=false, referencedColumnName=Template.PATH)
+    Template template;
+    
     public String getName() {
         return name;
     }
@@ -59,9 +54,6 @@ public class Parameter extends BaseEntity {
         return path;
     }
 
-    public Type getType() {
-        return type;
-    }
     public String getValue() {
         return value;
     }
@@ -73,17 +65,15 @@ public class Parameter extends BaseEntity {
     public void setPath(String path) {
         this.path = path;
     }
-    public void setType(Type type) {
-        this.type = type;
-    }
+
     public void setValue(String value) {
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return "Parameter [path=" + path + ", name=" + name + ", type=" + type
-                + ", value=" + value + ", toString()=" + super.toString() + "]";
+        return "Parameter [path=" + path + ", name=" + name + ", value="
+                + value + ", toString()=" + super.toString() + "]";
     }
-    
+
 }

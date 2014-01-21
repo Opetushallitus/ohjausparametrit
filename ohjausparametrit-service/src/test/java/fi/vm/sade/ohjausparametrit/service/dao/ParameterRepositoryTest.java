@@ -16,11 +16,16 @@ package fi.vm.sade.ohjausparametrit.service.dao;
 
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
+
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -28,48 +33,77 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.google.common.collect.Lists;
 
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
-import fi.vm.sade.ohjausparametrit.service.model.Parameter.Type;
+import fi.vm.sade.ohjausparametrit.service.model.Template;
+import fi.vm.sade.ohjausparametrit.service.model.Template.Type;
 
-@ContextConfiguration(locations = {"classpath:test-context.xml"})
+@ContextConfiguration(locations = { "classpath:test-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 public class ParameterRepositoryTest {
 
     @Autowired
     private ParamRepository paramRepository;
+    @Autowired
+    private TemplateRepository templateRepository;
 
+    @Before
+    public void setup(){
+        paramRepository.deleteAll();
+        templateRepository.deleteAll();
+    }
+    
     @Test
     public void testCrud() {
+
+        Template t = new Template();
+        t.setPath("path");
+        t.setRequired(true);
+        t.setType(Type.STRING);
+        templateRepository.save(t);
         Parameter param = new Parameter();
         param.setCreatedBy("user1");
         param.setPath("path");
         param.setValue("value");
-        param.setType(Type.STRING);
         param.setName("name");
         Parameter param2 = new Parameter();
         param2.setCreatedBy("user2");
         param2.setPath("path");
         param2.setValue("value");
-        param2.setType(Type.STRING);
         param2.setName("name1");
 
         Parameter saved = paramRepository.save(param);
         long id = saved.getId();
         List<Parameter> params = Lists.newArrayList(paramRepository.findAll());
-        Assert.assertEquals(1,params.size());
+        Assert.assertEquals(1, params.size());
         Assert.assertEquals("user1", params.get(0).getCreatedBy());
         saved.setCreatedBy("user2");
         paramRepository.save(param);
         params = Lists.newArrayList(paramRepository.findAll());
-        Assert.assertEquals(1,params.size());
+        Assert.assertEquals(1, params.size());
         saved = paramRepository.findOne(id);
         Assert.assertEquals("user2", params.get(0).getCreatedBy());
         saved = paramRepository.save(param2);
         saved = paramRepository.findOne(saved.getId());
         Assert.assertEquals("user2", saved.getCreatedBy());
         params = Lists.newArrayList(paramRepository.findAll());
-        Assert.assertEquals(2,params.size());
-        
-        
+        Assert.assertEquals(2, params.size());
+
     }
+
+    @Test
+    public void testCreateWithoutTemplate() {
+
+        Parameter param = new Parameter();
+        param.setCreatedBy("user1");
+        param.setPath("path");
+        param.setValue("value");
+        param.setName("name");
+        try {
+            Parameter saved = paramRepository.save(param);
+            Assert.fail("should throw exception");
+        } catch (JpaSystemException jse) {
+            Assert.assertTrue(jse.getCause().getMessage().contains("foreign key no parent"));
+        }
+    }
+
 }
