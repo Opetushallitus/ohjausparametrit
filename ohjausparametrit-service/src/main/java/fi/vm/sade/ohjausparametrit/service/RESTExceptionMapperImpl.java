@@ -37,7 +37,8 @@ public class RESTExceptionMapperImpl implements ExceptionMapper<Exception> {
     public Response toResponse(Exception e) {
         log.error("unexpected service error", e);
         // last case scenario
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(e.getMessage()).build();
+        throw new RuntimeException(e);
+//        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+//                .entity(e.getMessage()).build();
     }
 }

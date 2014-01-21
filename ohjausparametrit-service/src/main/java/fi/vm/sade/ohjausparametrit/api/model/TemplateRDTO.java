@@ -21,7 +21,7 @@ import java.util.Date;
  * 
  * @author mlyly
  */
-public class ParameterRDTO implements Serializable {
+public class TemplateRDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,9 +31,17 @@ public class ParameterRDTO implements Serializable {
     private String modifiedBy;
 
     private String path;
-    private String name;
-    private Object value;
-    
+    private String type;
+    private boolean required;
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -50,16 +58,12 @@ public class ParameterRDTO implements Serializable {
         return modifiedBy;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getPath() {
         return path;
     }
 
-    public Object getValue() {
-        return value;
+    public String getType() {
+        return type;
     }
 
     public void setCreated(Date created) {
@@ -78,16 +82,12 @@ public class ParameterRDTO implements Serializable {
         this.modifiedBy = modifiedBy;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setPath(String path) {
         this.path = path;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

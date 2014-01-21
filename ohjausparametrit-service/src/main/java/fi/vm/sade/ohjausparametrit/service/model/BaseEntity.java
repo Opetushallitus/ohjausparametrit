@@ -14,7 +14,6 @@
  */
 package fi.vm.sade.ohjausparametrit.service.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,6 +33,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class BaseEntity extends fi.vm.sade.generic.model.BaseEntity {
 
+    private static final long serialVersionUID = 1L;
+    
     public static final String MODIFIED = "modified";
     public static final String CREATED = "created";
     public static final String MODIFIEDBY = "modifiedBy";

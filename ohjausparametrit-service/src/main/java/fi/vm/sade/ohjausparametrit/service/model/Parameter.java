@@ -16,6 +16,7 @@ package fi.vm.sade.ohjausparametrit.service.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -42,7 +43,7 @@ public class Parameter extends BaseEntity {
     @Column(name = VALUE, nullable = false)
     private String value;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name=PATH, insertable=false, updatable=false, referencedColumnName=Template.PATH)
     Template template;
     

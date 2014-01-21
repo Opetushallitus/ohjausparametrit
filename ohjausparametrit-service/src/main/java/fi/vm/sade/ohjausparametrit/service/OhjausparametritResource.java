@@ -32,7 +32,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
-import fi.vm.sade.ohjausparametrit.service.conversion.ConvertParameterToParameterRDTO;
+import fi.vm.sade.ohjausparametrit.api.model.TemplateRDTO;
+import fi.vm.sade.ohjausparametrit.service.conversion.ParameterToParameterRDTO;
+import fi.vm.sade.ohjausparametrit.service.conversion.TemplateToTemplateRDTO;
 import fi.vm.sade.ohjausparametrit.service.dao.ParamRepository;
 import fi.vm.sade.ohjausparametrit.service.dao.TemplateRepository;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
@@ -69,7 +71,8 @@ public class OhjausparametritResource {
     private Logger logger = LoggerFactory
             .getLogger(OhjausparametritResource.class);
 
-    private ConvertParameterToParameterRDTO converter = new ConvertParameterToParameterRDTO();
+    private ParameterToParameterRDTO paramConverter = new ParameterToParameterRDTO();
+    private TemplateToTemplateRDTO templateConverter = new TemplateToTemplateRDTO();
 
     private final Map<Class<?>, Template.Type> typeMap;
 
@@ -83,7 +86,8 @@ public class OhjausparametritResource {
         typeMap = ImmutableMap.<Class<?>, Template.Type> builder()
                 .put(String.class, Template.Type.STRING)
                 .put(Integer.class, Template.Type.INT)
-                .put(Boolean.class, Template.Type.BOOLEAN).build();
+                .put(Boolean.class, Template.Type.BOOLEAN)
+                .put(Date.class, Template.Type.DATE).build();
     }
 
     @GET
@@ -97,15 +101,17 @@ public class OhjausparametritResource {
             }
             logger.error("*** GENERATING DEMO DATA ***");
 
-            createDemoParameter("security.maxConcurrentUsers", NO_TARGET, 500, true);
-            createDemoParameter("haku:hakuaikatarjonta.julkhakukausi",
-                    NO_TARGET, 500, true);
+            createDemoParameter("securityMaxConcurrentUsers", NO_TARGET, 500, true);
+            createDemoParameter("alkupvm",
+                    NO_TARGET, new Date(), true);
+            createDemoParameter("securityLoginsAllowed",
+                    NO_TARGET, true, true);
         }
         return "Well heeello! " + new Date();
 
     }
 
-    private void createDemoParameter(String path, String target, Object value, boolean required) {
+    private Response createDemoParameter(String path, String target, Object value, boolean required) {
 
         Parameter p = paramRepository.findByPathAndName(path, target);
 
@@ -127,7 +133,7 @@ public class OhjausparametritResource {
             
             templateRepository.save(t);
 
-            p = new Parameter();
+        }   p = new Parameter();
 
             p.setName(target);
             p.setPath(path);
@@ -135,14 +141,46 @@ public class OhjausparametritResource {
             p.setValue(value.toString());
 
             paramRepository.save(p);
-        }
+        
+            return Response.ok().build();
     }
 
     @GET
     @Produces("application/json;charset=UTF-8")
     public Iterable<ParameterRDTO> list() {
         logger.info("list all");
-        return Iterables.transform(paramRepository.findAll(), converter);
+        return Iterables.transform(paramRepository.findAll(), paramConverter);
+    }
+
+    @GET
+    @Produces("application/json;charset=UTF-8")
+    @Path("template/{path}")
+    public Response getTemplateByPath(
+            @PathParam("path") String path) {
+        try {
+        logger.info("list all");
+        Template t= templateRepository.findByPath(path);
+        if(t==null) {
+            logger.debug("not found:" + path);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            return Response.ok("").build();
+
+        }
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        
+    }
+
+    @GET
+    @Produces("application/json;charset=UTF-8")
+    @Path("template")
+    public Iterable<TemplateRDTO> getTemplates(
+            @PathParam("path") String path) {
+        logger.info("list all");
+        return Iterables.transform(templateRepository.findAll(), templateConverter);
     }
 
     @GET
@@ -165,7 +203,7 @@ public class OhjausparametritResource {
     public Iterable<ParameterRDTO> listByPath(@PathParam("path") String path) {
         logger.info("list path starting with:" + path);
         return Iterables.transform(
-                paramRepository.findByPathStartingWith(path), converter);
+                paramRepository.findByPathStartingWith(path), paramConverter);
     }
 
 }
