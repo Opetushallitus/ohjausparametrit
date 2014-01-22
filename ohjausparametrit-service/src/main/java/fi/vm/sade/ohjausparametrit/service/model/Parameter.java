@@ -14,6 +14,8 @@
  */
 package fi.vm.sade.ohjausparametrit.service.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,10 +45,10 @@ public class Parameter extends BaseEntity {
     @Column(name = VALUE, nullable = false)
     private String value;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name=PATH, insertable=false, updatable=false, referencedColumnName=Template.PATH)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = PATH, insertable = false, updatable = false, referencedColumnName = Template.PATH)
     Template template;
-    
+
     public String getName() {
         return name;
     }
@@ -55,8 +57,8 @@ public class Parameter extends BaseEntity {
         return path;
     }
 
-    public String getValue() {
-        return value;
+    public <T> T getValue() {
+        return (T) deserialize(value);
     }
 
     public void setName(String name) {
@@ -67,8 +69,65 @@ public class Parameter extends BaseEntity {
         this.path = path;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(Object value) {
+        this.value = serialize(value);
+    }
+
+    /**
+     * Serializes actual data into string column in db
+     * @param o
+     * @return
+     */
+    private String serialize(Object o) {
+
+        if (o instanceof String) {
+            return "s" + o.toString();
+        }
+
+        if (o instanceof Integer) {
+            return "i" + o.toString();
+        }
+
+        if (o instanceof Date) {
+            return "d" + ((Date) o).getTime();
+        }
+
+        if (o instanceof Boolean) {
+            return "b" + o.toString();
+        }
+
+        throw new RuntimeException("Donät know how to serialize type: "
+                + o.getClass());
+    }
+
+    /**
+     * Deserializes actual data from string column
+     * @param value
+     * @return
+     */
+    private Object deserialize(String value) {
+
+        if (value == null)
+            return null;
+        if (value.length() < 1)
+            return null; // type + payload
+
+        final char c = value.charAt(0);
+        final String rawValue = value.substring(1);
+
+        switch (c) {
+        case 's':
+            return rawValue;
+        case 'i':
+            return Integer.valueOf(rawValue);
+        case 'd':
+            return new Date(Long.parseLong(rawValue));
+        case 'b':
+            return Boolean.valueOf(rawValue);
+        default:
+            return value;
+        }
+
     }
 
     @Override

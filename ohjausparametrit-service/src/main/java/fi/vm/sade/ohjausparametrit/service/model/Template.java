@@ -49,5 +49,11 @@ public class Template extends BaseEntity {
     public void setType(Type type) {
         this.type = type;
     }
+    @Override
+    public String toString() {
+        return "Template [path=" + path + ", required=" + required + ", type="
+                + type + ", toString()=" + super.toString() + "]";
+    }
 
+    
 }

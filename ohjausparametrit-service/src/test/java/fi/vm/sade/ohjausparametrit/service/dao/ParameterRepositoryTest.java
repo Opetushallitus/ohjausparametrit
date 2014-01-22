@@ -63,12 +63,12 @@ public class ParameterRepositoryTest {
         Parameter param = new Parameter();
         param.setCreatedBy("user1");
         param.setPath("path");
-        param.setValue("value");
+        param.setValue(5);
         param.setName("name");
         Parameter param2 = new Parameter();
         param2.setCreatedBy("user2");
         param2.setPath("path");
-        param2.setValue("value");
+        param2.setValue(true);
         param2.setName("name1");
 
         Parameter saved = paramRepository.save(param);
@@ -76,6 +76,7 @@ public class ParameterRepositoryTest {
         List<Parameter> params = Lists.newArrayList(paramRepository.findAll());
         Assert.assertEquals(1, params.size());
         Assert.assertEquals("user1", params.get(0).getCreatedBy());
+        Assert.assertEquals(5, params.get(0).getValue());
         saved.setCreatedBy("user2");
         paramRepository.save(param);
         params = Lists.newArrayList(paramRepository.findAll());

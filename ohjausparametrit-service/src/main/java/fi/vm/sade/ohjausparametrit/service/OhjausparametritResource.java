@@ -17,7 +17,10 @@ package fi.vm.sade.ohjausparametrit.service;
 import java.util.Date;
 import java.util.Map;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -32,7 +35,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
-import fi.vm.sade.ohjausparametrit.api.model.TemplateRDTO;
+import fi.vm.sade.ohjausparametrit.service.conversion.ParameterRDTOToParameter;
 import fi.vm.sade.ohjausparametrit.service.conversion.ParameterToParameterRDTO;
 import fi.vm.sade.ohjausparametrit.service.conversion.TemplateToTemplateRDTO;
 import fi.vm.sade.ohjausparametrit.service.dao.ParamRepository;
@@ -41,7 +44,8 @@ import fi.vm.sade.ohjausparametrit.service.model.Parameter;
 import fi.vm.sade.ohjausparametrit.service.model.Template;
 
 /**
- * TODO add swagger annotate api
+ * TODO add swagger, annotate api
+ * 
  * @author mlyly
  * 
  *         Usage examples.
@@ -73,6 +77,7 @@ public class OhjausparametritResource {
 
     private ParameterToParameterRDTO paramConverter = new ParameterToParameterRDTO();
     private TemplateToTemplateRDTO templateConverter = new TemplateToTemplateRDTO();
+    private ParameterRDTOToParameter parameterRdtoConverter = new ParameterRDTOToParameter();
 
     private final Map<Class<?>, Template.Type> typeMap;
 
@@ -101,28 +106,29 @@ public class OhjausparametritResource {
             }
             logger.error("*** GENERATING DEMO DATA ***");
 
-            createDemoParameter("securityMaxConcurrentUsers", NO_TARGET, 500, true);
-            createDemoParameter("alkupvm",
-                    NO_TARGET, new Date(), true);
-            createDemoParameter("securityLoginsAllowed",
-                    NO_TARGET, true, true);
+            createDemoParameter("securityMaxConcurrentUsers", NO_TARGET, 500,
+                    true);
+            createDemoParameter("alkupvm", NO_TARGET, new Date(), true);
+            createDemoParameter("securityLoginsAllowed", NO_TARGET, true, true);
+            createDemoParameter("hello", NO_TARGET, "world!", true);
         }
         return "Well heeello! " + new Date();
-
     }
 
-    private Response createDemoParameter(String path, String target, Object value, boolean required) {
+    private Response createDemoParameter(String path, String target,
+            Object value, boolean required) {
 
         Parameter p = paramRepository.findByPathAndName(path, target);
 
         if (p == null) {
             Template t = templateRepository.findByPath(path);
-            if(t==null){
-                t= new Template();
+            if (t == null) {
+                System.out.println("creating new template for path" + path);
+                t = new Template();
                 t.setRequired(required);
                 t.setPath(path);
             }
-            
+
             Template.Type type = typeMap.get(value.getClass());
             if (type == null) {
                 throw new RuntimeException("Unknown parameter type:"
@@ -130,19 +136,20 @@ public class OhjausparametritResource {
             }
 
             t.setType(type);
-            
+
             templateRepository.save(t);
 
-        }   p = new Parameter();
+            p = new Parameter();
+        }
 
-            p.setName(target);
-            p.setPath(path);
+        p.setName(target);
+        p.setPath(path);
 
-            p.setValue(value.toString());
+        p.setValue(value);
 
-            paramRepository.save(p);
-        
-            return Response.ok().build();
+        paramRepository.save(p);
+
+        return Response.ok().build();
     }
 
     @GET
@@ -155,48 +162,52 @@ public class OhjausparametritResource {
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("template/{path}")
-    public Response getTemplateByPath(
-            @PathParam("path") String path) {
+    public Response getTemplateByPath(@PathParam("path") String path) {
         try {
-        logger.info("list all");
-        Template t= templateRepository.findByPath(path);
-        if(t==null) {
-            logger.debug("not found:" + path);
-            return Response.status(Response.Status.NOT_FOUND).build();
-        } else {
-            return Response.ok("").build();
+            logger.info("list all");
+            Template t = templateRepository.findByPath(path);
+            if (t == null) {
+                logger.debug("not found:" + path);
+                return Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                return Response.ok(templateConverter.apply(t)).build();
 
-        }
+            }
         } catch (Throwable t) {
             t.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        
+
     }
 
-    @GET
-    @Produces("application/json;charset=UTF-8")
-    @Path("template")
-    public Iterable<TemplateRDTO> getTemplates(
-            @PathParam("path") String path) {
-        logger.info("list all");
-        return Iterables.transform(templateRepository.findAll(), templateConverter);
-    }
-
+    /**
+     * Hakee parametrin
+     * 
+     * @param path
+     * @param name
+     * @return
+     */
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
     public Response getParameterByCategoryAndtarget(
             @PathParam("path") String path, @PathParam("name") String name) {
         Parameter p = paramRepository.findByPathAndName(path, name);
-        if(p==null) {
+        if (p == null) {
             logger.debug("not found:" + path + "," + name);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        
+
         return Response.ok(p).build();
     }
 
+    /**
+     * Listaa parametrit
+     * 
+     * @param path
+     *            polku (prefix)
+     * @return
+     */
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("{path}")
@@ -204,6 +215,43 @@ public class OhjausparametritResource {
         logger.info("list path starting with:" + path);
         return Iterables.transform(
                 paramRepository.findByPathStartingWith(path), paramConverter);
+    }
+
+    /**
+     * Poista parametri.
+     * 
+     * @param path
+     * @param name
+     * @return
+     */
+    @DELETE
+    @Produces("application/json;charset=UTF-8")
+    @Path("{path}/{name}")
+    public Response deleteParameter(@PathParam("path") String path,
+            @PathParam("name") String name) {
+        Parameter p = paramRepository.findByPathAndName(path, name);
+        if (p == null) {
+            logger.debug("not found:" + path + "," + name);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        paramRepository.delete(p);
+        return Response.ok(p).build();
+    }
+
+    @POST
+    @Produces("application/json;charset=UTF-8")
+    public Response createParameter(ParameterRDTO p) {
+        paramRepository.save(parameterRdtoConverter.apply(p));
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Produces("application/json;charset=UTF-8")
+    @Path("{path}")
+    public Response updateParameter(@PathParam("path") String path, Parameter p) {
+
+        paramRepository.save(p);
+        return Response.ok().build();
     }
 
 }
