@@ -181,24 +181,18 @@ public class OhjausparametritResource {
     }
 
     /**
-     * Hakee parametrin
+     * Hakee parametrin 
      * 
-     * @param path
-     * @param name
+     * @param path path prefix (esim HK)
+     * @param name name(esim oid)
      * @return
      */
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
-    public Response getParameterByCategoryAndtarget(
+    public Response getParameterByPathAndName(
             @PathParam("path") String path, @PathParam("name") String name) {
-        Parameter p = paramRepository.findByPathAndName(path, name);
-        if (p == null) {
-            logger.debug("not found:" + path + "," + name);
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.ok(p).build();
+        return Response.ok(Iterables.transform(paramRepository.findByPathStartingWithAndName(path, name), paramConverter)).build();
     }
 
     /**

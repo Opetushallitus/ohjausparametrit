@@ -30,5 +30,7 @@ public interface ParamRepository extends
     Parameter findByPathAndName(String path, String name);
 
     List<Parameter> findByPathStartingWith(String path);
+    
+    List<Parameter> findByPathStartingWithAndName(String path, String name);
 
 }
