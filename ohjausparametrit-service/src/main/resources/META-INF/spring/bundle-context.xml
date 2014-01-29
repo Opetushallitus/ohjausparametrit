@@ -11,6 +11,7 @@
     <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="properties">
             <util:properties local-override="true">
+            	<prop key="cas_callback_url">${cas.callback.parametri-service}</prop>
                 <prop key="cas_mode">front</prop>
                 <prop key="cas_key">ohjausparametrit-service</prop>
                 <prop key="cas_service">${cas.service.ohjausparametrit-service}</prop>

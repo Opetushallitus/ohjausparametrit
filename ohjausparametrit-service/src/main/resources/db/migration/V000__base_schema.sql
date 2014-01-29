@@ -7,7 +7,7 @@
         modifiedBy varchar(255),
         name varchar(255) not null,
         path varchar(255) not null,
-        value varchar(255) not null,
+        value varchar(255),
         primary key (id),
         unique (path, name)
     );
@@ -26,12 +26,19 @@
         unique (path)
     );
 
+    alter table parameter 
+        add constraint FK747EB3A99686EE89 
+        foreign key (path) 
+        references template (path);
+
+    create sequence hibernate_sequence;
+
+
     alter table parameter
         add constraint parameter_template
         foreign key (path)
         references template (path);
 
-create sequence hibernate_sequence;
 create index p_pathname on parameter(path, name);
 create index t_path on template(path);
 

@@ -42,7 +42,7 @@ public class Parameter extends BaseEntity {
     @Column(name = NAME, nullable = false)
     private String name;
 
-    @Column(name = VALUE, nullable = false)
+    @Column(name = VALUE, nullable = true)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -79,12 +79,16 @@ public class Parameter extends BaseEntity {
      * @return
      */
     private String serialize(Object o) {
+        
+        if(o==null) {
+            return null;
+        }
 
         if (o instanceof String) {
             return "s" + o.toString();
         }
 
-        if (o instanceof Integer) {
+        if (o instanceof Integer || o instanceof Long) {
             return "i" + o.toString();
         }
 
@@ -96,7 +100,7 @@ public class Parameter extends BaseEntity {
             return "b" + o.toString();
         }
 
-        throw new RuntimeException("Donät know how to serialize type: "
+        throw new RuntimeException("Don't know how to serialize type: "
                 + o.getClass());
     }
 
@@ -119,7 +123,7 @@ public class Parameter extends BaseEntity {
         case 's':
             return rawValue;
         case 'i':
-            return Integer.valueOf(rawValue);
+            return Long.valueOf(rawValue);
         case 'd':
             return new Date(Long.parseLong(rawValue));
         case 'b':

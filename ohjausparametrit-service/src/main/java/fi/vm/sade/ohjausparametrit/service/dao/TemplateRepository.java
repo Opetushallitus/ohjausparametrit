@@ -25,6 +25,18 @@ import fi.vm.sade.ohjausparametrit.service.model.Template;
 public interface TemplateRepository extends
         PagingAndSortingRepository<Template, Long> {
 
+    /**
+     * Hae koko pathilla.
+     * @param path
+     * @return
+     */
     Template findByPath(String path);
+    
+    /**
+     * Hae path prefixillä.
+     * @param path
+     * @return
+     */
+    Iterable<Template> findByPathStartingWith(String path);
 
 }

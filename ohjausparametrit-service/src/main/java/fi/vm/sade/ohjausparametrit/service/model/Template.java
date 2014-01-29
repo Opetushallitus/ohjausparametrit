@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+//TODO remove "required", not needed
 @Entity
 @Table(name = Template.TABLE_NAME, uniqueConstraints = @UniqueConstraint(columnNames = {
         Template.PATH}))
