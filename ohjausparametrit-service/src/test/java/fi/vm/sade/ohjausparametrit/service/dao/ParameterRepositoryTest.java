@@ -16,9 +16,6 @@ package fi.vm.sade.ohjausparametrit.service.dao;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolationException;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -76,7 +73,7 @@ public class ParameterRepositoryTest {
         List<Parameter> params = Lists.newArrayList(paramRepository.findAll());
         Assert.assertEquals(1, params.size());
         Assert.assertEquals("user1", params.get(0).getCreatedBy());
-        Assert.assertEquals(5, params.get(0).getValue());
+        Assert.assertEquals(5l, params.get(0).getValue());
         saved.setCreatedBy("user2");
         paramRepository.save(param);
         params = Lists.newArrayList(paramRepository.findAll());
