@@ -6,7 +6,7 @@
 	deploy to luokka shell command:
 	#ant -Dtomcat-host=luokka -Dtomcat-port=8302
 -->
-		<property name="oph.name" value="ophjausparametrit"/>
+		<property name="oph.name" value="ohjausparametrit"/>
 		<property name="pom.version" value="9.0-SNAPSHOT"/>
 		
 		<property name="maven.repo" value="${user.home}/.m2/repository"/>
