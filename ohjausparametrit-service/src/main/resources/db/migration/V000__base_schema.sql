@@ -7,7 +7,9 @@
         modifiedBy varchar(255),
         name varchar(255) not null,
         path varchar(255) not null,
-        value varchar(255),
+        value_b boolean,
+        value_l int8,
+        value_s varchar(255),
         primary key (id),
         unique (path, name)
     );
@@ -26,13 +28,12 @@
         unique (path)
     );
 
-    alter table parameter 
-        add constraint FK747EB3A99686EE89 
-        foreign key (path) 
+    alter table parameter
+        add constraint FK747EB3A99686EE89
+        foreign key (path)
         references template (path);
 
     create sequence hibernate_sequence;
-
 
     alter table parameter
         add constraint parameter_template

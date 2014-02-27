@@ -14,7 +14,7 @@ import javax.persistence.UniqueConstraint;
 public class Template extends BaseEntity {
 
     public enum Type {
-        BOOLEAN, LONG, STRING, DATE
+        BOOLEAN, LONG, STRING
     }
     
     private static final long serialVersionUID = 1L;

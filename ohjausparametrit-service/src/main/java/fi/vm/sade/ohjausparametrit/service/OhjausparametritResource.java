@@ -96,7 +96,7 @@ public class OhjausparametritResource {
                 .put(Integer.class, Template.Type.LONG)
                 .put(Long.class, Template.Type.LONG)
                 .put(Boolean.class, Template.Type.BOOLEAN)
-                .put(Date.class, Template.Type.DATE).build();
+                .put(Date.class, Template.Type.LONG).build();
     }
 
     @GET
@@ -110,61 +110,61 @@ public class OhjausparametritResource {
             }
             logger.error("*** GENERATING DEMO DATA ***");
 
-            saveDateTemplate("PH_TJT", Type.DATE);
-            saveDateTemplate("PH_HKLPT", Type.DATE);
-            saveDateTemplate("PH_HKMT", Type.DATE);
-            saveDateTemplate("PH_KKM_S", Type.DATE);
-            saveDateTemplate("PH_KKM_E", Type.DATE);
-            saveDateTemplate("PH_HVVPTP", Type.DATE);
-            saveDateTemplate("PH_KTT_S", Type.DATE);
-            saveDateTemplate("PH_KTT_E", Type.DATE);
-            saveDateTemplate("PH_OLVVPKE_S", Type.DATE);
-            saveDateTemplate("PH_OLVVPKE_E", Type.DATE);
-            saveDateTemplate("PH_VLS_S", Type.DATE);
-            saveDateTemplate("PH_VLS_E", Type.DATE);
-            saveDateTemplate("PH_SS_S", Type.DATE);
-            saveDateTemplate("PH_SS_E", Type.DATE);
-            saveDateTemplate("PH_SSAVTM", Type.DATE);
+            saveDateTemplate("PH_TJT", Type.LONG);
+            saveDateTemplate("PH_HKLPT", Type.LONG);
+            saveDateTemplate("PH_HKMT", Type.LONG);
+            saveDateTemplate("PH_KKM_S", Type.LONG);
+            saveDateTemplate("PH_KKM_E", Type.LONG);
+            saveDateTemplate("PH_HVVPTP", Type.LONG);
+            saveDateTemplate("PH_KTT_S", Type.LONG);
+            saveDateTemplate("PH_KTT_E", Type.LONG);
+            saveDateTemplate("PH_OLVVPKE_S", Type.LONG);
+            saveDateTemplate("PH_OLVVPKE_E", Type.LONG);
+            saveDateTemplate("PH_VLS_S", Type.LONG);
+            saveDateTemplate("PH_VLS_E", Type.LONG);
+            saveDateTemplate("PH_SS_S", Type.LONG);
+            saveDateTemplate("PH_SS_E", Type.LONG);
+            saveDateTemplate("PH_SSAVTM", Type.LONG);
             saveDateTemplate("PH_SST", Type.LONG);
-            saveDateTemplate("PH_SSKA", Type.DATE);
-            saveDateTemplate("PH_VTSSV", Type.DATE);
-            saveDateTemplate("PH_VSSAV", Type.DATE);
-            saveDateTemplate("PH_JKLIP", Type.DATE);
-            saveDateTemplate("PH_HKP", Type.DATE);
-            saveDateTemplate("PH_VTJH_S", Type.DATE);
-            saveDateTemplate("PH_VTJH_E", Type.DATE);
-            saveDateTemplate("PH_EVR", Type.DATE);
-            saveDateTemplate("PH_OPVP", Type.DATE);
+            saveDateTemplate("PH_SSKA", Type.LONG);
+            saveDateTemplate("PH_VTSSV", Type.LONG);
+            saveDateTemplate("PH_VSSAV", Type.LONG);
+            saveDateTemplate("PH_JKLIP", Type.LONG);
+            saveDateTemplate("PH_HKP", Type.LONG);
+            saveDateTemplate("PH_VTJH_S", Type.LONG);
+            saveDateTemplate("PH_VTJH_E", Type.LONG);
+            saveDateTemplate("PH_EVR", Type.LONG);
+            saveDateTemplate("PH_OPVP", Type.LONG);
             saveDateTemplate("PH_HPVOA", Type.LONG);
-            saveDateTemplate("PH_HKTA", Type.DATE);
+            saveDateTemplate("PH_HKTA", Type.LONG);
             
             //Hakukausi
-            saveDateTemplate("PHK_HKAR_S", Type.DATE);
-            saveDateTemplate("PHK_HKAR_E", Type.DATE);
-            saveDateTemplate("PHK_PLPS_S", Type.DATE);
-            saveDateTemplate("PHK_PLPS_E", Type.DATE);
-            saveDateTemplate("PHK_PLAS_S",Type.DATE);
-            saveDateTemplate("PHK_PLAS_E", Type.DATE);
-            saveDateTemplate("PHK_LPAS_S", Type.DATE);
-            saveDateTemplate("PHK_LPAS_E", Type.DATE);
+            saveDateTemplate("PHK_HKAR_S", Type.LONG);
+            saveDateTemplate("PHK_HKAR_E", Type.LONG);
+            saveDateTemplate("PHK_PLPS_S", Type.LONG);
+            saveDateTemplate("PHK_PLPS_E", Type.LONG);
+            saveDateTemplate("PHK_PLAS_S",Type.LONG);
+            saveDateTemplate("PHK_PLAS_E", Type.LONG);
+            saveDateTemplate("PHK_LPAS_S", Type.LONG);
+            saveDateTemplate("PHK_LPAS_E", Type.LONG);
             
             //KELA
-            saveDateTemplate("PHK_KELAKTTS", Type.DATE);
-            saveDateTemplate("PHK_KELATAVS_S",Type.DATE);
-            saveDateTemplate("PHK_KELATAVS_E",Type.DATE);
+            saveDateTemplate("PHK_KELAKTTS", Type.LONG);
+            saveDateTemplate("PHK_KELATAVS_S",Type.LONG);
+            saveDateTemplate("PHK_KELATAVS_E",Type.LONG);
             saveDateTemplate("PHK_KELATAVSM",Type.BOOLEAN);
-            saveDateTemplate("PHK_KELAKAVTS_S",Type.DATE);
-            saveDateTemplate("PHK_KELAKAVTS_E",Type.DATE);
+            saveDateTemplate("PHK_KELAKAVTS_S",Type.LONG);
+            saveDateTemplate("PHK_KELAKAVTS_E",Type.LONG);
             saveDateTemplate("PHK_KELAKAVTSM",Type.BOOLEAN);
             saveDateTemplate("PHK_KELAVTST",Type.LONG);
             saveDateTemplate("PHK_KELAVTSAK",Type.STRING);
 
             // TEM
-            saveDateTemplate("PHK_TEMTAVS_S",Type.DATE);
-            saveDateTemplate("PHK_TEMATAVS_E",Type.DATE);
+            saveDateTemplate("PHK_TEMTAVS_S",Type.LONG);
+            saveDateTemplate("PHK_TEMATAVS_E",Type.LONG);
             saveDateTemplate("PHK_TEMTAVSM",Type.BOOLEAN);
-            saveDateTemplate("PHK_TEMKAVTS_S",Type.DATE);
-            saveDateTemplate("PHK_TEMKAVTS_E",Type.DATE);
+            saveDateTemplate("PHK_TEMKAVTS_S",Type.LONG);
+            saveDateTemplate("PHK_TEMKAVTS_E",Type.LONG);
             saveDateTemplate("PHK_TEMKAVTSM",Type.BOOLEAN);
             saveDateTemplate("PHK_TEMVTST",Type.LONG);
             saveDateTemplate("PHK_TEMVTSAK",Type.STRING);
@@ -328,13 +328,6 @@ public class OhjausparametritResource {
             case BOOLEAN:
                 if(value.value.getClass()!=Boolean.class) {
                     return error("not a boolean: '" + value.value + "'");
-                }
-                break;
-            case DATE:
-                try{
-                    Long.parseLong(value.value.toString());
-                } catch (NumberFormatException nfe) {
-                    return error("not a date: '" + value.value + "'");
                 }
                 break;
             case LONG:

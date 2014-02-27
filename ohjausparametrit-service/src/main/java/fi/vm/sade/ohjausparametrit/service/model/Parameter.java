@@ -14,8 +14,6 @@
  */
 package fi.vm.sade.ohjausparametrit.service.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,6 +22,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+
+/**
+ * Stores data in different column based on type, new types should probably have separate column too?
+ */
 @Entity
 @Table(name = Parameter.TABLE_NAME, uniqueConstraints = @UniqueConstraint(columnNames = {
         Parameter.PATH, Parameter.NAME }))
@@ -32,7 +34,9 @@ public class Parameter extends BaseEntity {
     private static final long serialVersionUID = 1L;
     public static final String NAME = "name";
     public static final String PATH = "path";
-    public static final String VALUE = "value";
+    public static final String VALUE_STRING = "value_s";
+    public static final String VALUE_LONG = "value_l";
+    public static final String VALUE_BOOLEAN = "value_b";
 
     public static final String TABLE_NAME = "parameter";
 
@@ -42,8 +46,14 @@ public class Parameter extends BaseEntity {
     @Column(name = NAME, nullable = false)
     private String name;
 
-    @Column(name = VALUE, nullable = true)
-    private String value;
+    @Column(name = VALUE_STRING, nullable = true)
+    private String valueString;
+
+    @Column(name = VALUE_LONG, nullable = true)
+    private Long valueLong;
+
+    @Column(name = VALUE_BOOLEAN, nullable = true)
+    private Boolean valueBoolean;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = PATH, insertable = false, updatable = false, referencedColumnName = Template.PATH)
@@ -58,7 +68,17 @@ public class Parameter extends BaseEntity {
     }
 
     public <T> T getValue() {
-        return (T) deserialize(value);
+        Object values[] = new Object[3];
+        values[0]=valueString;
+        values[1]=valueLong;
+        values[2]=valueBoolean;
+        for (Object o : values) {
+            if (o != null) {
+                return (T)o;
+            }
+        };
+        
+        return null;
     }
 
     public void setName(String name) {
@@ -70,74 +90,27 @@ public class Parameter extends BaseEntity {
     }
 
     public void setValue(Object value) {
-        this.value = serialize(value);
-    }
-
-    /**
-     * Serializes actual data into string column in db
-     * @param o
-     * @return
-     */
-    private String serialize(Object o) {
+        valueString=null;
+        valueBoolean=null;
+        valueLong=null;
         
-        if(o==null) {
-            return null;
+        if(value.getClass()==String.class) {
+            valueString=(String)value;
         }
 
-        if (o instanceof String) {
-            return "s" + o.toString();
+        if(value.getClass()==Boolean.class) {
+            valueBoolean=(Boolean)value;
         }
 
-        if (o instanceof Integer || o instanceof Long) {
-            return "i" + o.toString();
+        if(value.getClass()==Long.class || value.getClass()==Integer.class) {
+            valueLong = Long.parseLong(value.toString());
         }
-
-        if (o instanceof Date) {
-            return "d" + ((Date) o).getTime();
-        }
-
-        if (o instanceof Boolean) {
-            return "b" + o.toString();
-        }
-
-        throw new RuntimeException("Don't know how to serialize type: "
-                + o.getClass());
-    }
-
-    /**
-     * Deserializes actual data from string column
-     * @param value
-     * @return
-     */
-    private Object deserialize(String value) {
-
-        if (value == null)
-            return null;
-        if (value.length() < 1)
-            return null; // type + payload
-
-        final char c = value.charAt(0);
-        final String rawValue = value.substring(1);
-
-        switch (c) {
-        case 's':
-            return rawValue;
-        case 'i':
-            return Long.valueOf(rawValue);
-        case 'd':
-            return new Date(Long.parseLong(rawValue));
-        case 'b':
-            return Boolean.valueOf(rawValue);
-        default:
-            return value;
-        }
-
     }
 
     @Override
     public String toString() {
         return "Parameter [path=" + path + ", name=" + name + ", value="
-                + value + ", toString()=" + super.toString() + "]";
+                + getValue() + ", toString()=" + super.toString() + "]";
     }
 
 }
