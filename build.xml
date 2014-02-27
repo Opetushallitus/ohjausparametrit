@@ -72,14 +72,14 @@
 		<echo>Wait for service http-url</echo>
 		<waitfor maxwait="600000" checkevery="500" >
 			<and>
-			<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/api/rest"/>
+			<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/api/rest/parametri"/>
 			</and>
 		</waitfor>
 		<fail message="App did not come up.  Check your log files, fix and try again.  Good Luck :-).">     
 			<condition>
 				<or>
 					<not>
-						<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/rest/haku" />
+						<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/rest/parametri" />
 					</not>
 				</or>
 			</condition>
