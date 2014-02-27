@@ -4,6 +4,10 @@ public class Param {
     
     Object value;
     
+    public Param() {
+        // for json serialization
+    }
+    
     public Param(Object value) {
         this.value = value;
     }
