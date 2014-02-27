@@ -79,7 +79,7 @@
 			<condition>
 				<or>
 					<not>
-						<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/rest/parametri" />
+						<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/rest/haku" />
 					</not>
 				</or>
 			</condition>
