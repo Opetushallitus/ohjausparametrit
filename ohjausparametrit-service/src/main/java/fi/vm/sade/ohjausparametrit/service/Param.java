@@ -4,6 +4,10 @@ public class Param {
     
     Object value;
     
+    public Param(Object value) {
+        this.value = value;
+    }
+    
     public Object getValue() {
         return value;
     }

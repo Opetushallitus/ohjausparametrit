@@ -24,14 +24,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
 import fi.vm.sade.ohjausparametrit.service.conversion.ParameterRDTOToParameter;
@@ -90,8 +93,8 @@ public class OhjausparametritResource {
     public OhjausparametritResource() {
         typeMap = ImmutableMap.<Class<?>, Template.Type> builder()
                 .put(String.class, Template.Type.STRING)
-                .put(Integer.class, Template.Type.INT)
-                .put(Long.class, Template.Type.INT)
+                .put(Integer.class, Template.Type.LONG)
+                .put(Long.class, Template.Type.LONG)
                 .put(Boolean.class, Template.Type.BOOLEAN)
                 .put(Date.class, Template.Type.DATE).build();
     }
@@ -108,119 +111,64 @@ public class OhjausparametritResource {
             logger.error("*** GENERATING DEMO DATA ***");
 
             saveDateTemplate("PH_TJT", Type.DATE);
-//            saveDateTemplate("PH_HKLPT", Type.DATE);
-//            saveDateTemplate("PH_HKMT", Type.DATE);
-//            saveDateTemplate("PH_KKM_S", Type.DATE);
-//            saveDateTemplate("PH_KKM_E", Type.DATE);
-//            saveDateTemplate("PH_HVVPTP", Type.DATE);
-//            saveDateTemplate("PH_KTT_S", Type.DATE);
-//            saveDateTemplate("PH_KTT_E", Type.DATE);
-//            saveDateTemplate("PH_OLVVPKE_S", Type.DATE);
-//            saveDateTemplate("PH_OLVVPKE_E", Type.DATE);
-//            saveDateTemplate("PH_VLS_S", Type.DATE);
-//            saveDateTemplate("PH_VLS_E", Type.DATE);
-//            saveDateTemplate("PH_SS_S", Type.DATE);
-//            saveDateTemplate("PH_SS_E", Type.DATE);
-//            saveDateTemplate("PH_SSAVTM", Type.DATE);
-//            saveDateTemplate("PH_SST", Type.INT);
-//            saveDateTemplate("PH_SSKA", Type.DATE);
-//            saveDateTemplate("PH_VTSSV", Type.DATE);
-//            saveDateTemplate("PH_VSSAV", Type.DATE);
-//            saveDateTemplate("PH_JKLIP", Type.DATE);
-//            saveDateTemplate("PH_HKP", Type.DATE);
-//            saveDateTemplate("PH_VTJH_S", Type.DATE);
-//            saveDateTemplate("PH_VTJH_E", Type.DATE);
-//            saveDateTemplate("PH_EVR", Type.DATE);
-//            saveDateTemplate("PH_OPVP", Type.DATE);
-//            saveDateTemplate("PH_HPVOA", Type.INT);
-//            saveDateTemplate("PH_HKTA", Type.DATE);
-//            saveDateTemplate("PHK_PLPS_S");
-//            saveDateTemplate("PHK_PLPS_E");
-//            saveDateTemplate("PHK_PLAS_S");
-//            saveDateTemplate("PHK_PLAS_E");
-//            saveDateTemplate("PHK_LPAS_S");
-//            saveDateTemplate("PHK_LPAS_E");
-//            saveDateTemplate("PHK_KTTS");
-//            saveDateTemplate("PHK_TAVS_S");
-//            saveDateTemplate("PHK_TAVS_E");
-//            saveDateTemplate("PHK_TAVSM");
-//            saveDateTemplate("PHK_KAVS_S");
-//            saveDateTemplate("PHK_KAVS_E");
-//            saveDateTemplate("PHK_KAVSM");
-//            saveDateTemplate("PHK_VTST");
-//            saveDateTemplate("PHK_VTSAK");
+            saveDateTemplate("PH_HKLPT", Type.DATE);
+            saveDateTemplate("PH_HKMT", Type.DATE);
+            saveDateTemplate("PH_KKM_S", Type.DATE);
+            saveDateTemplate("PH_KKM_E", Type.DATE);
+            saveDateTemplate("PH_HVVPTP", Type.DATE);
+            saveDateTemplate("PH_KTT_S", Type.DATE);
+            saveDateTemplate("PH_KTT_E", Type.DATE);
+            saveDateTemplate("PH_OLVVPKE_S", Type.DATE);
+            saveDateTemplate("PH_OLVVPKE_E", Type.DATE);
+            saveDateTemplate("PH_VLS_S", Type.DATE);
+            saveDateTemplate("PH_VLS_E", Type.DATE);
+            saveDateTemplate("PH_SS_S", Type.DATE);
+            saveDateTemplate("PH_SS_E", Type.DATE);
+            saveDateTemplate("PH_SSAVTM", Type.DATE);
+            saveDateTemplate("PH_SST", Type.LONG);
+            saveDateTemplate("PH_SSKA", Type.DATE);
+            saveDateTemplate("PH_VTSSV", Type.DATE);
+            saveDateTemplate("PH_VSSAV", Type.DATE);
+            saveDateTemplate("PH_JKLIP", Type.DATE);
+            saveDateTemplate("PH_HKP", Type.DATE);
+            saveDateTemplate("PH_VTJH_S", Type.DATE);
+            saveDateTemplate("PH_VTJH_E", Type.DATE);
+            saveDateTemplate("PH_EVR", Type.DATE);
+            saveDateTemplate("PH_OPVP", Type.DATE);
+            saveDateTemplate("PH_HPVOA", Type.LONG);
+            saveDateTemplate("PH_HKTA", Type.DATE);
+            
+            //Hakukausi
+            saveDateTemplate("PHK_HKAR_S", Type.DATE);
+            saveDateTemplate("PHK_HKAR_E", Type.DATE);
+            saveDateTemplate("PHK_PLPS_S", Type.DATE);
+            saveDateTemplate("PHK_PLPS_E", Type.DATE);
+            saveDateTemplate("PHK_PLAS_S",Type.DATE);
+            saveDateTemplate("PHK_PLAS_E", Type.DATE);
+            saveDateTemplate("PHK_LPAS_S", Type.DATE);
+            saveDateTemplate("PHK_LPAS_E", Type.DATE);
+            
+            //KELA
+            saveDateTemplate("PHK_KELAKTTS", Type.DATE);
+            saveDateTemplate("PHK_KELATAVS_S",Type.DATE);
+            saveDateTemplate("PHK_KELATAVS_E",Type.DATE);
+            saveDateTemplate("PHK_KELATAVSM",Type.BOOLEAN);
+            saveDateTemplate("PHK_KELAKAVTS_S",Type.DATE);
+            saveDateTemplate("PHK_KELAKAVTS_E",Type.DATE);
+            saveDateTemplate("PHK_KELAKAVTSM",Type.BOOLEAN);
+            saveDateTemplate("PHK_KELAVTST",Type.LONG);
+            saveDateTemplate("PHK_KELAVTSAK",Type.STRING);
 
-            /**
-             *              PH_TJT : new Date(),
-                            PH_HKLPT : new Date(),
-                            PH_HKMT : new Date(),
+            // TEM
+            saveDateTemplate("PHK_TEMTAVS_S",Type.DATE);
+            saveDateTemplate("PHK_TEMATAVS_E",Type.DATE);
+            saveDateTemplate("PHK_TEMTAVSM",Type.BOOLEAN);
+            saveDateTemplate("PHK_TEMKAVTS_S",Type.DATE);
+            saveDateTemplate("PHK_TEMKAVTS_E",Type.DATE);
+            saveDateTemplate("PHK_TEMKAVTSM",Type.BOOLEAN);
+            saveDateTemplate("PHK_TEMVTST",Type.LONG);
+            saveDateTemplate("PHK_TEMVTSAK",Type.STRING);
 
-                            // Valinnat ja sijoittelu
-                            PH_KKM_S : new Date(),
-                            PH_KKM_E : new Date(),
-                            PH_HVVPTP : new Date(),
-                            PH_KTT_S : new Date(),
-                            PH_KTT_E : new Date(),
-                            PH_OLVVPKE_S : new Date(),
-                            PH_OLVVPKE_E : new Date(),
-                            PH_VLS_S : new Date(),
-                            PH_VLS_E : new Date(),
-                            PH_SS_S : new Date(),
-                            PH_SS_E : new Date(),
-                            PH_SSAVTM : true,
-                            PH_SST : 48,
-                            PH_SSKA : "23:59",
-                            PH_VTSSV : new Date(), // kk
-                            PH_VSSAV : new Date(), // kk
-
-                            // Tulokset ja paikan vastaanotto
-                            PH_JKLIP : new Date(),
-                            PH_HKP : new Date(),
-                            PH_VTJH_S : new Date(),
-                            PH_VTJH_E : new Date(),
-                            PH_EVR : new Date(),
-                            PH_OPVP : new Date(),
-                            PH_HPVOA : 7,
-
-                            // Lisähaku
-                            PH_HKTA : new Date(),
-                            // PH_HKP : new Date(),
-
-                            // Hakukauden parametrit
-                            PHK_PLPS_S : new Date(),
-                            PHK_PLPS_E : new Date(),
-                            PHK_PLAS_S : new Date(),
-                            PHK_PLAS_E : new Date(),
-                            PHK_LPAS_S : new Date(),
-                            PHK_LPAS_E : new Date(),
-
-                            // Tiedonsiirto
-                            PHK_KTTS : new Date(),
-                            PHK_TAVS_S : new Date(),
-                            PHK_TAVS_E : new Date(),
-                            PHK_TAVSM : true,
-                            PHK_KAVS_S : new Date(),
-                            PHK_KAVS_E : new Date(),
-                            PHK_KAVSM : true,
-                            PHK_VTST : 2,
-                            PHK_VTSAK : "23:59",
-                            
-                            **/
-//             */
-            
-            
-//            createDemoParameter("securityMaxConcurrentUsers", NO_TARGET, 500,
-//                    true);
-//            createDemoParameter("alkupvm", NO_TARGET, new Date(), true);
-//            createDemoParameter("securityLoginsAllowed", NO_TARGET, true, true);
-//            createDemoParameter("hello", NO_TARGET, "world!", true);
-            
-            
-            
-            
-            
-            
-            
         }
         return "Well heeello! " + new Date();
     }
@@ -309,7 +257,7 @@ public class OhjausparametritResource {
     @Path("{path}/{name}")
     public Response getParameterByPathAndName(
             @PathParam("path") String path, @PathParam("name") String name) {
-        return Response.ok(Iterables.transform(paramRepository.findByPathStartingWithAndName(path, name), paramConverter)).build();
+        return Response.ok(Lists.newArrayList(Iterables.transform(paramRepository.findByPathStartingWithAndName(path, name), paramConverter))).build();
     }
 
     /**
@@ -373,12 +321,49 @@ public class OhjausparametritResource {
         Template t = templateRepository.findByPath(path);
         if (t == null) {
             t = createTemplate(path, name, value);
+        } else {
+            logger.info("validating...");
+            //simple validations for data
+            switch(t.getType()) {
+            case BOOLEAN:
+                if(value.value.getClass()!=Boolean.class) {
+                    return error("not a boolean: '" + value.value + "'");
+                }
+                break;
+            case DATE:
+                try{
+                    Long.parseLong(value.value.toString());
+                } catch (NumberFormatException nfe) {
+                    return error("not a date: '" + value.value + "'");
+                }
+                break;
+            case LONG:
+                try{
+                    Long.parseLong(value.value.toString());
+                } catch (NumberFormatException nfe) {
+                    return error("not a long: '" + value.value + "'");
+                }
+                break;
+            case STRING:
+                if(value.value.getClass()!=String.class) {
+                    return error("not a string: '" + value.value + "'");
+                }
+                break;
+            default:
+                break;
+            
+            }
         }
 
         
         p.setValue(value.value);
         paramRepository.save(p);
         return Response.ok().build();
+    }
+
+    private Response error(String message) {
+        logger.warn(message);
+        return Response.status(Status.BAD_REQUEST).entity(message).build();
     }
 
     private Template createTemplate(String path, String name, Param value) {

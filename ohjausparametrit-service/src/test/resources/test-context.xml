@@ -51,5 +51,12 @@
 
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
     <import resource="classpath:test-dao-context.xml"/>
+    
+    <context:annotation-config />
+    <context:component-scan base-package="fi.vm.sade.ohjausparametrit" />
+
+    <!-- service configuration -->
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-rest-context.xml"/>
+    
 
 </beans>
