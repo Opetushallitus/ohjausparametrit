@@ -75,15 +75,6 @@
 			<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/api/rest/parametri"/>
 			</and>
 		</waitfor>
-		<fail message="App did not come up.  Check your log files, fix and try again.  Good Luck :-).">     
-			<condition>
-				<or>
-					<not>
-						<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/rest/haku" />
-					</not>
-				</or>
-			</condition>
-		</fail>
 		
         <echo>Successfully deployed to ${tomcat-host}</echo>
     </target>
