@@ -73,8 +73,7 @@ public class OhjausparametritResource {
 
     private static final String NO_TARGET = "_no_target_";
 
-    private Logger logger = LoggerFactory
-            .getLogger(OhjausparametritResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OhjausparametritResource.class);
 
     private TemplateToTemplateRDTO templateConverter = new TemplateToTemplateRDTO();
 
@@ -94,6 +93,7 @@ public class OhjausparametritResource {
     private ParameterToParameterRDTO paramConverter;
 
     public OhjausparametritResource() {
+        LOG.info("OhjausparametritResource()");
         typeMap = ImmutableMap.<Class<?>, Template.Type> builder()
                 .put(String.class, Template.Type.STRING)
                 .put(Integer.class, Template.Type.LONG)
@@ -106,73 +106,7 @@ public class OhjausparametritResource {
     @Path("/hello")
     @Produces("text/plain")
     public String hello() {
-        System.out.println("/hello");
-        if (true) {
-            for (Parameter p : paramRepository.findAll()) {
-                logger.info("  p = {}", p);
-            }
-            logger.error("*** GENERATING DEMO DATA ***");
-
-            saveDateTemplate("PH_TJT", Type.LONG);
-            saveDateTemplate("PH_HKLPT", Type.LONG);
-            saveDateTemplate("PH_HKMT", Type.LONG);
-            saveDateTemplate("PH_KKM_S", Type.LONG);
-            saveDateTemplate("PH_KKM_E", Type.LONG);
-            saveDateTemplate("PH_HVVPTP", Type.LONG);
-            saveDateTemplate("PH_KTT_S", Type.LONG);
-            saveDateTemplate("PH_KTT_E", Type.LONG);
-            saveDateTemplate("PH_OLVVPKE_S", Type.LONG);
-            saveDateTemplate("PH_OLVVPKE_E", Type.LONG);
-            saveDateTemplate("PH_VLS_S", Type.LONG);
-            saveDateTemplate("PH_VLS_E", Type.LONG);
-            saveDateTemplate("PH_SS_S", Type.LONG);
-            saveDateTemplate("PH_SS_E", Type.LONG);
-            saveDateTemplate("PH_SSAVTM", Type.LONG);
-            saveDateTemplate("PH_SST", Type.LONG);
-            saveDateTemplate("PH_SSKA", Type.LONG);
-            saveDateTemplate("PH_VTSSV", Type.LONG);
-            saveDateTemplate("PH_VSSAV", Type.LONG);
-            saveDateTemplate("PH_JKLIP", Type.LONG);
-            saveDateTemplate("PH_HKP", Type.LONG);
-            saveDateTemplate("PH_VTJH_S", Type.LONG);
-            saveDateTemplate("PH_VTJH_E", Type.LONG);
-            saveDateTemplate("PH_EVR", Type.LONG);
-            saveDateTemplate("PH_OPVP", Type.LONG);
-            saveDateTemplate("PH_HPVOA", Type.LONG);
-            saveDateTemplate("PH_HKTA", Type.LONG);
-
-            // Hakukausi
-            saveDateTemplate("PHK_HKAR_S", Type.LONG);
-            saveDateTemplate("PHK_HKAR_E", Type.LONG);
-            saveDateTemplate("PHK_PLPS_S", Type.LONG);
-            saveDateTemplate("PHK_PLPS_E", Type.LONG);
-            saveDateTemplate("PHK_PLAS_S", Type.LONG);
-            saveDateTemplate("PHK_PLAS_E", Type.LONG);
-            saveDateTemplate("PHK_LPAS_S", Type.LONG);
-            saveDateTemplate("PHK_LPAS_E", Type.LONG);
-
-            // KELA
-            saveDateTemplate("PHK_KELAKTTS", Type.LONG);
-            saveDateTemplate("PHK_KELATAVS_S", Type.LONG);
-            saveDateTemplate("PHK_KELATAVS_E", Type.LONG);
-            saveDateTemplate("PHK_KELATAVSM", Type.BOOLEAN);
-            saveDateTemplate("PHK_KELAKAVTS_S", Type.LONG);
-            saveDateTemplate("PHK_KELAKAVTS_E", Type.LONG);
-            saveDateTemplate("PHK_KELAKAVTSM", Type.BOOLEAN);
-            saveDateTemplate("PHK_KELAVTST", Type.LONG);
-            saveDateTemplate("PHK_KELAVTSAK", Type.STRING);
-
-            // TEM
-            saveDateTemplate("PHK_TEMTAVS_S", Type.LONG);
-            saveDateTemplate("PHK_TEMATAVS_E", Type.LONG);
-            saveDateTemplate("PHK_TEMTAVSM", Type.BOOLEAN);
-            saveDateTemplate("PHK_TEMKAVTS_S", Type.LONG);
-            saveDateTemplate("PHK_TEMKAVTS_E", Type.LONG);
-            saveDateTemplate("PHK_TEMKAVTSM", Type.BOOLEAN);
-            saveDateTemplate("PHK_TEMVTST", Type.LONG);
-            saveDateTemplate("PHK_TEMVTSAK", Type.STRING);
-
-        }
+        LOG.info("/hello");
         return "Well heeello! " + new Date();
     }
 
@@ -188,8 +122,7 @@ public class OhjausparametritResource {
         templateRepository.save(t);
     }
 
-    private Response createDemoParameter(String path, String target,
-            Object value, boolean required) {
+    private Response createDemoParameter(String path, String target, Object value, boolean required) {
 
         Parameter p = paramRepository.findByPathAndName(path, target);
 
@@ -228,7 +161,7 @@ public class OhjausparametritResource {
     @GET
     @Produces("application/json;charset=UTF-8")
     public Iterable<ParameterRDTO> list() {
-        logger.info("list all");
+        LOG.info("list()");
         return Iterables.transform(paramRepository.findAll(), paramConverter);
     }
 
@@ -236,56 +169,55 @@ public class OhjausparametritResource {
     @Produces("application/json;charset=UTF-8")
     @Path("template")
     public Response listAllTemplates() {
-        return Response.ok(
-                Iterables.transform(templateRepository.findAll(),
-                        templateConverter)).build();
+        LOG.info("listAllTemplates()");
+        return Response.ok(Iterables.transform(templateRepository.findAll(), templateConverter)).build();
     }
 
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("template/{path}")
     public Response getTemplatesByPathPrefix(@PathParam("path") String path) {
-        logger.info("finding templates with prefix:" + path);
-        return Response.ok(
-                Iterables.transform(
-                        templateRepository.findByPathStartingWith(path),
-                        templateConverter)).build();
+        LOG.info("finding templates with prefix:" + path);
+        if ("ALL".equalsIgnoreCase(path)) {
+            path = "";
+        }
+        return Response.ok(Iterables.transform(templateRepository.findByPathStartingWith(path), templateConverter)).build();
     }
 
     /**
      * Hakee parametrin
      * 
-     * @param path
-     *            path prefix (esim HK)
-     * @param name
-     *            name(esim oid)
+     * @param path path prefix (esim HK), if "ALL" all parameters will be returned
+     * @param name name(esim oid)
      * @return
      */
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
-    public Response getParameterByPathAndName(@PathParam("path") String path,
-            @PathParam("name") String name) {
-        return Response.ok(
-                Lists.newArrayList(Iterables.transform(paramRepository
-                        .findByPathStartingWithAndName(path, name),
-                        paramConverter))).build();
+    public Response getParameterByPathAndName(@PathParam("path") String path, @PathParam("name") String name) {
+        if ("ALL".equalsIgnoreCase(path)) {
+            path = "";
+        }
+        LOG.info("getParameterByPathAndName({}, {})", path, name);
+        return Response.ok(Lists.newArrayList(Iterables.transform(paramRepository.findByPathStartingWithAndName(path, name), paramConverter))).build();
     }
 
     /**
      * Listaa parametrit
      * 
      * @param path
-     *            polku (prefix)
+     *            polku (prefix), if "ALL" all will be returned
      * @return
      */
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("{path}")
     public Iterable<ParameterRDTO> listByPath(@PathParam("path") String path) {
-        logger.info("list path starting with:" + path);
-        return Iterables.transform(
-                paramRepository.findByPathStartingWith(path), paramConverter);
+        if ("ALL".equalsIgnoreCase(path)) {
+            path = "";
+        }
+        LOG.info("list path starting with:" + path);
+        return Iterables.transform(paramRepository.findByPathStartingWith(path), paramConverter);
     }
 
     /**
@@ -298,11 +230,11 @@ public class OhjausparametritResource {
     @DELETE
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
-    public Response deleteParameter(@PathParam("path") String path,
-            @PathParam("name") String name) {
+    public Response deleteParameter(@PathParam("path") String path, @PathParam("name") String name) {
+        LOG.info("deleteParameter({}, {})", path, name);
         Parameter p = paramRepository.findByPathAndName(path, name);
         if (p == null) {
-            logger.debug("not found:" + path + "," + name);
+            LOG.debug("not found:" + path + "," + name);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         paramRepository.delete(p);
@@ -312,21 +244,20 @@ public class OhjausparametritResource {
     @PUT
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
-    public Response setParameter(@PathParam("path") String path,
-            @PathParam("name") String name, Param value) {
+    public Response setParameter(@PathParam("path") String path, @PathParam("name") String name, Param value) {
+        LOG.info("setParameter({}, {}, {})", new Object[] {path, name, value});
 
-        if (value.value == null) {
-            logger.info("deleting parameter: path:" + path + " name:" + name);
-            // remove param
-            deleteParameter(path, name);
+        if(value.value==null) {
+            LOG.info("deleting parameter: path:" + path + " name:" + name);
+            //remove param
+            deleteParameter(path,  name);
             return Response.ok().build();
         }
 
         Parameter p = paramRepository.findByPathAndName(path, name);
-        if (p == null) {
-            logger.info("creating new parameter: path:" + path + " name:"
-                    + name);
-            p = new Parameter();
+        if(p==null) {
+            LOG.info("creating new parameter: path:" + path + " name:" + name);
+            p= new Parameter();
             p.setPath(path);
             p.setName(name);
         }
@@ -335,9 +266,9 @@ public class OhjausparametritResource {
         if (t == null) {
             t = createTemplate(path, name, value);
         } else {
-            logger.info("validating...");
-            // simple validations for data
-            switch (t.getType()) {
+            LOG.info("validating...");
+            //simple validations for data
+            switch(t.getType()) {
             case BOOLEAN:
                 if (value.value.getClass() != Boolean.class) {
                     return error("not a boolean: '" + value.value + "'");
@@ -367,12 +298,12 @@ public class OhjausparametritResource {
     }
 
     private Response error(String message) {
-        logger.warn(message);
+        LOG.warn(message);
         return Response.status(Status.BAD_REQUEST).entity(message).build();
     }
 
     private Template createTemplate(String path, String name, Param value) {
-        logger.info("creating new template");
+        LOG.info("creating new template");
 
         Template t = templateRepository.findByPath(path);
         if (t != null) {
