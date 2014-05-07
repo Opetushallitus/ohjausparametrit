@@ -29,7 +29,6 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.ImmutableMap;
@@ -37,7 +36,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
-import fi.vm.sade.ohjausparametrit.service.conversion.ParameterRDTOToParameter;
 import fi.vm.sade.ohjausparametrit.service.conversion.ParameterToParameterRDTO;
 import fi.vm.sade.ohjausparametrit.service.conversion.TemplateToTemplateRDTO;
 import fi.vm.sade.ohjausparametrit.service.dao.ParamRepository;
@@ -78,17 +76,22 @@ public class OhjausparametritResource {
     private Logger logger = LoggerFactory
             .getLogger(OhjausparametritResource.class);
 
-    private ParameterToParameterRDTO paramConverter = new ParameterToParameterRDTO();
     private TemplateToTemplateRDTO templateConverter = new TemplateToTemplateRDTO();
-    private ParameterRDTOToParameter parameterRdtoConverter = new ParameterRDTOToParameter();
 
     private final Map<Class<?>, Template.Type> typeMap;
 
     @Autowired
     private ParamRepository paramRepository;
 
-    @Autowired
     private TemplateRepository templateRepository;
+
+    @Autowired
+    public void setTemplateRepository(TemplateRepository templateRepository) {
+        this.templateRepository = templateRepository;
+        this.paramConverter = new ParameterToParameterRDTO(templateRepository);
+    }
+
+    private ParameterToParameterRDTO paramConverter;
 
     public OhjausparametritResource() {
         typeMap = ImmutableMap.<Class<?>, Template.Type> builder()
@@ -137,37 +140,37 @@ public class OhjausparametritResource {
             saveDateTemplate("PH_OPVP", Type.LONG);
             saveDateTemplate("PH_HPVOA", Type.LONG);
             saveDateTemplate("PH_HKTA", Type.LONG);
-            
-            //Hakukausi
+
+            // Hakukausi
             saveDateTemplate("PHK_HKAR_S", Type.LONG);
             saveDateTemplate("PHK_HKAR_E", Type.LONG);
             saveDateTemplate("PHK_PLPS_S", Type.LONG);
             saveDateTemplate("PHK_PLPS_E", Type.LONG);
-            saveDateTemplate("PHK_PLAS_S",Type.LONG);
+            saveDateTemplate("PHK_PLAS_S", Type.LONG);
             saveDateTemplate("PHK_PLAS_E", Type.LONG);
             saveDateTemplate("PHK_LPAS_S", Type.LONG);
             saveDateTemplate("PHK_LPAS_E", Type.LONG);
-            
-            //KELA
+
+            // KELA
             saveDateTemplate("PHK_KELAKTTS", Type.LONG);
-            saveDateTemplate("PHK_KELATAVS_S",Type.LONG);
-            saveDateTemplate("PHK_KELATAVS_E",Type.LONG);
-            saveDateTemplate("PHK_KELATAVSM",Type.BOOLEAN);
-            saveDateTemplate("PHK_KELAKAVTS_S",Type.LONG);
-            saveDateTemplate("PHK_KELAKAVTS_E",Type.LONG);
-            saveDateTemplate("PHK_KELAKAVTSM",Type.BOOLEAN);
-            saveDateTemplate("PHK_KELAVTST",Type.LONG);
-            saveDateTemplate("PHK_KELAVTSAK",Type.STRING);
+            saveDateTemplate("PHK_KELATAVS_S", Type.LONG);
+            saveDateTemplate("PHK_KELATAVS_E", Type.LONG);
+            saveDateTemplate("PHK_KELATAVSM", Type.BOOLEAN);
+            saveDateTemplate("PHK_KELAKAVTS_S", Type.LONG);
+            saveDateTemplate("PHK_KELAKAVTS_E", Type.LONG);
+            saveDateTemplate("PHK_KELAKAVTSM", Type.BOOLEAN);
+            saveDateTemplate("PHK_KELAVTST", Type.LONG);
+            saveDateTemplate("PHK_KELAVTSAK", Type.STRING);
 
             // TEM
-            saveDateTemplate("PHK_TEMTAVS_S",Type.LONG);
-            saveDateTemplate("PHK_TEMATAVS_E",Type.LONG);
-            saveDateTemplate("PHK_TEMTAVSM",Type.BOOLEAN);
-            saveDateTemplate("PHK_TEMKAVTS_S",Type.LONG);
-            saveDateTemplate("PHK_TEMKAVTS_E",Type.LONG);
-            saveDateTemplate("PHK_TEMKAVTSM",Type.BOOLEAN);
-            saveDateTemplate("PHK_TEMVTST",Type.LONG);
-            saveDateTemplate("PHK_TEMVTSAK",Type.STRING);
+            saveDateTemplate("PHK_TEMTAVS_S", Type.LONG);
+            saveDateTemplate("PHK_TEMATAVS_E", Type.LONG);
+            saveDateTemplate("PHK_TEMTAVSM", Type.BOOLEAN);
+            saveDateTemplate("PHK_TEMKAVTS_S", Type.LONG);
+            saveDateTemplate("PHK_TEMKAVTS_E", Type.LONG);
+            saveDateTemplate("PHK_TEMKAVTSM", Type.BOOLEAN);
+            saveDateTemplate("PHK_TEMVTST", Type.LONG);
+            saveDateTemplate("PHK_TEMVTSAK", Type.STRING);
 
         }
         return "Well heeello! " + new Date();
@@ -233,7 +236,9 @@ public class OhjausparametritResource {
     @Produces("application/json;charset=UTF-8")
     @Path("template")
     public Response listAllTemplates() {
-        return Response.ok(Iterables.transform(templateRepository.findAll(), templateConverter)).build();
+        return Response.ok(
+                Iterables.transform(templateRepository.findAll(),
+                        templateConverter)).build();
     }
 
     @GET
@@ -241,23 +246,30 @@ public class OhjausparametritResource {
     @Path("template/{path}")
     public Response getTemplatesByPathPrefix(@PathParam("path") String path) {
         logger.info("finding templates with prefix:" + path);
-        return Response.ok(Iterables.transform(templateRepository.findByPathStartingWith(path), templateConverter)).build();
+        return Response.ok(
+                Iterables.transform(
+                        templateRepository.findByPathStartingWith(path),
+                        templateConverter)).build();
     }
 
-
     /**
-     * Hakee parametrin 
+     * Hakee parametrin
      * 
-     * @param path path prefix (esim HK)
-     * @param name name(esim oid)
+     * @param path
+     *            path prefix (esim HK)
+     * @param name
+     *            name(esim oid)
      * @return
      */
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
-    public Response getParameterByPathAndName(
-            @PathParam("path") String path, @PathParam("name") String name) {
-        return Response.ok(Lists.newArrayList(Iterables.transform(paramRepository.findByPathStartingWithAndName(path, name), paramConverter))).build();
+    public Response getParameterByPathAndName(@PathParam("path") String path,
+            @PathParam("name") String name) {
+        return Response.ok(
+                Lists.newArrayList(Iterables.transform(paramRepository
+                        .findByPathStartingWithAndName(path, name),
+                        paramConverter))).build();
     }
 
     /**
@@ -300,20 +312,21 @@ public class OhjausparametritResource {
     @PUT
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
-    public Response setParameter(@PathParam("path") String path, @PathParam("name") String name, Param value) {
+    public Response setParameter(@PathParam("path") String path,
+            @PathParam("name") String name, Param value) {
 
-        if(value.value==null) {
+        if (value.value == null) {
             logger.info("deleting parameter: path:" + path + " name:" + name);
-            //remove param
-            deleteParameter(path,  name);
+            // remove param
+            deleteParameter(path, name);
             return Response.ok().build();
         }
-        
 
         Parameter p = paramRepository.findByPathAndName(path, name);
-        if(p==null) {
-            logger.info("creating new parameter: path:" + path + " name:" + name);
-            p= new Parameter();
+        if (p == null) {
+            logger.info("creating new parameter: path:" + path + " name:"
+                    + name);
+            p = new Parameter();
             p.setPath(path);
             p.setName(name);
         }
@@ -323,32 +336,31 @@ public class OhjausparametritResource {
             t = createTemplate(path, name, value);
         } else {
             logger.info("validating...");
-            //simple validations for data
-            switch(t.getType()) {
+            // simple validations for data
+            switch (t.getType()) {
             case BOOLEAN:
-                if(value.value.getClass()!=Boolean.class) {
+                if (value.value.getClass() != Boolean.class) {
                     return error("not a boolean: '" + value.value + "'");
                 }
                 break;
             case LONG:
-                try{
+                try {
                     Long.parseLong(value.value.toString());
                 } catch (NumberFormatException nfe) {
                     return error("not a long: '" + value.value + "'");
                 }
                 break;
             case STRING:
-                if(value.value.getClass()!=String.class) {
+                if (value.value.getClass() != String.class) {
                     return error("not a string: '" + value.value + "'");
                 }
                 break;
             default:
                 break;
-            
+
             }
         }
 
-        
         p.setValue(value.value);
         paramRepository.save(p);
         return Response.ok().build();
@@ -363,20 +375,22 @@ public class OhjausparametritResource {
         logger.info("creating new template");
 
         Template t = templateRepository.findByPath(path);
-        if(t!=null) {
+        if (t != null) {
             return t;
         }
 
         System.out.println("Creating new template for path" + path);
         t = new Template();
-        
+
         t.setType(typeMap.get(value.value.getClass()));
         t.setRequired(false);
         t.setPath(path);
-        if(t.getType()==null) {
-            throw new RuntimeException("Could not quess template type from value:" + value + " please create template first");
+        if (t.getType() == null) {
+            throw new RuntimeException(
+                    "Could not quess template type from value:" + value
+                            + " please create template first");
         }
-        
+
         return templateRepository.save(t);
     }
 

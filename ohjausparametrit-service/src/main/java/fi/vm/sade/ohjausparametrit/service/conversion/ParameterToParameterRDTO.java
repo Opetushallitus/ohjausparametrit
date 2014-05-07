@@ -14,12 +14,22 @@
  */
 package fi.vm.sade.ohjausparametrit.service.conversion;
 
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Maps;
 
 import fi.vm.sade.ohjausparametrit.api.model.ParameterRDTO;
+import fi.vm.sade.ohjausparametrit.service.dao.TemplateRepository;
 import fi.vm.sade.ohjausparametrit.service.model.Parameter;
+import fi.vm.sade.ohjausparametrit.service.model.Template;
 
 /**
  * Kind of stupid since it's 1-1... but just in case.
@@ -28,6 +38,25 @@ import fi.vm.sade.ohjausparametrit.service.model.Parameter;
  */
 public class ParameterToParameterRDTO implements
         Function<Parameter, ParameterRDTO> {
+
+    private final TemplateRepository templateRepository;
+
+    public ParameterToParameterRDTO(TemplateRepository templateRepository) {
+        this.templateRepository = templateRepository;
+    }
+
+    LoadingCache<String, String> typeCache = CacheBuilder.newBuilder()
+            .maximumSize(10000).expireAfterWrite(10, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, String>() {
+                public String load(String key) {
+                    final Template template = templateRepository
+                            .findByPath(key);
+                    if (template != null) {
+                        return template.getType().name();
+                    }
+                    return null;
+                }
+            });
 
     @Override
     public ParameterRDTO apply(@Nullable Parameter s) {
@@ -38,6 +67,14 @@ public class ParameterToParameterRDTO implements
 
         ParameterRDTO t = new ParameterRDTO();
 
+        if (templateRepository != null) {
+            try {
+                t.setType(typeCache.get(s.getPath()));
+            } catch (ExecutionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
         t.setCreated(s.getCreated());
         t.setCreatedBy(s.getCreatedBy());
         t.setModified(s.getModified());

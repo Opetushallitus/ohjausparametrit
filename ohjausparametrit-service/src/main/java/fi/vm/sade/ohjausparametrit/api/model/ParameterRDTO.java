@@ -33,7 +33,16 @@ public class ParameterRDTO implements Serializable {
     private String path;
     private String name;
     private Object value;
+    private String type;
     
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Date getCreated() {
         return created;
     }
