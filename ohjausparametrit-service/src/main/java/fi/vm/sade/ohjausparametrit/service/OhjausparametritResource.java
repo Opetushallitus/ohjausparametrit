@@ -243,7 +243,7 @@ public class OhjausparametritResource {
     @Produces("application/json;charset=UTF-8")
     @Path("{path}/{name}")
     public Response setParameter(@PathParam("path") String path, @PathParam("name") String name, Param value) {
-        LOG.info("setParameter({}, {}, {})", path, name, value);
+        LOG.info("setParameter({}, {}, {})", new Object[] {path, name, value});
 
         if(value.value==null) {
             LOG.info("deleting parameter: path:" + path + " name:" + name);
