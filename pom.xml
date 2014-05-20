@@ -4,7 +4,7 @@
 
     <groupId>fi.vm.sade.ohjausparametrit</groupId>
     <artifactId>pom</artifactId>
-    <version>9.0-SNAPSHOT</version>
+    <version>9.4.1</version>
     <packaging>pom</packaging>
     <name>Ohjausparametrit :: Parent</name>
 
