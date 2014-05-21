@@ -3,6 +3,9 @@ package fi.vm.sade.ohjausparametrit.service;
 import fi.vm.sade.ohjausparametrit.service.dao.JSONParameterRepository;
 import fi.vm.sade.ohjausparametrit.service.model.JSONParameter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -45,6 +48,30 @@ public class OhjausparametritResourceV1 {
         return "HELLO: " + new Date();
     }
 
+    @GET
+    @Path("/ALL")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public Response doGetAll() {
+        LOG.info("GET /ALL");
+
+        Response.ResponseBuilder rb = Response.status(Response.Status.OK);
+
+        try {
+            JSONObject result = new JSONObject();
+        
+            for (JSONParameter jSONParameter : dao.findAll()) {
+                result.put(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
+            }
+
+            rb.entity(result.toString(2));
+        } catch (JSONException ex) {
+            LOG.error("Failed to produce json output...?", ex);
+            rb = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+        return rb.build();
+    }
+    
+    
     @GET
     @Path("/{target}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
