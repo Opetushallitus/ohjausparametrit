@@ -32,9 +32,7 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
     <!-- Resource impls -->
-    <bean id="ohjausparametritResource" class="fi.vm.sade.ohjausparametrit.service.OhjausparametritResource" />
     <bean id="ohjausparametritResourceV1" class="fi.vm.sade.ohjausparametrit.service.OhjausparametritResourceV1" />
-    
     
     <bean id="restExceptionMapper" class="fi.vm.sade.ohjausparametrit.service.RESTExceptionMapperImpl" />
 
@@ -66,17 +64,7 @@
 
     <!--
         REST Services exposed
-    -->
-    <jaxrs:server id="ohjausparametritREST" address="/rest">
-        <jaxrs:serviceBeans>
-            <ref bean="ohjausparametritResource"/>
-        </jaxrs:serviceBeans>
-        <jaxrs:providers>
-            <ref bean="restExceptionMapper"/>
-            <ref bean="restJacksonJsonProvider" />
-        </jaxrs:providers>
-    </jaxrs:server>
-
+    -->    
     <jaxrs:server id="ohjausparametritRESTV1" address="/v1/rest">
         <jaxrs:serviceBeans>
             <ref bean="ohjausparametritResourceV1"/>
@@ -86,6 +74,5 @@
             <ref bean="restJacksonJsonProvider" />
         </jaxrs:providers>
     </jaxrs:server>
-
 
 </beans>

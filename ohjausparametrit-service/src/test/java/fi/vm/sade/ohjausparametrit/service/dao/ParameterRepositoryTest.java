@@ -22,16 +22,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.google.common.collect.Lists;
+import fi.vm.sade.ohjausparametrit.service.model.JSONParameter;
 
-import fi.vm.sade.ohjausparametrit.service.model.Parameter;
-import fi.vm.sade.ohjausparametrit.service.model.Template;
-import fi.vm.sade.ohjausparametrit.service.model.Template.Type;
 
 @ContextConfiguration(locations = { "classpath:test-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,68 +36,38 @@ import fi.vm.sade.ohjausparametrit.service.model.Template.Type;
 public class ParameterRepositoryTest {
 
     @Autowired
-    private ParamRepository paramRepository;
-    @Autowired
-    private TemplateRepository templateRepository;
+    private JSONParameterRepository dao;
 
     @Before
     public void setup(){
-        paramRepository.deleteAll();
-        templateRepository.deleteAll();
+        dao.deleteAll();
     }
     
     @Test
     public void testCrud() {
 
-        Template t = new Template();
-        t.setPath("path");
-        t.setRequired(true);
-        t.setType(Type.STRING);
-        templateRepository.save(t);
-        Parameter param = new Parameter();
-        param.setCreatedBy("user1");
-        param.setPath("path");
-        param.setValue(5);
-        param.setName("name");
-        Parameter param2 = new Parameter();
-        param2.setCreatedBy("user2");
-        param2.setPath("path");
-        param2.setValue(true);
-        param2.setName("name1");
+        {
+            List<JSONParameter> ps = Lists.newArrayList(dao.findAll());
+            Assert.assertEquals("Param repo should be empty", ps.size(), 0);
+        }
 
-        Parameter saved = paramRepository.save(param);
-        long id = saved.getId();
-        List<Parameter> params = Lists.newArrayList(paramRepository.findAll());
-        Assert.assertEquals(1, params.size());
-        Assert.assertEquals("user1", params.get(0).getCreatedBy());
-        Assert.assertEquals(5l, params.get(0).getValue());
-        saved.setCreatedBy("user2");
-        paramRepository.save(param);
-        params = Lists.newArrayList(paramRepository.findAll());
-        Assert.assertEquals(1, params.size());
-        saved = paramRepository.findOne(id);
-        Assert.assertEquals("user2", params.get(0).getCreatedBy());
-        saved = paramRepository.save(param2);
-        saved = paramRepository.findOne(saved.getId());
-        Assert.assertEquals("user2", saved.getCreatedBy());
-        params = Lists.newArrayList(paramRepository.findAll());
-        Assert.assertEquals(2, params.size());
+        {
+            JSONParameter p = new JSONParameter();
+            p.setTarget("A");
+            p.setJsonValue("{ foo: false}");
+            dao.save(p);
+        }
 
-    }
+        {
+            List<JSONParameter> ps = Lists.newArrayList(dao.findAll());
+            Assert.assertEquals("Param repo should be populated with one entry", ps.size(), 1);
+        }
 
-    @Test
-    public void testCreateWithoutTemplate() {
-
-        Parameter param = new Parameter();
-        param.setCreatedBy("user1");
-        param.setPath("path");
-        param.setValue("value");
-        param.setName("name");
-        try {
-            Parameter saved = paramRepository.save(param);
-            Assert.fail("should throw exception");
-        } catch (JpaSystemException jse) {
-            Assert.assertTrue(jse.getCause().getMessage().contains("foreign key no parent"));
+        dao.delete("A");
+        
+        {
+            List<JSONParameter> ps = Lists.newArrayList(dao.findAll());
+            Assert.assertEquals("Param repo should be empty", ps.size(), 0);
         }
     }
 

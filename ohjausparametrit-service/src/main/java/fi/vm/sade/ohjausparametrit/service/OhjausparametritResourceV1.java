@@ -1,8 +1,8 @@
 package fi.vm.sade.ohjausparametrit.service;
 
+import fi.vm.sade.ohjausparametrit.service.dao.JSONParameterRepository;
+import fi.vm.sade.ohjausparametrit.service.model.JSONParameter;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,17 +15,18 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Simpler parameters:
  * <pre>
  * GET  /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING -> json of all parameters
- * 
- * POST /v1/rest/parametri/REQUIRED_ROLE/TARGET_KEY_OID_OR_SOMETHING <- json of all parameters
- * POST /v1/rest/parametri/REQUIRED_ROLE/TARGET_KEY_OID_OR_SOMETHING/PARAM_NAME <- json of single parameter updated/inserted 
+ *
+ * POST /v1/rest/parametri/REQUIRED_ROLE/TARGET_KEY_OID_OR_SOMETHING <- json of all parameters updated/inserted/removed
+ * POST /v1/rest/parametri/REQUIRED_ROLE/TARGET_KEY_OID_OR_SOMETHING/PARAM_NAME <- json of single parameter updated/inserted/removed
  * </pre>
- * 
+ *
  * @author mlyly
  */
 @Path("/parametri")
@@ -34,13 +35,13 @@ public class OhjausparametritResourceV1 {
 
     private static final Logger LOG = LoggerFactory.getLogger(OhjausparametritResourceV1.class);
 
-    private Map<String, String> parameters = new HashMap<String, String>();
+    @Autowired
+    private JSONParameterRepository dao;
 
     @GET
     @Path("/hello")
     @Produces("text/plain")
     public String doHello() {
-        parameters.put("TEST", "{boolean: true, long: 283768746264, str: \"string value\"}");
         return "HELLO: " + new Date();
     }
 
@@ -66,10 +67,9 @@ public class OhjausparametritResourceV1 {
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Response doPost(@PathParam("role") String role, @PathParam("target") String target, String value) {
-        LOG.info("POST /{}/{} <= {}", new Object[] {role, target, value});
-        
+        LOG.info("POST /{}/{} <= {}", new Object[]{role, target, value});
+
         // TODO authenticate!
-        
         JSONObject jsonParameters = getParameters(target);
         if (jsonParameters != null) {
             if (!verifyRoleInParameters(role, target, jsonParameters)) {
@@ -77,7 +77,7 @@ public class OhjausparametritResourceV1 {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             }
         }
-        
+
         if (value == null || value.trim().isEmpty()) {
             // Remove parameters
             setParameters(target, (String) null);
@@ -100,14 +100,13 @@ public class OhjausparametritResourceV1 {
     @Path("/{role}/{target}/{paramName}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response doPost(@PathParam("role") String role, 
+    public Response doPost(@PathParam("role") String role,
             @PathParam("target") String target,
-            @PathParam("paramName") String paramName, 
+            @PathParam("paramName") String paramName,
             String value) {
-        LOG.info("POST /{}/{}/{} <= {}", new Object[] {role, target, paramName, value});
+        LOG.info("POST /{}/{}/{} <= {}", new Object[]{role, target, paramName, value});
 
         // TODO authenticate required role!
-        
         JSONObject jsonParameters = getParameters(target);
         if (jsonParameters == null) {
             jsonParameters = getAsJSON("{}");
@@ -118,11 +117,11 @@ public class OhjausparametritResourceV1 {
             LOG.error("NOT AUTHORIZED TO UPDATE.");
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         // Remove named parameter?
         if (value == null || value.trim().isEmpty()) {
             // Remove selected parameter in parameters
-            jsonParameters.remove(paramName);            
+            jsonParameters.remove(paramName);
         } else {
             // Add / modify
             JSONObject jsonParam = getAsJSON(value);
@@ -144,7 +143,7 @@ public class OhjausparametritResourceV1 {
 
         return Response.ok().build();
     }
-    
+
     //
     // Helpers
     //
@@ -158,7 +157,7 @@ public class OhjausparametritResourceV1 {
             return null;
         }
     }
-    
+
     private String getJSONAsString(JSONObject json) {
         try {
             if (json == null) {
@@ -179,7 +178,7 @@ public class OhjausparametritResourceV1 {
             LOG.error("Invalid role def: " + role, ex);
         }
     }
-    
+
     private String getRoleFromJson(JSONObject json) {
         if (json == null) {
             return null;
@@ -190,45 +189,66 @@ public class OhjausparametritResourceV1 {
             return null;
         }
     }
-    
+
     private boolean verifyRoleInParameters(String role, String target, JSONObject json) {
         if (role == null) {
             return false;
         }
-        
+
         if (json == null) {
             json = getParameters(target);
         }
-        
+
         if (json == null) {
             // New parameter
             return true;
         }
-        
+
         return role.equalsIgnoreCase(getRoleFromJson(json));
     }
-    
-    
+
     //
     // "DAO"
     //
     private void setParameters(String target, String value) {
+
+        // Find existing parameter;
+        JSONParameter p = dao.findByTarget(target);
+
         if (value == null || value.trim().isEmpty()) {
-            parameters.remove(target);
+            if (p != null) {
+                dao.delete(p);
+            }
         } else {
-            parameters.put(target, value);
+            if (p == null) {
+                p = new JSONParameter();
+                p.setTarget(target);
+            }
+            p.setJsonValue(value);
+
+            dao.save(p);
         }
     }
 
     private void setParameters(String target, JSONObject value) {
         setParameters(target, getJSONAsString(value));
     }
-    
+
     private JSONObject getParameters(String target) {
         return getAsJSON(getParametersAsString(target));
     }
 
     private String getParametersAsString(String target) {
-        return parameters.get(target);
+        String result;
+
+        JSONParameter p = dao.findByTarget(target);
+        if (p != null) {
+            result = p.getJsonValue();
+        } else {
+            result = null;
+        }
+
+        LOG.info("getParametersAsString({}) --> {}", target, result);
+        return result;
     }
 }

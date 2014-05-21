@@ -22,7 +22,6 @@
     </properties>
 
     <modules>
-        <module>ohjausparametrit-client</module>
         <module>ohjausparametrit-service</module>
         <module>ohjausparametrit-app</module>
     </modules>
