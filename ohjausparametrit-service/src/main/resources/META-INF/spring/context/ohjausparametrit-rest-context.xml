@@ -70,7 +70,10 @@
             <ref bean="ohjausparametritResourceV1"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
+            <!--
+            JOS PÄÄLLÄ CAS EI TOIMI!
             <ref bean="restExceptionMapper"/>
+            -->
             <ref bean="restJacksonJsonProvider" />
         </jaxrs:providers>
     </jaxrs:server>

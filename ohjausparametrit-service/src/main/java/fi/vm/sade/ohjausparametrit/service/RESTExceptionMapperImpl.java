@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 The Finnish Board of Education - Opetushallitus
+ * Copyright (c) 2014 The Finnish Board of Education - Opetushallitus
  *
  * This program is free software:  Licensed under the EUPL, Version 1.1 or - as
  * soon as they will be approved by the European Commission - subsequent versions
@@ -30,12 +30,21 @@ import org.slf4j.LoggerFactory;
 @Provider
 public class RESTExceptionMapperImpl implements ExceptionMapper<Exception> {
 
-    private static final Logger log = LoggerFactory
-            .getLogger(RESTExceptionMapperImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(RESTExceptionMapperImpl.class);
 
     @Override
     public Response toResponse(Exception e) {
-        log.error("unexpected service error", e);
+        if (e instanceof org.springframework.security.access.AccessDeniedException) {
+            log.error("AccessDeniedException");
+            if (true) {
+                throw new RuntimeException(e);
+            }
+            Response res = Response.status(Response.Status.UNAUTHORIZED).build();
+            return res;
+        } else {
+            log.error("unexpected service error", e);
+        }
+        
         // last case scenario
         throw new RuntimeException(e);
 //        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
