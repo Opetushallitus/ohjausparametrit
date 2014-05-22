@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.ws.rs.core.Response;
 
 import junit.framework.Assert;
+import org.junit.Ignore;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,7 @@ public class OhjausparametritResourceTest {
     private OhjausparametritResourceV1 op;
     
     @Test
+    @Ignore
     public void testCreateReadParam() {
 
         String paramName = "" + System.currentTimeMillis();
