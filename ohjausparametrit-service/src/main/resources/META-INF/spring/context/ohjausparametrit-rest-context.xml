@@ -32,12 +32,12 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
     <!-- Resource impls -->
-    <bean id="ohjausparametritResource" class="fi.vm.sade.ohjausparametrit.service.OhjausparametritResource" />
-    
+    <bean id="ohjausparametritResourceV1" class="fi.vm.sade.ohjausparametrit.service.OhjausparametritResourceV1" />
     
     <bean id="restExceptionMapper" class="fi.vm.sade.ohjausparametrit.service.RESTExceptionMapperImpl" />
 
     <!--  Needed to convert wsdl generated dtos to json. (no @XmlRootElement annotation) -->
+<!--
     <bean id="restObjectMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="targetObject" ref="restObjectMapper"/>
@@ -59,20 +59,26 @@
             </util:list>
         </property>
     </bean>
+-->
+<!--    
     <bean id="restJacksonJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
         <property name="mapper" ref="restObjectMapper"/>
     </bean>
+-->
 
     <!--
         REST Services exposed
-    -->
-    <jaxrs:server id="ohjausparametritREST" address="/rest">
+    -->    
+    <jaxrs:server id="ohjausparametritRESTV1" address="/v1/rest">
         <jaxrs:serviceBeans>
-            <ref bean="ohjausparametritResource"/>
+            <ref bean="ohjausparametritResourceV1"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
+            <!--
+            JOS PÄÄLLÄ CAS EI TOIMI!
             <ref bean="restExceptionMapper"/>
             <ref bean="restJacksonJsonProvider" />
+            -->
         </jaxrs:providers>
     </jaxrs:server>
 
