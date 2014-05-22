@@ -52,14 +52,14 @@ public class OhjausparametritResourceV1 {
      */
     @GET
     @Path("/hello")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public String doHello() {
         return "HELLO: " + new Date();
     }
 
     @GET
     @Path("/authorize")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     @Secured({ROLE_READ, ROLE_UPDATE, ROLE_CRUD})
     public String doAuthorize() {
         LOG.debug("GET /authorize");

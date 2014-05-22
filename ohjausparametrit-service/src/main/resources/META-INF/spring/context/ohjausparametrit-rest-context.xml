@@ -37,6 +37,7 @@
     <bean id="restExceptionMapper" class="fi.vm.sade.ohjausparametrit.service.RESTExceptionMapperImpl" />
 
     <!--  Needed to convert wsdl generated dtos to json. (no @XmlRootElement annotation) -->
+<!--
     <bean id="restObjectMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="targetObject" ref="restObjectMapper"/>
@@ -58,9 +59,12 @@
             </util:list>
         </property>
     </bean>
+-->
+<!--    
     <bean id="restJacksonJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
         <property name="mapper" ref="restObjectMapper"/>
     </bean>
+-->
 
     <!--
         REST Services exposed
@@ -73,8 +77,8 @@
             <!--
             JOS PÄÄLLÄ CAS EI TOIMI!
             <ref bean="restExceptionMapper"/>
-            -->
             <ref bean="restJacksonJsonProvider" />
+            -->
         </jaxrs:providers>
     </jaxrs:server>
 
