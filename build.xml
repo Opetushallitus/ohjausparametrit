@@ -72,7 +72,7 @@
 		<echo>Wait for service http-url</echo>
 		<waitfor maxwait="600000" checkevery="500" >
 			<and>
-			<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/api/rest/parametri"/>
+			<http url="http://${tomcat-host}:${tomcat-port}/ohjausparametrit-service/api/v1/rest/parametri/hello"/>
 			</and>
 		</waitfor>
 		
