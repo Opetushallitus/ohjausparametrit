@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.activiti.engine.ProcessEngine;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,6 +46,10 @@ public class OhjausparametritResourceV1 {
     @Autowired
     private JSONParameterRepository dao;
 
+    @Autowired
+    private ProcessEngine processEngine;
+    
+    
     /**
      * "Ping" method to see if service is "alive".
      * 
@@ -54,6 +59,10 @@ public class OhjausparametritResourceV1 {
     @Path("/hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String doHello() {
+        if (false) {
+            processEngine.getRuntimeService().startProcessInstanceByKey("helloWorld");
+        }
+
         return "HELLO: " + new Date();
     }
 
