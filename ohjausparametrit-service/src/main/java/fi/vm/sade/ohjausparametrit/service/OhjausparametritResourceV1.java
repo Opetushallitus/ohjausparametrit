@@ -2,14 +2,9 @@ package fi.vm.sade.ohjausparametrit.service;
 
 import fi.vm.sade.ohjausparametrit.service.dao.JSONParameterRepository;
 import fi.vm.sade.ohjausparametrit.service.model.JSONParameter;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.logging.Level;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  * <pre>
  * GET  /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING -> json of all parameters
  *
- * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING <- json of all parameters updated/inserted/removed
+ * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING <- json of all parameters updated/inserted/removed (replaces existing)
  * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING/PARAM_NAME <- json of single parameter updated/inserted/removed
  * </pre>
  * 
