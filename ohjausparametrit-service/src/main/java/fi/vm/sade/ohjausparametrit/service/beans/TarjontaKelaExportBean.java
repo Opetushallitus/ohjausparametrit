@@ -32,7 +32,7 @@ public class TarjontaKelaExportBean {
 
     public static final Logger LOG = LoggerFactory.getLogger(TarjontaKelaExportBean.class);
 
-    @Value("${ohjausparametrit.tarjonta.export.kela.casService}")
+    @Value("${ohjausparametrit.tarjonta.export.kela.casService:CAS_SERVICE_URL_MISSING}")
     private String casServiceUrl;
     
     @Value("${ohjausparametrit.tarjonta.export.kela.user:ophadmin}")

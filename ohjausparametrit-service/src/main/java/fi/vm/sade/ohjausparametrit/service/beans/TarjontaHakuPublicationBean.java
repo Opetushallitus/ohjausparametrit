@@ -35,7 +35,7 @@ public class TarjontaHakuPublicationBean {
 // /service-access/accessTicket?client_id=" + env.user + "&client_secret=" + env.pass + "&service_url=" + env.remote + "/authentication-service
 // https://itest-virkailija.oph.ware.fi/service-access/accessTicket?client_id=ophadmin&client_secret=ophadmin&service_url=https://itest-virkailija.oph.ware.fi/tarjonta-service
 
-    @Value("${ohjausparametrit.tarjonta.publish.casService}")
+    @Value("${ohjausparametrit.tarjonta.publish.casService:CAS_SERVICE_URL_MISSING}")
     private String casServiceUrl;
     
     @Value("${ohjausparametrit.tarjonta.publish.user:ophadmin}")
