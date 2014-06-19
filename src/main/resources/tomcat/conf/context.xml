@@ -29,7 +29,7 @@
               maxActive="{{ host_postgresql_ohjausparametrit_maxActive | default(5) }}"
               maxIdle="{{ host_postgresql_ohjausparametrit_maxIdle | default(30) }}" 
               maxWait="{{ host_postgresql_ohjausparametrit_maxWait | default(10000) }}"
-              username="{{host_postgresql_ohjausparametrit_user}}" password="{{host_postgresql_ohjausparametrit_password}}" driverClassName="org.postgresql.Driver"
+              username="{{ host_postgresql_ohjausparametrit_user }}" password="{{ host_postgresql_ohjausparametrit_password }}" driverClassName="org.postgresql.Driver"
               url="jdbc:postgresql://{{host_postgresql_ohjausparametrit}}:{{port_postgresql}}/ohjausparametrit"/>
     
 </Context>
