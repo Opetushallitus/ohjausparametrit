@@ -12,23 +12,21 @@
 
         <scriptTask id="scriptInfo" scriptFormat="groovy">
             <script>
-                System.out.println("Schedule HAKU PUBLICATION");
-                System.out.println(" now = " + new Date());
-                System.out.println(" target = ${target} (== haku)");
-                System.out.println(" type = ${type}");
-                System.out.println(" date = ${date} (== when to run)");
-                // System.out.println(" process_start_time = ${process_start_time}");
+                myLogger.info("Schedule HAKU PUBLICATION");
+                myLogger.info(" now = " + new Date());
+                myLogger.info(" target = ${target} (== haku)");
+                myLogger.info(" type = ${type}");
+                myLogger.info(" date = ${date} (== when to run)");
             </script>
         </scriptTask>
 
         <sequenceFlow id="flow2" sourceRef="scriptInfo" targetRef="longTimerTask" />
         
         <userTask id="longTimerTask" name="Task with timer on it">
-          <documentation>This task has a timer on it</documentation>
+          <documentation>This 'user' task has a timer on it</documentation>
         </userTask>
         <boundaryEvent id="longTimer" cancelActivity="true" attachedToRef="longTimerTask">
           <timerEventDefinition>
-<!--              <timeDate>${process_start_time}</timeDate> -->
               <timeDate>${date}</timeDate>
           </timerEventDefinition>
         </boundaryEvent>
@@ -39,20 +37,19 @@
         <scriptTask id="scriptInfoEnd" scriptFormat="groovy">
             <script>
                 // The time has arrived to publish
-                System.out.println("Publishing haku oid: ${target} ...");
+                myLogger.info("Publishing haku oid: ${target} ...");
                 try {
                     if (tarjontaHakuPublicationBean.publish("${target}")) {
-                      System.out.println("  Haku publish SUCCESS");
+                      myLogger.info("Publishing haku oid: ${target} ... SUCCESS");
                     } else {
-                      System.out.println("  Haku publish FAILED...");
+                      myLogger.error("Publishing haku oid: ${target} ... FAILED");
                       tarjontaHakuPublicationBean.sendErrorEmail("${target}", null);
                     }
                 } catch (Exception ex) {
-                      System.out.println("  Haku publish FAILED with exception..." + ex);
+                      myLogger.error("Publishing haku oid: ${target} ... FAILED", ex);
                       tarjontaHakuPublicationBean.sendErrorEmail("${target}", ex);
                 }
-
-                System.out.println("ENDING process at: " + new Date());
+                myLogger.info("ENDING process at: " + new Date());
             </script>
         </scriptTask>
                         
@@ -60,50 +57,6 @@
                 
         <endEvent id="theEnd" />
 
-        
-<!--
-
-        FIRST WORKING TIMER
-
-        <startEvent id="start" />
-        
-        <sequenceFlow id="flow1" sourceRef="start" targetRef="scriptInfo" />
-
-        <scriptTask id="scriptInfo" scriptFormat="groovy">
-            <script>
-                System.out.println("Starting process at: " + new Date());
-                System.out.println(" id = ${id}");
-                System.out.println(" date = ${date}");
-            </script>
-        </scriptTask>
-
-        <sequenceFlow id="flow2" sourceRef="scriptInfo" targetRef="longTimerTask" />
-        
-        <userTask id="longTimerTask" name="Task with timer on it">
-          <documentation>This task has a timer on it</documentation>
-        </userTask>
-        <boundaryEvent id="longTimer" cancelActivity="true" attachedToRef="longTimerTask">
-          <timerEventDefinition>
-            <timeDuration>PT1M</timeDuration>
-          </timerEventDefinition>
-        </boundaryEvent>
-                
-        <sequenceFlow id="flow3_0" sourceRef="longTimerTask" targetRef="scriptInfoEnd" />
-        <sequenceFlow id="flow3_1" sourceRef="longTimer" targetRef="scriptInfoEnd" />
-
-        <scriptTask id="scriptInfoEnd" scriptFormat="groovy">
-            <script>
-                System.out.println("Ending process at: " + new Date());
-                System.out.println(" id = ${id}");
-                System.out.println(" date = ${date}");
-            </script>
-        </scriptTask>
-                        
-        <sequenceFlow id="flow4" sourceRef="scriptInfoEnd" targetRef="theEnd" />
-                
-        <endEvent id="theEnd" />
--->        
-                                                        
     </process>
  
 </definitions>

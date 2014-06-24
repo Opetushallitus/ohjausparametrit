@@ -15,11 +15,18 @@
 package fi.vm.sade.ohjausparametrit.service.beans;
 
 import fi.vm.sade.generic.rest.CachingRestClient;
+import fi.vm.sade.mail.Mailer;
+import fi.vm.sade.mail.dto.MailMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +60,9 @@ public class TarjontaHakuPublicationBean {
     @Value("${ohjausparametrit.tarjonta.publish.error.email:sd@cybercom.com}")
     private String errorEmailAddress;
 
+    @Autowired
+    private Mailer mailer;
+    
     public TarjontaHakuPublicationBean() {
         LOG.info("TarjontaHakuPublicationBean()");
     }
@@ -60,7 +70,7 @@ public class TarjontaHakuPublicationBean {
     public void printConfig() {
         LOG.info("TarjontaHakuPublicationBean() configuration");
         LOG.info("  username= {}", username);
-        LOG.info("  password= {}", (password != null) ? "OK" : "missing!");
+        LOG.info("  password= {}", (password != null) ? "<provided>" : "MISSING!");
         LOG.info("  serviceUrl= {}", serviceUrl);
         LOG.info("  casServiceUrl= {}", casServiceUrl);
         LOG.info("  errorEmailEnabled= {}", errorEmailEnabled);
@@ -69,16 +79,26 @@ public class TarjontaHakuPublicationBean {
 
     public boolean publish(String hakuOid) {
         LOG.info("publish(oid={})", hakuOid);
-
         this.printConfig();
         
-        boolean result;
+        boolean result = false;
         
-        CachingRestClient client = getCachingRestClient();
+        String urlStr = serviceUrl + "/rest/v1/haku/" + hakuOid + "/state?state=JULKAISTU";
+        LOG.info("  target url = {}", urlStr);
         
         try {
-            InputStream in = client.get(serviceUrl + "/rest/v1/permission/authorize");
-            result = true;
+            CachingRestClient client = getCachingRestClient();
+            HttpPut put = new HttpPut(urlStr);
+
+            LOG.info("  do request: {}", put);
+
+            HttpResponse response = client.execute(put, "application/json", null);
+            
+            LOG.info("  done request: {}", response);
+
+            result = (response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200);
+
+            LOG.info("  done request, result = {}", result);
         } catch (IOException ex) {
             LOG.error("Failed to publish haku: " + hakuOid, ex);
             result = false;
@@ -89,11 +109,32 @@ public class TarjontaHakuPublicationBean {
 
     public boolean sendErrorEmail(String hakuOid, Exception ex) {
         LOG.info("sendErrorEmail - failed to publish haku with OID = {}", hakuOid);
-
         this.printConfig();
         
         if (Boolean.valueOf(errorEmailEnabled)) {
-            LOG.info("  should send the mail now to: {}", errorEmailAddress);
+            LOG.info("  send the error mail now to: {}", errorEmailAddress);        
+            try {
+                MailMessage message = new MailMessage();
+                message.setTo(errorEmailAddress);
+                message.setFrom("ohjausparametrit-noreply@opintopolku.fi");
+                message.setSubject("ERROR - Haun julkaisu epäonnistui: haun oid = " + hakuOid);
+                
+                String body = "/n";
+                body += "ERROR - Haun julkaisu epäonnistui: haun oid = " + hakuOid;
+                body += "\n";
+                if (ex != null) {
+                    body += "Virhe: \n";
+                    body += ex.toString();
+                    body += "\n";
+                }
+                body += "Tähän viestiin ei voi vastata.\n";
+                
+                message.setBody(body);
+                
+                mailer.sendMail(message);
+            } catch (Exception ex2) {
+                LOG.error("Failed to send error email about Haku publication failure.", ex2);
+            }
         } else {
             LOG.info("  error email sending disabled.");
         }

@@ -16,10 +16,13 @@
 package fi.vm.sade.ohjausparametrit.service.beans;
 
 import fi.vm.sade.generic.rest.CachingRestClient;
+import fi.vm.sade.mail.Mailer;
+import fi.vm.sade.mail.dto.MailMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +53,9 @@ public class TarjontaKelaExportBean {
     @Value("${ohjausparametrit.tarjonta.export.kela.error.email:sd@cybercom.com}")
     private String errorEmailAddress;
 
+    @Autowired
+    private Mailer mailer;
+    
     public TarjontaKelaExportBean() {
         LOG.info("TarjontaKelaExportBean()");
     }
@@ -57,7 +63,7 @@ public class TarjontaKelaExportBean {
     public void printConfig() {
         LOG.info("TarjontaKelaExportBean() configuration");
         LOG.info("  username= {}", username);
-        LOG.info("  password= {}", (password != null) ? "OK" : "missing!");
+        LOG.info("  password= {}", (password != null) ? "<provided>" : "MISSING!");
         LOG.info("  serviceUrl= {}", serviceUrl);
         LOG.info("  casServiceUrl= {}", casServiceUrl);
         LOG.info("  errorEmailEnabled= {}", errorEmailEnabled);
@@ -92,8 +98,31 @@ public class TarjontaKelaExportBean {
         boolean result;
         
         if (Boolean.parseBoolean(errorEmailEnabled)) {
-            // TODO send email
-            LOG.info("  TODO send email with exception: {}", ex);
+            LOG.info("  send email with exception: {}", ex);
+            
+            try {
+                MailMessage message = new MailMessage();
+                message.setTo(errorEmailAddress);
+                message.setFrom("ohjausparametrit-noreply@opintopolku.fi");
+                message.setSubject("ERROR - KELA EXPORT epäonnistui");
+                
+                String body = "/n";
+                body += "ERROR - KELA EXPORT epäonnistui";
+                body += "\n";
+                if (ex != null) {
+                    body += "Virhe: \n";
+                    body += ex.toString();
+                    body += "\n";
+                }
+                body += "Tähän viestiin ei voi vastata.\n";
+                
+                message.setBody(body);
+                
+                mailer.sendMail(message);
+            } catch (Exception ex2) {
+                LOG.error("Failed to send error email about Kela Export failure.", ex2);
+            }
+
             result = true;
         } else {
             LOG.info("  error email sending disabled.");

@@ -20,16 +20,17 @@
 
         <scriptTask id="scriptInfo" scriptFormat="groovy">
             <script>
-                System.out.println("STARTING kelaExport process at: " + new Date());
+                myLogger.info("STARTING kelaExport process at: " + new Date());
                 try {
                   if (tarjontaKelaExportBean.export()) {
-                    System.out.println("  export OK at: " + new Date());
+                    myLogger.info("  export OK at: " + new Date());
                   } else {
-                    System.out.println("  export FAILED at: " + new Date());
-                      tarjontaKelaExportBean.sendErrorEmail(null);
+                    myLogger.info("  export FAILED at: " + new Date());
+                    tarjontaKelaExportBean.sendErrorEmail(null);
                   }
                 } catch (Exception ex) {
-                      tarjontaKelaExportBean.sendErrorEmail(ex);
+                    myLogger.error("  export FAILED at: " + new Date(), ex);
+                    tarjontaKelaExportBean.sendErrorEmail(ex);
                 }
             </script>
         </scriptTask>

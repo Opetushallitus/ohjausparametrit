@@ -67,44 +67,16 @@ public class OhjausparametritResourceV1 {
         return "HELLO: " + new Date();
     }
 
-//    @GET
-//    @Path("/test/{target}/{date}")
-//    @Produces(MediaType.TEXT_PLAIN)
-//    public String doTest(@PathParam("target") String target, @PathParam("date") String dateStr) {
-//
-//        LOG.info("doTest() target={}, date={}", target, dateStr);
-//        LOG.info("  date now: {}", new Date().getTime());
-//
-//        // Find processes to modify
-//        ProcessInstanceQuery q = processEngine.getRuntimeService().createProcessInstanceQuery();
-//        q.processDefinitionKey("tarjontaHakuPublication");
-//        q.variableValueEquals("target", target);
-//        q.variableValueEquals("type", "PH_TJT");
-//
-//        // Delete old instances
-//        for (ProcessInstance processInstance : q.list()) {
-//            LOG.info("  found old process instance: id={}", processInstance.getId());
-//            processEngine.getRuntimeService().deleteProcessInstance(processInstance.getProcessInstanceId(), "new values acquired");
-//        }
-//        
-//        // Start new process
-//        Date date = new Date(Long.parseLong(dateStr));
-//        
-//        Map model = new HashMap();
-//        model.put("target", target);
-//        model.put("type", "PH_TJT");
-//        model.put("date", date);
-//        // model.put("process_start_time", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(date));
-//            
-//        ProcessInstance pi = processEngine.getRuntimeService().startProcessInstanceByKey("tarjontaHakuPublication", model);
-//        LOG.info("started process instance: {} - model = {}", pi.getId(), model);
-//       
-//        LOG.info("  /test ended");
-//        
-//        return "Started: process instance id = " + pi.getProcessInstanceId();
-//    }
-    
-    
+    @GET
+    @Path("/test/{target}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String doTest(@PathParam("target") String target) {
+        LOG.info("doTest() target={}", target);
+        Date when = new Date(System.currentTimeMillis() + 15 * 1000);       
+        hakuPublishProcessStart(target, when);        
+        return "Starting publish process at: " + when;
+    }
+        
     @GET
     @Path("/authorize")
     @Produces(MediaType.TEXT_PLAIN)

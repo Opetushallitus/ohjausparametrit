@@ -19,6 +19,7 @@
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <authentication.api.version>8.0-SNAPSHOT</authentication.api.version>
         <generic.version>9.0-SNAPSHOT</generic.version>
+	<mail.version>6.0</mail.version>
     </properties>
 
     <modules>

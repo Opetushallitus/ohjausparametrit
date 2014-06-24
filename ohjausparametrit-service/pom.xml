@@ -56,6 +56,13 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>fi.vm.sade.mail</groupId>
+            <artifactId>mail-client</artifactId>
+            <version>${mail.version}</version>
+        </dependency>
+
+
         <!-- Antisamy / XSS prevention -->
         <!--        
                 <dependency>
