@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="OPH">
+     
+    <process id="tarjontaKelaExport">
+
+        <startEvent id="start">
+          <timerEventDefinition>
+              <!-- 1st day of every month at 04:00 -->
+              <timeCycle>0 0 4 1 * ?</timeCycle>
+
+<!-- Test timer - once a minute -->
+<!--              <timeCycle>0 * * * * ?</timeCycle> -->
+          </timerEventDefinition>
+        </startEvent>
+        
+        <sequenceFlow id="flow1" sourceRef="start" targetRef="scriptInfo" />
+
+        <scriptTask id="scriptInfo" scriptFormat="groovy">
+            <script>
+                myLogger.info("STARTING kelaExport process at: " + new Date());
+                try {
+                  if (tarjontaKelaExportBean.export()) {
+                    myLogger.info("  export OK at: " + new Date());
+                  } else {
+                    myLogger.info("  export FAILED at: " + new Date());
+                    tarjontaKelaExportBean.sendErrorEmail(null);
+                  }
+                } catch (Exception ex) {
+                    myLogger.error("  export FAILED at: " + new Date(), ex);
+                    tarjontaKelaExportBean.sendErrorEmail(ex);
+                }
+            </script>
+        </scriptTask>
+                        
+        <sequenceFlow id="flow2" sourceRef="scriptInfo" targetRef="theEnd" />
+                
+        <endEvent id="theEnd" />
+                                                        
+    </process>
+ 
+</definitions>

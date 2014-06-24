@@ -7,4 +7,6 @@ target
 .project
 .classpath
 .settings
-
+**/*.vpp.*
+**/*.vpp~*
+**/nb-configuration.xml
