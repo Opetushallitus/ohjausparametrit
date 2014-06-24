@@ -27,7 +27,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * This bean calls tarjonta service to export kela data and sends emails when export fails.
+ * 
  * @author mlyly
  */
 @Component("tarjontaKelaExportBean")

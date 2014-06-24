@@ -18,12 +18,8 @@ import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.mail.Mailer;
 import fi.vm.sade.mail.dto.MailMessage;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * This bean is called from business process that gets created when relevant parameter (PH_TJT.date) has been modified
+ * for a given Haku.
+ * 
+ * Calls tarjonta service to publish the haku, sends email when publication fails.
+ * 
  * @author mlyly
  */
 @Component("tarjontaHakuPublicationBean")
@@ -39,9 +39,6 @@ public class TarjontaHakuPublicationBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(TarjontaHakuPublicationBean.class);
     
-// /service-access/accessTicket?client_id=" + env.user + "&client_secret=" + env.pass + "&service_url=" + env.remote + "/authentication-service
-// https://itest-virkailija.oph.ware.fi/service-access/accessTicket?client_id=ophadmin&client_secret=ophadmin&service_url=https://itest-virkailija.oph.ware.fi/tarjonta-service
-
     @Value("${ohjausparametrit.tarjonta.publish.casService:CAS_SERVICE_URL_MISSING}")
     private String casServiceUrl;
     
@@ -88,12 +85,11 @@ public class TarjontaHakuPublicationBean {
         
         try {
             CachingRestClient client = getCachingRestClient();
-            HttpPut put = new HttpPut(urlStr);
 
+            HttpPut put = new HttpPut(urlStr);
             LOG.info("  do request: {}", put);
 
             HttpResponse response = client.execute(put, "application/json", null);
-            
             LOG.info("  done request: {}", response);
 
             result = (response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200);
@@ -160,6 +156,5 @@ public class TarjontaHakuPublicationBean {
     private void setCachingRestClient(CachingRestClient client) {
         cachingRestClient = client;
     }
-    
     
 }
