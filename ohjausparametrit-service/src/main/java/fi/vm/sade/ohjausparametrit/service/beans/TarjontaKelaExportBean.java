@@ -110,6 +110,16 @@ public class TarjontaKelaExportBean {
                 String body = "/n";
                 body += "ERROR - KELA EXPORT epäonnistui";
                 body += "\n";
+                
+                body += "Asetukset:\n";
+                body += "  username=" + username;
+                body += "  password=" + ((password != null) ? "<provided>" : "MISSING!");
+                body += "  serviceUrl=" + serviceUrl;
+                body += "  casServiceUrl=" + casServiceUrl;
+                body += "  errorEmailEnabled=" + errorEmailEnabled;
+                body += "  errorEmailAddress=" + errorEmailAddress;
+                body += "\n";
+                
                 if (ex != null) {
                     body += "Virhe: \n";
                     body += ex.toString();
