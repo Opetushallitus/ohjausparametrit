@@ -3,6 +3,8 @@ package fi.vm.sade.ohjausparametrit.service;
 import fi.vm.sade.ohjausparametrit.service.dao.JSONParameterRepository;
 import fi.vm.sade.ohjausparametrit.service.model.JSONParameter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,6 +13,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -26,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  * <pre>
  * GET  /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING -> json of all parameters
  *
- * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING <- json of all parameters updated/inserted/removed
+ * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING <- json of all parameters updated/inserted/removed (replaces existing)
  * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING/PARAM_NAME <- json of single parameter updated/inserted/removed
  * </pre>
  * 
@@ -45,6 +50,10 @@ public class OhjausparametritResourceV1 {
     @Autowired
     private JSONParameterRepository dao;
 
+    @Autowired
+    private ProcessEngine processEngine;
+    
+    
     /**
      * "Ping" method to see if service is "alive".
      * 
@@ -54,9 +63,20 @@ public class OhjausparametritResourceV1 {
     @Path("/hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String doHello() {
+        LOG.info("/hello - date now {} == {}", new Date(), new Date().getTime());
         return "HELLO: " + new Date();
     }
 
+//    @GET
+//    @Path("/test/{target}")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public String doTest(@PathParam("target") String target) {
+//        LOG.info("doTest() target={}", target);
+//        Date when = new Date(System.currentTimeMillis() + 15 * 1000);       
+//        hakuPublishProcessStart(target, when);        
+//        return "Starting publish process at: " + when;
+//    }
+        
     @GET
     @Path("/authorize")
     @Produces(MediaType.TEXT_PLAIN)
@@ -133,6 +153,9 @@ public class OhjausparametritResourceV1 {
         if (value == null || value.trim().isEmpty()) {
             // Remove parameters
             setParameters(target, (String) null);
+            
+            // Removes old processess for target
+            hakuPublishProcessStart(target, (JSONObject) null);
         } else {
             JSONObject json = getAsJSON(value);
             if (json == null) {
@@ -142,8 +165,11 @@ public class OhjausparametritResourceV1 {
 
             // Save parameters
             setParameters(target, json);
-        }
 
+            // Removes old and possibly starts new process for haku TJT parameter
+            hakuPublishProcessStart(target, json);
+        }
+        
         return Response.ok().build();
     }
 
@@ -189,10 +215,15 @@ public class OhjausparametritResourceV1 {
                 return Response.status(Response.Status.NOT_ACCEPTABLE).build();
             }
         }
-
+        
         // Save modified parameters
         setParameters(target, jsonParameters);
 
+        if ("PH_TJT".equalsIgnoreCase(paramName)) {
+            // Removes old and possibly stats new process for haku TJT parameter
+            hakuPublishProcessStart(target, jsonParameters);
+        }
+        
         return Response.ok().build();
     }
 
@@ -436,5 +467,91 @@ public class OhjausparametritResourceV1 {
 
         LOG.info("getParametersAsString({}) --> {}", target, result);
         return result;
+    }
+
+    /**
+     * Removes old "tarjontaHakuPublication" processes and starts new one to run on given date.
+     * 
+     * @param target
+     * @param jsonParameters 
+     */
+    private void hakuPublishProcessStart(String target, JSONObject jsonParameters) {
+
+        LOG.info("hakuPublishProcessStart({}, {})", target, jsonParameters);
+        
+        if (jsonParameters == null || !jsonParameters.has("PH_TJT")) {
+            LOG.info("  remove old process because NULL or no PH_TJT");
+            hakuPublishProcessStart(target, (Date) null);
+            return;
+        }
+
+        JSONObject ph_tjt;
+        try {
+            ph_tjt = jsonParameters.getJSONObject("PH_TJT");
+        } catch (JSONException ex) {
+            LOG.error("Failed to get parameter PH_TJT!", ex);
+            return;
+        }
+        
+        if (ph_tjt == null) {
+            LOG.info("  remove old process because NULL PH_TJT");
+            hakuPublishProcessStart(target, (Date) null);
+            return;
+        }
+        
+        if (!ph_tjt.has("date")) {
+            LOG.info("  remove old process because PH_TJT does not have 'date'");
+            hakuPublishProcessStart(target, (Date) null);
+            return;
+        }
+
+        try {
+            long ts = ph_tjt.getLong("date");
+            Date date = new Date(ts);
+            hakuPublishProcessStart(target, date);
+        } catch (JSONException ex) {
+            LOG.error("Invalid json value for 'PH_TJT.date' - not long! params={}", jsonParameters);
+        }
+    }
+
+    /**
+     * Removes old "tarjontaHakuPublication" processes and starts new one to run on given date.
+     * 
+     * @param target
+     * @param date 
+     */
+    private void hakuPublishProcessStart(String target, Date date) {
+        LOG.info("hakuPublishProcessStart(target={}, date={})...", target, date);
+
+        // Find processes to modify
+        ProcessInstanceQuery q = processEngine.getRuntimeService().createProcessInstanceQuery();
+        q.processDefinitionKey("tarjontaHakuPublication");
+        q.variableValueEquals("target", target);
+        q.variableValueEquals("type", "PH_TJT");
+
+        // Delete old instances of targets processes
+        for (ProcessInstance processInstance : q.list()) {
+            LOG.info("  found old process instance to delete: id={}", processInstance.getId());
+            processEngine.getRuntimeService().deleteProcessInstance(processInstance.getProcessInstanceId(), "new values acquired");
+        }
+
+        if (date != null) {
+            try {
+                Map model = new HashMap();
+                model.put("target", target);
+                model.put("type", "PH_TJT");
+                model.put("date", date);
+                // model.put("process_start_time", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(date));
+            
+                ProcessInstance pi = processEngine.getRuntimeService().startProcessInstanceByKey("tarjontaHakuPublication", model);
+                LOG.info("started process instance: {} - model = {}", pi.getId(), model);
+            } catch (Exception ex) {
+                LOG.error("Failed to start process for " + target, ex);
+            }
+        } else {
+            LOG.info("  no process to start for target: {}", target);
+        }
+
+        LOG.info("hakuPublishProcessStart()... done.");
     }
 }

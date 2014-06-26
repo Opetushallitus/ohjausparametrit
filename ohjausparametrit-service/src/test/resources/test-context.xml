@@ -51,9 +51,7 @@
         <property name="password" value="" />
     </bean>
 
-<!--    
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
--->    
     <import resource="classpath:test-dao-context.xml"/>
     
     <context:annotation-config />
@@ -61,6 +59,8 @@
 
     <!-- service configuration -->
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-rest-context.xml"/>
-    
+
+    <!-- Mailer -->    
+    <import resource="classpath:META-INF/spring/mail-mock-context.xml" />
 
 </beans>
