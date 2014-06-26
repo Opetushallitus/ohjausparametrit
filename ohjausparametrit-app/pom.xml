@@ -3,7 +3,7 @@
     <parent>
         <artifactId>pom</artifactId>
         <groupId>fi.vm.sade.ohjausparametrit</groupId>
-        <version>9.4.1</version>
+        <version>9.4.5</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
