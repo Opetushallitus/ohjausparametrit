@@ -18,8 +18,20 @@ ldap.manager.password={{ldap_manager_password}}
 ldap.manager-password={{ldap_manager_password}}
 ldap.manager.userdn={{ldap_manager_userdn}}
 server.name={{ansible_hostname}}
+ohjausparametrit.tarjonta.publish.user={{ohjausparametrit_tarjonta_publish_user}}
+ohjausparametrit.tarjonta.publish.password={{ohjausparametrit_tarjonta_publish_password}}
+ohjausparametrit.tarjonta.publish.error.enabled={{ohjausparametrit_tarjonta_publish_error_enabled}}
+ohjausparametrit.tarjonta.publish.error.email={{ohjausparametrit_tarjonta_publish_error_email}}
+ohjausparametrit.tarjonta.export.kela.user={{ohjausparametrit_tarjonta_export_kela_user}}
+ohjausparametrit.tarjonta.export.kela.password={{ohjausparametrit_tarjonta_export_kela_password}}
+ohjausparametrit.tarjonta.export.kela.error.enabled={{ohjausparametrit_tarjonta_export_kela_error_enabled}}
+ohjausparametrit.tarjonta.export.kela.error.email={{ohjausparametrit_tarjonta_export_kela_error_email}}
 
 # Oletusarvoja
+ohjausparametrit.tarjonta.publish.service=https://${host.virkailija}/tarjonta-service
+ohjausparametrit.tarjonta.publish.casService=https://${host.cas}/cas
+ohjausparametrit.tarjonta.export.kela.service=https://${host.virkailija}/tarjonta-service
+ohjausparametrit.tarjonta.export.kela.casService=https://${host.cas}/cas
 accessRight.webservice.url.backend=https\://${host.virkailija}/authentication-service/services/accessRightService
 accessRightAdmin.webservice.url.backend=https\://${host.virkailija}/authentication-service/services/accessRightAdminService
 accessRightHistory.webservice.url.backend=https\://${host.virkailija}/authentication-service/services/accessRightHistoryService
