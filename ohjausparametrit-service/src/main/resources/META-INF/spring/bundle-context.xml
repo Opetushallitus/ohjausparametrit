@@ -10,7 +10,7 @@
 
 
     <context:property-placeholder
-        location="classpath:ohjausparametrit-service.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/ohjausparametrit-service.properties, file:///${user.home:''}/oph-configuration/override.properties"
+        location="classpath:ohjausparametrit.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/ohjausparametrit.properties, file:///${user.home:''}/oph-configuration/override.properties"
         ignore-resource-not-found="true" properties-ref="defaultProps"/>
 
 
