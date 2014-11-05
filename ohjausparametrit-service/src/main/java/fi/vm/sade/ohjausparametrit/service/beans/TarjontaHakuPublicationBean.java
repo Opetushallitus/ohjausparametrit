@@ -42,19 +42,19 @@ public class TarjontaHakuPublicationBean {
     @Value("${ohjausparametrit.tarjonta.publish.casService:CAS_SERVICE_URL_MISSING}")
     private String casServiceUrl;
     
-    @Value("${ohjausparametrit.tarjonta.publish.user:ophadmin}")
+    @Value("${ohjausparametrit.tarjonta.publish.user}")
     private String username;
 
-    @Value("${ohjausparametrit.tarjonta.publish.password:ilonkautta!}")
+    @Value("${ohjausparametrit.tarjonta.publish.password}")
     private String password;
 
-    @Value("${ohjausparametrit.tarjonta.publish.service:https://itest-virkailija.oph.ware.fi/tarjonta-service}")
+    @Value("${ohjausparametrit.tarjonta.publish.service}")
     private String serviceUrl;
 
-    @Value("${ohjausparametrit.tarjonta.publish.error.enabled:false}")
+    @Value("${ohjausparametrit.tarjonta.publish.error.enabled}")
     private String errorEmailEnabled;
 
-    @Value("${ohjausparametrit.tarjonta.publish.error.email:sd@cybercom.com}")
+    @Value("${ohjausparametrit.tarjonta.publish.error.email}")
     private String errorEmailAddress;
 
     @Autowired
