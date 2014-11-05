@@ -39,19 +39,19 @@ public class TarjontaKelaExportBean {
     @Value("${ohjausparametrit.tarjonta.export.kela.casService:CAS_SERVICE_URL_MISSING}")
     private String casServiceUrl;
     
-    @Value("${ohjausparametrit.tarjonta.export.kela.user:ophadmin}")
+    @Value("${ohjausparametrit.tarjonta.export.kela.user}")
     private String username;
 
-    @Value("${ohjausparametrit.tarjonta.export.kela.password:ilonkautta!}")
+    @Value("${ohjausparametrit.tarjonta.export.kela.password}")
     private String password;
 
-    @Value("${ohjausparametrit.tarjonta.export.kela.service:https://itest-virkailija.oph.ware.fi/tarjonta-service}")
+    @Value("${ohjausparametrit.tarjonta.export.kela.service}")
     private String serviceUrl;
 
-    @Value("${ohjausparametrit.tarjonta.export.kela.error.enabled:false}")
+    @Value("${ohjausparametrit.tarjonta.export.kela.error.enabled}")
     private String errorEmailEnabled;
 
-    @Value("${ohjausparametrit.tarjonta.export.kela.error.email:sd@cybercom.com}")
+    @Value("${ohjausparametrit.tarjonta.export.kela.error.email}")
     private String errorEmailAddress;
 
     @Autowired
