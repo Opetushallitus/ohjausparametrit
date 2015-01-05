@@ -10,3 +10,4 @@ target
 **/*.vpp.*
 **/*.vpp~*
 **/nb-configuration.xml
+*.iml
