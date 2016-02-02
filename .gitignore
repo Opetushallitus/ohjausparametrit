@@ -11,3 +11,4 @@ target
 **/*.vpp~*
 **/nb-configuration.xml
 *.iml
+.idea
