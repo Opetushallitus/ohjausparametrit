@@ -18,6 +18,8 @@ import fi.vm.sade.generic.rest.CachingRestClient;
 import fi.vm.sade.mail.Mailer;
 import fi.vm.sade.mail.dto.MailMessage;
 import java.io.IOException;
+
+import fi.vm.sade.properties.OphProperties;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
 import org.slf4j.Logger;
@@ -25,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * This bean is called from business process that gets created when relevant parameter (PH_TJT.date) has been modified
@@ -51,6 +55,9 @@ public class TarjontaHakuPublicationBean {
     @Value("${ohjausparametrit.tarjonta.publish.service}")
     private String serviceUrl;
 
+    @Value("${host.virkailija}")
+    private String hostVirkailija;
+
     @Value("${ohjausparametrit.tarjonta.publish.error.enabled}")
     private String errorEmailEnabled;
 
@@ -59,9 +66,16 @@ public class TarjontaHakuPublicationBean {
 
     @Autowired
     private Mailer mailer;
+
+    private OphProperties properties = new OphProperties().addFiles("/ohjausparametrit-service_oph.properties");
     
     public TarjontaHakuPublicationBean() {
         LOG.info("TarjontaHakuPublicationBean()");
+    }
+
+    @PostConstruct
+    public void initializeProperties() {
+        properties.addDefault("baseUrl", "https://" + hostVirkailija);
     }
 
     public void printConfig() {
@@ -79,17 +93,12 @@ public class TarjontaHakuPublicationBean {
         this.printConfig();
         
         boolean result = false;
-        
-        String urlStr = serviceUrl + "/rest/v1/haku/" + hakuOid + "/state?state=JULKAISTU";
-        LOG.info("  target url = {}", urlStr);
-        
-        try {
-            CachingRestClient client = getCachingRestClient();
 
-            HttpPut put = new HttpPut(urlStr);
+        try {
+            HttpPut put = new HttpPut(properties.url("tarjonta.haku.julkaise", hakuOid));
             LOG.info("  do request: {}", put);
 
-            HttpResponse response = client.execute(put, "application/json", null);
+            HttpResponse response = getCachingRestClient().execute(put, "application/json", null);
             LOG.info("  done request: {}", response);
 
             result = (response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200);
@@ -153,7 +162,7 @@ public class TarjontaHakuPublicationBean {
     
     private CachingRestClient getCachingRestClient() {
         if (cachingRestClient == null) {
-            cachingRestClient = new CachingRestClient();
+            cachingRestClient = new CachingRestClient().setClientSubSystemCode("ohjausparametrit-service");
             cachingRestClient.setWebCasUrl(casServiceUrl);
             cachingRestClient.setCasService(serviceUrl);
             cachingRestClient.setUsername(username);

@@ -16,6 +16,7 @@ package fi.vm.sade.ohjausparametrit.service.dao;
 
 import java.util.List;
 
+import fi.vm.sade.ohjausparametrit.service.beans.TarjontaHakuPublicationBean;
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -37,6 +38,9 @@ public class ParameterRepositoryTest {
 
     @Autowired
     private JSONParameterRepository dao;
+
+    @Autowired
+    private TarjontaHakuPublicationBean bean;
 
     @Before
     public void setup(){

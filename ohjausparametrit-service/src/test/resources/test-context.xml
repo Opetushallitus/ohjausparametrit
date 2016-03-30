@@ -22,10 +22,7 @@
     
         <context:annotation-config />
 
-    <context:property-placeholder
-        location="classpath:ohjausparametrit-service.properties, file:///${user.home:''}/oph-configuration/common.properties, file:///${user.home:''}/oph-configuration/ohjausparametrit-service.properties, file:///${user.home:''}/oph-configuration/override.properties"
-        ignore-resource-not-found="true" properties-ref="defaultProps"/>
-
+    <context:property-placeholder location="classpath:ohjausparametrit-service.properties" properties-ref="defaultProps"/>
 
     <bean id="defaultProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="properties">
