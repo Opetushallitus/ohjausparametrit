@@ -498,9 +498,9 @@ public class OhjausparametritResourceV1 {
             hakuPublishProcessStart(target, (Date) null);
             return;
         }
-        
-        if (!ph_tjt.has("date")) {
-            LOG.info("  remove old process because PH_TJT does not have 'date'");
+
+        if (!ph_tjt.has("date") || ph_tjt.isNull("date")) {
+            LOG.info("  remove old process because PH_TJT does not have 'date' or it is null");
             hakuPublishProcessStart(target, (Date) null);
             return;
         }
