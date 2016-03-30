@@ -22,10 +22,6 @@ ohjausparametrit.tarjonta.publish.user={{ohjausparametrit_tarjonta_publish_user}
 ohjausparametrit.tarjonta.publish.password={{ohjausparametrit_tarjonta_publish_password}}
 ohjausparametrit.tarjonta.publish.error.enabled={{ohjausparametrit_tarjonta_publish_error_enabled}}
 ohjausparametrit.tarjonta.publish.error.email={{ohjausparametrit_tarjonta_publish_error_email}}
-ohjausparametrit.tarjonta.export.kela.user={{ohjausparametrit_tarjonta_export_kela_user}}
-ohjausparametrit.tarjonta.export.kela.password={{ohjausparametrit_tarjonta_export_kela_password}}
-ohjausparametrit.tarjonta.export.kela.error.enabled={{ohjausparametrit_tarjonta_export_kela_error_enabled}}
-ohjausparametrit.tarjonta.export.kela.error.email={{ohjausparametrit_tarjonta_export_kela_error_email}}
 
 # Oletusarvoja
 ohjausparametrit.tarjonta.publish.service=https://${host.virkailija}/tarjonta-service
