@@ -95,7 +95,7 @@ public class TarjontaHakuPublicationBean {
         boolean result = false;
 
         try {
-            HttpPut put = new HttpPut(properties.url("tarjonta.haku.julkaise", hakuOid));
+            HttpPut put = new HttpPut(properties.url("tarjonta-service.haku.julkaise", hakuOid));
             LOG.info("  do request: {}", put);
 
             HttpResponse response = getCachingRestClient().execute(put, "application/json", null);
