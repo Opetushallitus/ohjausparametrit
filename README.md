@@ -1,3 +1,17 @@
+# Ohjausparametrit #
+
+Ohjausparametripalvelussa pidetään järjestelmän toimintaa ylläpitäviä ja ohjaavia parametreja.
+Palvelu tarjoaa REST-rajapinnan.
+Yksi keskeinen käyttökohde on haun aikatauluasetukset.
+
+## Teknologiat
+
+Spring
+Flyway
+PostgreSql
+http://activiti.org/, bpm työkalu. Enää käytössä vain "Tarjonnan julkaisun takaraja" päivämäärän takaisinkutsussa.
+
+## Sekalaista ##
 
 mvn -Dflyway.user=oph -Dflyway.password=oph -P flyway flyway:init
 
