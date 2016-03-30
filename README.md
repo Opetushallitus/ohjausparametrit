@@ -1,7 +1,9 @@
 # Ohjausparametrit #
 
 Ohjausparametripalvelussa pidetään järjestelmän toimintaa ylläpitäviä ja ohjaavia parametreja.
-Palvelu tarjoaa REST-rajapinnan.
+
+Palvelu tarjoaa REST-rajapinnan. 
+
 Yksi keskeinen käyttökohde on haun aikatauluasetukset.
 
 ## Teknologiat
@@ -9,7 +11,7 @@ Yksi keskeinen käyttökohde on haun aikatauluasetukset.
 - Spring
 - Flyway
 - PostgreSql
-- http://activiti.org/, bpm työkalu. Enää käytössä vain "Tarjonnan julkaisun takaraja" päivämäärän takaisinkutsussa.
+- http://activiti.org/, bpm työkalu. Enää käytössä vain "Tarjonnan julkaisun takaraja" päivämäärän (PH_TJT) takaisinkutsussa.
 
 ## Sekalaista ##
 
