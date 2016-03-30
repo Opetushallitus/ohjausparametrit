@@ -6,10 +6,10 @@ Yksi keskeinen käyttökohde on haun aikatauluasetukset.
 
 ## Teknologiat
 
-Spring
-Flyway
-PostgreSql
-http://activiti.org/, bpm työkalu. Enää käytössä vain "Tarjonnan julkaisun takaraja" päivämäärän takaisinkutsussa.
+- Spring
+- Flyway
+- PostgreSql
+- http://activiti.org/, bpm työkalu. Enää käytössä vain "Tarjonnan julkaisun takaraja" päivämäärän takaisinkutsussa.
 
 ## Sekalaista ##
 
