@@ -24,7 +24,6 @@
 
     <modules>
         <module>ohjausparametrit-service</module>
-        <module>ohjausparametrit-app</module>
     </modules>
 
     <build>
