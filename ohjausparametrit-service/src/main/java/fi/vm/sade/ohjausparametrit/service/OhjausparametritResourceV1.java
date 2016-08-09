@@ -465,7 +465,7 @@ public class OhjausparametritResourceV1 {
             result = null;
         }
 
-        LOG.info("getParametersAsString({}) --> {}", target, result);
+        LOG.debug("getParametersAsString({}) --> {}", target, result);
         return result;
     }
 
