@@ -86,6 +86,4 @@ ohjausparametrit-service.postgresql.user={{host_postgresql_ohjausparametrit_user
 ohjausparametrit-service.postgresql.password={{host_postgresql_ohjausparametrit_password}}
 ohjausparametrit-service.postgresql.maxactive={{host_postgresql_ohjausparametrit_max_active}}
 ohjausparametrit-service.postgresql.maxwait={{host_postgresql_ohjausparametrit_max_wait}}
-ohjausparametrit-service.postgresql.minimumidle=2
-ohjausparametrit-service.postgresql.idletimeoutmillis=30000
 ohjausparametrit-service.postgresql.maxlifetimemillis=60000
