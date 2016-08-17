@@ -80,3 +80,12 @@ root.organisaatio.oid=1.2.246.562.10.00000000001
 user.home.conf=${user.home}/oph-configuration
 user.webservice.url.backend=https\://${host.virkailija}/authentication-service/services/userService
 web.url.cas=https\://${host.cas}/cas
+
+ohjausparametrit-service.postgresql.url=jdbc:postgresql://{{host_postgresql_ohjausparametrit}}:{{port_postgresql}}/ohjausparametrit
+ohjausparametrit-service.postgresql.user={{host_postgresql_ohjausparametrit_user}}
+ohjausparametrit-service.postgresql.password={{host_postgresql_ohjausparametrit_password}}
+ohjausparametrit-service.postgresql.maxactive={{host_postgresql_ohjausparametrit_max_active}}
+ohjausparametrit-service.postgresql.maxwait={{host_postgresql_ohjausparametrit_max_wait}}
+ohjausparametrit-service.postgresql.minimumidle=2
+ohjausparametrit-service.postgresql.idletimeoutmillis=30000
+ohjausparametrit-service.postgresql.maxlifetimemillis=60000
