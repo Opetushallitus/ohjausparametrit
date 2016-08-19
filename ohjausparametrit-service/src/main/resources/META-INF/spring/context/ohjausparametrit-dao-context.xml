@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	       xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/data/jpa
     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
@@ -16,6 +17,7 @@
         <property name="loadTimeWeaver">
             <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
         </property>
+        <property name="dataSource" ref="dbDataSource"/>
         <property name="jpaPropertyMap">
             <map>
                 <entry key="hibernate.hbm2ddl.auto" value="${jpa.schemaUpdate}" />
@@ -33,10 +35,36 @@
     <bean id="flyway" class="com.googlecode.flyway.core.Flyway" init-method="migrate">
         <property name="initOnMigrate" value="${flyway.initOnMigrate}"/>
         <property name="dataSource">
-            <bean id="dbDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-                <property name="jndiName" value="java:comp/env/jdbc/ohjausparametrit"/>
+            <bean id="dataSource"
+                  class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+                <property name="targetDataSource" ref="dbDataSource"/>
             </bean>
         </property>
     </bean>
-	
+
+
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="poolName" value="springHikariCP" />
+        <property name="connectionTestQuery" value="SELECT 1" />
+        <property name="dataSourceClassName" value="org.postgresql.ds.PGSimpleDataSource" />
+        <property name="maximumPoolSize" value="${ohjausparametrit-service.postgresql.maxactive}" />
+        <property name="connectionTimeout" value="${ohjausparametrit-service.postgresql.maxwait}" />
+        <property name="maxLifetime" value="${ohjausparametrit-service.postgresql.maxlifetimemillis}"/>
+        <property name="registerMbeans" value="true" />
+
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="url">${ohjausparametrit-service.postgresql.url}</prop>
+                <prop key="user">${ohjausparametrit-service.postgresql.user}</prop>
+                <prop key="password">${ohjausparametrit-service.postgresql.password}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- HikariCP configuration -->
+    <bean id="dbDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig" />
+    </bean>
+
+
 </beans>

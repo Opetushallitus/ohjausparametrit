@@ -41,7 +41,7 @@
 
 
     <!-- Activiti DS -->
-    <bean id="activitiDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+    <bean id="dbDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="org.h2.Driver" />
         <property name="url" value="jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000" />
         <property name="username" value="sa" />
