@@ -4,7 +4,7 @@
 
     <groupId>fi.vm.sade.ohjausparametrit</groupId>
     <artifactId>ohjausparametrit</artifactId>
-    <version>9.4.5</version>
+    <version>9.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Ohjausparametrit :: Parent</name>
 
@@ -42,7 +42,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <repositories>
         <repository>
             <id>oph-sade-artifactory-snapshots</id>
