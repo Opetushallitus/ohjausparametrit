@@ -39,8 +39,5 @@
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-rest-context.xml"/>
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
 
-    <!-- Email service -->
-    <import resource="classpath:META-INF/spring/mail-context.xml" />
-    
 </beans>
 

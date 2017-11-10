@@ -67,16 +67,6 @@ public class OhjausparametritResourceV1 {
         return "HELLO: " + new Date();
     }
 
-//    @GET
-//    @Path("/test/{target}")
-//    @Produces(MediaType.TEXT_PLAIN)
-//    public String doTest(@PathParam("target") String target) {
-//        LOG.info("doTest() target={}", target);
-//        Date when = new Date(System.currentTimeMillis() + 15 * 1000);       
-//        hakuPublishProcessStart(target, when);        
-//        return "Starting publish process at: " + when;
-//    }
-        
     @GET
     @Path("/authorize")
     @Produces(MediaType.TEXT_PLAIN)

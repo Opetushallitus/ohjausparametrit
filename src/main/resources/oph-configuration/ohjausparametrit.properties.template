@@ -20,8 +20,6 @@ ldap.manager.userdn={{ldap_manager_userdn}}
 server.name={{ansible_hostname}}
 ohjausparametrit.tarjonta.publish.user={{ohjausparametrit_tarjonta_publish_user}}
 ohjausparametrit.tarjonta.publish.password={{ohjausparametrit_tarjonta_publish_password}}
-ohjausparametrit.tarjonta.publish.error.enabled={{ohjausparametrit_tarjonta_publish_error_enabled}}
-ohjausparametrit.tarjonta.publish.error.email={{ohjausparametrit_tarjonta_publish_error_email}}
 
 # Oletusarvoja
 ohjausparametrit.tarjonta.publish.service=https://${host.virkailija}/tarjonta-service
