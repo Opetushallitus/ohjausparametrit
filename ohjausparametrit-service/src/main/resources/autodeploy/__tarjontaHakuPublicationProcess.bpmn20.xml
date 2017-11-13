@@ -43,11 +43,9 @@
                       myLogger.info("Publishing haku oid: ${target} ... SUCCESS");
                     } else {
                       myLogger.error("Publishing haku oid: ${target} ... FAILED");
-                      tarjontaHakuPublicationBean.sendErrorEmail("${target}", null);
                     }
                 } catch (Exception ex) {
                       myLogger.error("Publishing haku oid: ${target} ... FAILED", ex);
-                      tarjontaHakuPublicationBean.sendErrorEmail("${target}", ex);
                 }
                 myLogger.info("ENDING process at: " + new Date());
             </script>

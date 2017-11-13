@@ -14,14 +14,12 @@
  */
 package fi.vm.sade.ohjausparametrit.service.beans;
 
-import fi.vm.sade.generic.rest.CachingRestClient;
-import fi.vm.sade.mail.Mailer;
-import fi.vm.sade.mail.dto.MailMessage;
-import java.io.IOException;
+import fi.vm.sade.javautils.http.OphHttpClient;
+import fi.vm.sade.javautils.http.OphHttpRequest;
+import fi.vm.sade.javautils.http.OphHttpResponse;
+import fi.vm.sade.javautils.http.auth.CasAuthenticator;
 
 import fi.vm.sade.properties.OphProperties;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +28,12 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+
 /**
  * This bean is called from business process that gets created when relevant parameter (PH_TJT.date) has been modified
  * for a given Haku.
  * 
- * Calls tarjonta service to publish the haku, sends email when publication fails.
+ * Calls tarjonta service to publish the haku
  * 
  * @author mlyly
  */
@@ -58,24 +57,28 @@ public class TarjontaHakuPublicationBean {
     @Value("${host.virkailija}")
     private String hostVirkailija;
 
-    @Value("${ohjausparametrit.tarjonta.publish.error.enabled}")
-    private String errorEmailEnabled;
-
-    @Value("${ohjausparametrit.tarjonta.publish.error.email}")
-    private String errorEmailAddress;
-
-    @Autowired
-    private Mailer mailer;
-
     private OphProperties properties = new OphProperties().addFiles("/ohjausparametrit-service_oph.properties");
-    
+    private OphHttpClient ophHttpClient = null;
+
     public TarjontaHakuPublicationBean() {
         LOG.info("TarjontaHakuPublicationBean()");
     }
 
+
     @PostConstruct
-    public void initializeProperties() {
+    public void initialize() {
         properties.addDefault("baseUrl", "https://" + hostVirkailija);
+
+        CasAuthenticator casAuthenticator = new CasAuthenticator.Builder()
+                .username(username)
+                .password(password)
+                .webCasUrl(casServiceUrl)
+                .casServiceUrl(serviceUrl)
+                .build();
+
+        ophHttpClient = new OphHttpClient.Builder()
+                .authenticator(casAuthenticator)
+                .build();
     }
 
     public void printConfig() {
@@ -84,96 +87,32 @@ public class TarjontaHakuPublicationBean {
         LOG.info("  password= {}", (password != null) ? "<provided>" : "MISSING!");
         LOG.info("  serviceUrl= {}", serviceUrl);
         LOG.info("  casServiceUrl= {}", casServiceUrl);
-        LOG.info("  errorEmailEnabled= {}", errorEmailEnabled);
-        LOG.info("  errorEmailAddress= {}", errorEmailAddress);
     }
 
     public boolean publish(String hakuOid) {
         LOG.info("publish(oid={})", hakuOid);
         this.printConfig();
-        
-        boolean result = false;
 
         try {
-            HttpPut put = new HttpPut(properties.url("tarjonta-service.haku.julkaise", hakuOid));
-            LOG.info("  do request: {}", put);
+            LOG.info("publishing haku: " + hakuOid);
+            OphHttpRequest request = OphHttpRequest.Builder
+                    .put(properties.url("tarjonta-service.haku.julkaise", hakuOid))
+                    .addHeader("clientSubSystemCode", "HenkilotietomuutosPalvelu")
+                    .build();
 
-            HttpResponse response = getCachingRestClient().execute(put, "application/json", null);
-            LOG.info("  done request: {}", response);
-
-            result = (response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200);
-
-            LOG.info("  done request, result = {}", result);
-        } catch (IOException ex) {
-            LOG.error("Failed to publish haku: " + hakuOid, ex);
-            result = false;
-        }
-        
-        return result;
-    }
-
-    public boolean sendErrorEmail(String hakuOid, Exception ex) {
-        LOG.info("sendErrorEmail - failed to publish haku with OID = {}", hakuOid);
-        this.printConfig();
-        
-        if (Boolean.valueOf(errorEmailEnabled)) {
-            LOG.info("  send the error mail now to: {}", errorEmailAddress);        
-            try {
-                MailMessage message = new MailMessage();
-                message.setTo(errorEmailAddress);
-                message.setFrom("ohjausparametrit-noreply@opintopolku.fi");
-                message.setSubject("ERROR - Haun julkaisu epäonnistui: haun oid = " + hakuOid);
-                
-                String body = "/n";
-                body += "ERROR - Haun julkaisu epäonnistui: haun oid = " + hakuOid;
-                body += "\n";
-                
-                body += "Asetukset:\n";
-                body += "  username=" + username;
-                body += "  password=" + ((password != null) ? "<provided>" : "MISSING!");
-                body += "  serviceUrl=" + serviceUrl;
-                body += "  casServiceUrl=" + casServiceUrl;
-                body += "  errorEmailEnabled=" + errorEmailEnabled;
-                body += "  errorEmailAddress=" + errorEmailAddress;
-                body += "\n";
-
-                if (ex != null) {
-                    body += "Virhe: \n";
-                    body += ex.toString();
-                    body += "\n";
-                }
-                body += "Tähän viestiin ei voi vastata.\n";
-                
-                message.setBody(body);
-                
-                mailer.sendMail(message);
-            } catch (Exception ex2) {
-                LOG.error("Failed to send error email about Haku publication failure.", ex2);
+            OphHttpResponse response = ophHttpClient.execute(request);
+            if (response.getStatusCode() == 200) {
+                LOG.info("published haku: " + hakuOid);
+                return true;
+            } else {
+                throw new RuntimeException(String.format("Invalid status code: %s", response.asText()));
             }
-        } else {
-            LOG.info("  error email sending disabled.");
+
+        } catch (Exception ex) {
+            LOG.error("Failed to publish haku: " + hakuOid, ex);
+            return false;
         }
 
-        return true;
     }
-    
-    
-    private CachingRestClient cachingRestClient = null;
-    
-    private CachingRestClient getCachingRestClient() {
-        if (cachingRestClient == null) {
-            cachingRestClient = new CachingRestClient().setClientSubSystemCode("ohjausparametrit-service");
-            cachingRestClient.setWebCasUrl(casServiceUrl);
-            cachingRestClient.setCasService(serviceUrl);
-            cachingRestClient.setUsername(username);
-            cachingRestClient.setPassword(password);
-        }
-        
-        return cachingRestClient;
-    }
-    
-    private void setCachingRestClient(CachingRestClient client) {
-        cachingRestClient = client;
-    }
-    
+
 }
