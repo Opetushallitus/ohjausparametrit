@@ -29,9 +29,9 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:p="http://www.springframework.org/schema/p"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
-                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
                     http://www.springframework.org/schema/security
-                    http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+                    http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
     <global-method-security secured-annotations="enabled" pre-post-annotations="enabled">
     </global-method-security>
@@ -170,7 +170,7 @@
 
     <beans:bean id="ehCacheBasedTicketCache" class="org.springframework.security.cas.authentication.EhCacheBasedTicketCache">
         <beans:property name="cache">
-                <beans:ref local="casTicketsCacheBean"/>
+                <beans:ref bean="casTicketsCacheBean"/>
         </beans:property>
     </beans:bean>
 
@@ -181,7 +181,7 @@
         <beans:property name="key" value="${cas_key}"/>
         <!-- enable proxy authentication (in backend) -->
         <beans:property name="statelessTicketCache">
-            <beans:ref local="ehCacheBasedTicketCache" />
+            <beans:ref bean="ehCacheBasedTicketCache" />
         </beans:property>
     </beans:bean>
 
