@@ -85,3 +85,4 @@ ohjausparametrit-service.postgresql.password={{host_postgresql_ohjausparametrit_
 ohjausparametrit-service.postgresql.maxactive={{host_postgresql_ohjausparametrit_max_active}}
 ohjausparametrit-service.postgresql.maxwait={{host_postgresql_ohjausparametrit_max_wait}}
 ohjausparametrit-service.postgresql.maxlifetimemillis=60000
+ohjausparametrit-service.postgresql.leakDetectionThresholdMillis=1800000
