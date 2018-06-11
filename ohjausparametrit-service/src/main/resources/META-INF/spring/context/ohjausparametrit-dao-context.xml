@@ -49,6 +49,7 @@
         <property name="dataSourceClassName" value="org.postgresql.ds.PGSimpleDataSource" />
         <property name="maximumPoolSize" value="${ohjausparametrit-service.postgresql.maxactive}" />
         <property name="connectionTimeout" value="${ohjausparametrit-service.postgresql.maxwait}" />
+        <property name="validationTimeout" value="${ohjausparametrit-service.postgresql.validationTimeout}" />
         <property name="maxLifetime" value="${ohjausparametrit-service.postgresql.maxlifetimemillis}"/>
         <property name="leakDetectionThreshold" value="${ohjausparametrit-service.postgresql.leakDetectionThresholdMillis}" />
         <property name="registerMbeans" value="true" />
