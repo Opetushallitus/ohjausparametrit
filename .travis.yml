@@ -15,7 +15,7 @@ env:
   - secure: "WL0Q0ZUS2MoyCuvlkp+1WY95qli8hCGj5FYLZYRu2NuDWo+hpdktqfnKRydDwsEXP1mb+47cGtuYto+/T6XVcvM4JDgEDQ+0EQkdsx99MMGi5MdKTQKjEcH7FRyeUjnoIGnhPVwF4eLdcfuvS/ljyGMFp8swf/serEn16R65pelvG+x9g4PGCh5JmM6WbnPIl/z11udSKC/NeFE1YkkKB7Siuy5CeOWveY7TZIfWfZzlpTPJ/c4vT4xeGstbUiS6VvbPtcpeBSgcAW72t8xQdEFCek5T0LUpL5663C6sMTYAyfMsTT4BsgoZz5E5AJoeoZwHD2mffsiv6KxQiNpvXxuZSOBAzASAmHpSODBvp6m540VnGa18h6jJ8+HVhXlOF6mPzuws5Jt3rbksUbnwponPALdKllBC+GN4HlZ8DvUZYOcTLb+hLkEGAEfyENEYd1iHm641GpJGoFVK0mesZPc3Z9eCBrn5ZLn46DgKYoqwcScNtKqeo31fDAteh5vzeuCymwXAFzFWKlQJIC92BHNCJZ5Pd/EJY8gd18Tzr0agjCqpYP5mQ09bR1GENBdp00NDnJ8V/xZRzEMsinCb3Egwj2+U6uG2uLuCEYYKt50I+wr4em5oJ7yD3g8E9I41OXKXeAjW/d6wbdJpvEUoDlYxO0kK9mS80OV6wlF+Rvo="
 
 install:
-- git clone https://github.com/Opetushallitus/ohjausparametrit.git
+- git clone https://github.com/Opetushallitus/ci-tools.git
 - source ci-tools/common/setup-tools.sh
 - export ARTIFACT_NAME="ohjausparametrit"
 
