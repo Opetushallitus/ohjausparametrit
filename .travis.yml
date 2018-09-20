@@ -27,7 +27,7 @@ script:
 
 - export BASE_IMAGE="base-legacy:0.1"
 - ./ci-tools/common/pull-image.sh
-- ./ci-tools/build/build-fatjar.sh $ARTIFACT_NAME
+- ./ci-tools/build/build-war.sh $ARTIFACT_NAME
 
 deploy:
   provider: script
