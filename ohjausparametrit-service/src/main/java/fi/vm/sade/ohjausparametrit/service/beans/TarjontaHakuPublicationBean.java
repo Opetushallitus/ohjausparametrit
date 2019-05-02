@@ -97,7 +97,7 @@ public class TarjontaHakuPublicationBean {
             LOG.info("publishing haku: " + hakuOid);
             OphHttpRequest request = OphHttpRequest.Builder
                     .put(properties.url("tarjonta-service.haku.julkaise", hakuOid))
-                    .addHeader("clientSubSystemCode", "HenkilotietomuutosPalvelu")
+                    .addHeader("Caller-Id", "ohjausparametrit-service")
                     .build();
 
             OphHttpResponse response = ophHttpClient.execute(request);
