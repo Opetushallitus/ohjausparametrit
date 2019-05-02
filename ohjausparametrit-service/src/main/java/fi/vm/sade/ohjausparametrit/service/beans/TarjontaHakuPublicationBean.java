@@ -101,13 +101,18 @@ public class TarjontaHakuPublicationBean {
                     .addHeader("Caller-Id", "ohjausparametrit-service")
                     .build();
 
-            return ophHttpClient.<String>execute(request)
+            String result = ophHttpClient.<String>execute(request)
                     .expectedStatus(200)
                     .mapWith(identity())
-                    .map(a -> {
-                        LOG.info("published haku: " + hakuOid);
-                        return true;})
-                    .orElseThrow(() -> new RuntimeException("Invalid status code"));
+                    .orElse(null);
+            if (result == null) {
+                String msg = "Failed to publish haku: Invalid status code from tarjonta";
+                LOG.error(msg);
+                throw new RuntimeException(msg);
+            } else {
+                LOG.info("Published haku" + hakuOid);
+                return true;
+            }
         } catch (Exception ex) {
             LOG.error("Failed to publish haku: " + hakuOid, ex);
             return false;
