@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+import static java.util.function.Function.identity;
 
 /**
  * This bean is called from business process that gets created when relevant parameter (PH_TJT.date) has been modified
@@ -76,7 +77,7 @@ public class TarjontaHakuPublicationBean {
                 .casServiceUrl(serviceUrl)
                 .build();
 
-        ophHttpClient = new OphHttpClient.Builder()
+        ophHttpClient = new OphHttpClient.Builder("ohjausparametrit-service")
                 .authenticator(casAuthenticator)
                 .build();
     }
@@ -100,14 +101,13 @@ public class TarjontaHakuPublicationBean {
                     .addHeader("Caller-Id", "ohjausparametrit-service")
                     .build();
 
-            OphHttpResponse response = ophHttpClient.execute(request);
-            if (response.getStatusCode() == 200) {
-                LOG.info("published haku: " + hakuOid);
-                return true;
-            } else {
-                throw new RuntimeException(String.format("Invalid status code: %s", response.asText()));
-            }
-
+            return ophHttpClient.<String>execute(request)
+                    .expectedStatus(200)
+                    .mapWith(identity())
+                    .map(a -> {
+                        LOG.info("published haku: " + hakuOid);
+                        return true;})
+                    .orElseThrow(() -> new RuntimeException("Invalid status code"));
         } catch (Exception ex) {
             LOG.error("Failed to publish haku: " + hakuOid, ex);
             return false;
