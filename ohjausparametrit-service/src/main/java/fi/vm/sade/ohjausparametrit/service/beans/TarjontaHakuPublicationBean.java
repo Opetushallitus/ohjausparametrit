@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+import java.util.concurrent.Semaphore;
+
 import static java.util.function.Function.identity;
 
 /**
@@ -58,6 +60,11 @@ public class TarjontaHakuPublicationBean {
     @Value("${host.virkailija}")
     private String hostVirkailija;
 
+    private Semaphore semaphore;
+
+    @Value("${ohjausparametrit.tarjonta.publish.slotlimit}")
+    private int semaphoreSlotLimit;
+
     private OphProperties properties = new OphProperties().addFiles("/ohjausparametrit-service_oph.properties");
     private OphHttpClient ophHttpClient = null;
 
@@ -77,6 +84,8 @@ public class TarjontaHakuPublicationBean {
                 .casServiceUrl(serviceUrl)
                 .build();
 
+        semaphore = new Semaphore(semaphoreSlotLimit);
+
         ophHttpClient = new OphHttpClient.Builder("ohjausparametrit-service")
                 .authenticator(casAuthenticator)
                 .build();
@@ -88,33 +97,43 @@ public class TarjontaHakuPublicationBean {
         LOG.info("  password= {}", (password != null) ? "<provided>" : "MISSING!");
         LOG.info("  serviceUrl= {}", serviceUrl);
         LOG.info("  casServiceUrl= {}", casServiceUrl);
+        LOG.info("  semaphoreSlotLimit= {}", semaphoreSlotLimit);
     }
 
     public boolean publish(String hakuOid) {
         LOG.info("publish(oid={})", hakuOid);
         this.printConfig();
 
-        try {
-            LOG.info("publishing haku: " + hakuOid);
-            OphHttpRequest request = OphHttpRequest.Builder
-                    .put(properties.url("tarjonta-service.haku.julkaise", hakuOid))
-                    .addHeader("Caller-Id", "ohjausparametrit-service")
-                    .build();
+        if (semaphore.tryAcquire()) {
+            LOG.info("Acquired semaphore.");
+            try {
+                LOG.info("publishing haku: " + hakuOid);
+                OphHttpRequest request = OphHttpRequest.Builder
+                        .put(properties.url("tarjonta-service.haku.julkaise", hakuOid))
+                        .addHeader("Caller-Id", "ohjausparametrit-service")
+                        .build();
 
-            String result = ophHttpClient.<String>execute(request)
-                    .expectedStatus(200)
-                    .mapWith(identity())
-                    .orElse(null);
-            if (result == null) {
-                String msg = "Failed to publish haku: Invalid status code from tarjonta";
-                LOG.error(msg);
-                throw new RuntimeException(msg);
-            } else {
-                LOG.info("Published haku" + hakuOid);
-                return true;
+                String result = ophHttpClient.<String>execute(request)
+                        .expectedStatus(200)
+                        .mapWith(identity())
+                        .orElse(null);
+                if (result == null) {
+                    String msg = "Failed to publish haku: Invalid status code from tarjonta";
+                    LOG.error(msg);
+                    throw new RuntimeException(msg);
+                } else {
+                    LOG.info("Published haku" + hakuOid);
+                    return true;
+                }
+            } catch (Exception ex) {
+                LOG.error("Failed to publish haku: " + hakuOid, ex);
+                return false;
+            } finally {
+                LOG.info("Releasing semaphore.");
+                semaphore.release();
             }
-        } catch (Exception ex) {
-            LOG.error("Failed to publish haku: " + hakuOid, ex);
+        } else {
+            LOG.error("Could not acquire semaphore to publish haku: " + hakuOid);
             return false;
         }
 

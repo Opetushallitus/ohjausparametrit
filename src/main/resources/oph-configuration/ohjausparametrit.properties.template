@@ -17,6 +17,7 @@ host.virkailija={{host_virkailija}}
 server.name={{ansible_hostname}}
 ohjausparametrit.tarjonta.publish.user={{ohjausparametrit_tarjonta_publish_user}}
 ohjausparametrit.tarjonta.publish.password={{ohjausparametrit_tarjonta_publish_password}}
+ohjausparametrit.tarjonta.publish.slotlimit={{ ohjausparametrit_tarjonta_publish_slotlimit | default(10) }}
 
 # Oletusarvoja
 ohjausparametrit.tarjonta.publish.service=https://${host.virkailija}/tarjonta-service
