@@ -355,41 +355,6 @@
 
     <build>
         <finalName>ohjausparametrit-service</finalName>
-
-        <plugins>
-            <plugin>
-                <groupId>de.smartics.maven.plugin</groupId>
-                <artifactId>hibernate4-maven-plugin</artifactId>
-                <version>0.1.3</version>
-                <executions>
-                    <execution>
-                        <id>export</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <unitName>ohjausparametrit</unitName>
-                    <createOutputFile>${project.build.directory}/hibernate3/sql/schema.ddl</createOutputFile>
-                    <dropOutputFile>${project.build.directory}/hibernate3/sql/drop.ddl</dropOutputFile>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-core</artifactId>
-                        <version>${hibernate.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-ehcache</artifactId>
-                        <version>${hibernate.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-
     </build>
 
 
