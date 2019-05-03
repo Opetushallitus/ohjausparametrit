@@ -105,7 +105,7 @@ public class TarjontaHakuPublicationBean {
         this.printConfig();
 
         if (semaphore.tryAcquire()) {
-            LOG.info("Acquired semaphore.");
+            LOG.info("Acquired permit. Remaining available: " + semaphore.availablePermits());
             try {
                 LOG.info("publishing haku: " + hakuOid);
                 OphHttpRequest request = OphHttpRequest.Builder
@@ -122,18 +122,19 @@ public class TarjontaHakuPublicationBean {
                     LOG.error(msg);
                     throw new RuntimeException(msg);
                 } else {
-                    LOG.info("Published haku" + hakuOid);
+                    LOG.info("Published haku" + hakuOid + ". Changes: " + result);
                     return true;
                 }
             } catch (Exception ex) {
                 LOG.error("Failed to publish haku: " + hakuOid, ex);
                 return false;
             } finally {
-                LOG.info("Releasing semaphore.");
+                LOG.info("Releasing permit.");
                 semaphore.release();
+                LOG.info("Available permits: " + semaphore.availablePermits());
             }
         } else {
-            LOG.error("Could not acquire semaphore to publish haku: " + hakuOid);
+            LOG.error("Could not acquire permit to publish haku: " + hakuOid + ", remaining available permits: " + semaphore.availablePermits());
             return false;
         }
 
