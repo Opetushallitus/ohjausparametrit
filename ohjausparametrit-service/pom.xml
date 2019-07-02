@@ -43,6 +43,12 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>fi.vm.sade.java-utils</groupId>
+            <artifactId>spring-aware-health-check-servlet</artifactId>
+            <version>0.3.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Activiti -->
         <dependency>
             <groupId>org.activiti</groupId>
