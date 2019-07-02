@@ -108,9 +108,10 @@ public class TarjontaHakuPublicationBean {
             LOG.info("Acquired permit. Remaining available: " + semaphore.availablePermits());
             try {
                 LOG.info("publishing haku: " + hakuOid);
+                String callerId = "1.2.246.562.10.00000000001.ohjausparametrit-service.backend";
                 OphHttpRequest request = OphHttpRequest.Builder
                         .put(properties.url("tarjonta-service.haku.julkaise", hakuOid))
-                        .addHeader("Caller-Id", "ohjausparametrit-service")
+                        .addHeader("Caller-Id", callerId)
                         .build();
 
                 String result = ophHttpClient.<String>execute(request)
