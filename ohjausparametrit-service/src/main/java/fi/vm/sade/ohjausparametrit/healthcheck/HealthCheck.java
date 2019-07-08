@@ -18,8 +18,8 @@ import java.util.Map;
 
 import com.google.gson.GsonBuilder;
 
-import fi.vm.sade.javautils.healthcheck.HealthChecker;
-import fi.vm.sade.javautils.healthcheck.SpringAwareHealthCheckServlet;
+import fi.vm.sade.generic.healthcheck.HealthChecker;
+import fi.vm.sade.generic.healthcheck.SpringAwareHealthCheckServlet;
 
 /**
  * 
