@@ -197,7 +197,7 @@
         <dependency>
             <groupId>fi.vm.sade.generic</groupId>
             <artifactId>generic-common</artifactId>
-            <version>9.5.callerid-SNAPSHOT</version>
+            <version>9.5.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>fi.vm.sade.java-utils</groupId>
