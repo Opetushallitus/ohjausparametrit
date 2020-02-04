@@ -39,6 +39,11 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>healthcheck</servlet-name>
+        <url-pattern>/j_spring_cas_security_check</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>cxf</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
