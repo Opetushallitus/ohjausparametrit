@@ -267,6 +267,19 @@
         </dependency>
 
         <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.2.11</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <!-- Spring AOP dependency -->
             <!-- A quick fix for : AopConfigException: Cannot proxy target class because CGLIB2 is not available. -->
             <groupId>cglib</groupId>

@@ -19,7 +19,6 @@ import java.util.Map;
 import com.google.gson.GsonBuilder;
 
 import fi.vm.sade.generic.healthcheck.HealthChecker;
-import fi.vm.sade.generic.healthcheck.SpringAwareHealthCheckServlet;
 
 /**
  * 
