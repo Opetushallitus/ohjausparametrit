@@ -89,6 +89,7 @@ public class SpringAwareHealthCheckServlet extends HttpServlet {
             Map<String, Object> result = doHealthCheck(timestamp, user);
             final String resultJson = toJson(result);
             if (result == null || !OK.equals(result.get(STATUS))) { // log status != ok
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 log.warn("healthcheck failed:\n" + resultJson);
             }
 
