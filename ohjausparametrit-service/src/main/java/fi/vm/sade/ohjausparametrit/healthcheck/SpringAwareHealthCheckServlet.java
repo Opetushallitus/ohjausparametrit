@@ -144,9 +144,9 @@ public class SpringAwareHealthCheckServlet extends HttpServlet {
         Map<String, HealthChecker> checkers = ctx.getBeansOfType(HealthChecker.class);
 
         // register some default checkers
-        checkers.put("database", new DatabaseHealthChecker(dataSource));
+        //checkers.put("database", new DatabaseHealthChecker(dataSource));
         checkers.put("buildversion", new BuildVersionHealthChecker(getServletContext()));
-        checkers.put("proxyauth", new ProxyAuthenticationChecker(getServletContext(), ctx));
+        //checkers.put("proxyauth", new ProxyAuthenticationChecker(getServletContext(), ctx));
 
         return checkers;
     }
