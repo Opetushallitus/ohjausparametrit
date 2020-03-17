@@ -50,8 +50,8 @@ public class OhjausparametritResourceV1 {
     @Autowired
     private JSONParameterRepository dao;
 
-    //@Autowired
-    //private ProcessEngine processEngine;
+    @Autowired
+    private ProcessEngine processEngine;
     
     
     /**
@@ -511,7 +511,6 @@ public class OhjausparametritResourceV1 {
      * @param date 
      */
     private void hakuPublishProcessStart(String target, Date date) {
-        /*
         LOG.info("hakuPublishProcessStart(target={}, date={})...", target, date);
 
         // Find processes to modify
@@ -544,6 +543,5 @@ public class OhjausparametritResourceV1 {
         }
 
         LOG.info("hakuPublishProcessStart()... done.");
-        */
     }
 }

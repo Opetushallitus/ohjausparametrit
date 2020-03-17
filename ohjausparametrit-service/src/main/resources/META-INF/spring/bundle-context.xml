@@ -37,7 +37,7 @@
     <!-- service configuration -->
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-dao-context.xml"/>
     <import resource="classpath:META-INF/spring/context/ohjausparametrit-rest-context.xml"/>
-    <!-- import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/ -->
+    <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
 
 </beans>
 
