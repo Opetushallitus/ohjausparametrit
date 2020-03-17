@@ -48,7 +48,7 @@
         <property name="password" value="" />
     </bean>
 
-    <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
+    <!--import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/ -->
     <import resource="classpath:test-dao-context.xml"/>
     
     <context:annotation-config />
