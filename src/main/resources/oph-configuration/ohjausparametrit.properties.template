@@ -73,6 +73,7 @@ ohjausparametrit-service.postgresql.url=jdbc:postgresql://{{host_postgresql_ohja
 ohjausparametrit-service.postgresql.user={{postgres_app_user}}
 ohjausparametrit-service.postgresql.password={{host_postgresql_ohjausparametrit_app_password}}
 ohjausparametrit-service.postgresql.maxactive={{ host_postgresql_ohjausparametrit_max_active | default(15) }}
+ohjausparametrit-service.postgresql.minactive={{ host_postgresql_ohjausparametrit_min_active | default(5) }}
 ohjausparametrit-service.postgresql.maxwait={{host_postgresql_ohjausparametrit_max_wait}}
 ohjausparametrit-service.postgresql.maxlifetimemillis=600000
 ohjausparametrit-service.postgresql.leakDetectionThresholdMillis=300000

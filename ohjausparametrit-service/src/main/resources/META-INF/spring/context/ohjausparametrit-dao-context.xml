@@ -48,6 +48,7 @@
         <property name="connectionTestQuery" value="SELECT 1" />
         <property name="dataSourceClassName" value="org.postgresql.ds.PGSimpleDataSource" />
         <property name="maximumPoolSize" value="${ohjausparametrit-service.postgresql.maxactive}" />
+        <property name="minimumIdle" value="${ohjausparametrit-service.postgresql.minactive}" />
         <property name="connectionTimeout" value="${ohjausparametrit-service.postgresql.maxwait}" />
         <property name="validationTimeout" value="${ohjausparametrit-service.postgresql.validationTimeout}" />
         <property name="maxLifetime" value="${ohjausparametrit-service.postgresql.maxlifetimemillis}"/>
