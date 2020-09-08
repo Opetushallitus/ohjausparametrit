@@ -15,8 +15,8 @@
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-        <cxf.version>3.2.0</cxf.version>
-        <spring-security.version>4.2.3.RELEASE</spring-security.version>
+        <cxf.version>3.2.12</cxf.version>
+        <spring-security.version>4.2.16.RELEASE</spring-security.version>
         <spring.version>4.3.9.RELEASE</spring.version>
         <hibernate.version>4.1.0.Final</hibernate.version>
 
@@ -321,17 +321,17 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.1.0.Final</version>
+            <version>5.3.18.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.1.0.Final</version>
+            <version>5.3.18.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>4.1.0.Final</version>
+            <version>6.0.19.Final</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
@@ -354,7 +354,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
+            <version>42.2.13</version>
         </dependency>
 
         <dependency>
@@ -392,7 +392,7 @@
                     <dependency>
                         <groupId>org.hibernate</groupId>
                         <artifactId>hibernate-core</artifactId>
-                        <version>${hibernate.version}</version>
+                        <version>5.3.18.Final</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hibernate</groupId>
