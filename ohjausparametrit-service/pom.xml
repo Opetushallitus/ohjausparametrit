@@ -15,7 +15,7 @@
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-        <cxf.version>3.2.0</cxf.version>
+        <cxf.version>3.3.8</cxf.version>
         <spring-security.version>4.2.3.RELEASE</spring-security.version>
         <spring.version>4.3.9.RELEASE</spring.version>
         <hibernate.version>4.1.0.Final</hibernate.version>
