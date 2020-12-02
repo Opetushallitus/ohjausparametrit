@@ -46,7 +46,8 @@ public class OhjausparametritResourceV1 {
     public static final String ROLE_READ = "ROLE_APP_TARJONTA_READ";
     public static final String ROLE_CRUD = "ROLE_APP_TARJONTA_CRUD";
     public static final String ROLE_UPDATE = "ROLE_APP_TARJONTA_READ_UPDATE";
-    
+    public static final String KOUTA_OPHPAAKAYTTAJA = "ROLE_APP_KOUTA_OPHPAAKAYTTAJA";
+
     @Autowired
     private JSONParameterRepository dao;
 
@@ -70,7 +71,7 @@ public class OhjausparametritResourceV1 {
     @GET
     @Path("/authorize")
     @Produces(MediaType.TEXT_PLAIN)
-    @Secured({ROLE_READ, ROLE_UPDATE, ROLE_CRUD})
+    @Secured({ROLE_READ, ROLE_UPDATE, ROLE_CRUD, KOUTA_OPHPAAKAYTTAJA})
     public String doAuthorize() {
         LOG.debug("GET /authorize");
         return getCurrentUserName();
@@ -136,7 +137,7 @@ public class OhjausparametritResourceV1 {
     @Path("/{target}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Secured({ROLE_UPDATE, ROLE_CRUD})
+    @Secured({ROLE_UPDATE, ROLE_CRUD, KOUTA_OPHPAAKAYTTAJA})
     public Response doPost(@PathParam("target") String target, String value) {
         LOG.debug("POST /{} <= {}", new Object[]{target, value});
 
@@ -175,7 +176,7 @@ public class OhjausparametritResourceV1 {
     @Path("/{target}/{paramName}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Secured({ROLE_UPDATE, ROLE_CRUD})
+    @Secured({ROLE_UPDATE, ROLE_CRUD, KOUTA_OPHPAAKAYTTAJA})
     public Response doPost(@PathParam("target") String target, @PathParam("paramName") String paramName, String value) {
         LOG.debug("POST /{}/{} <= {}", new Object[]{target, paramName, value});
 
