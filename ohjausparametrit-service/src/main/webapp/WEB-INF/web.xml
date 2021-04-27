@@ -30,7 +30,7 @@
 
     <servlet>
         <servlet-name>healthcheck</servlet-name>
-        <servlet-class>fi.vm.sade.ohjausparametrit.healthcheck.HealthCheck</servlet-class>
+        <servlet-class>fi.oph.ohjausparametrit.healthcheck.HealthCheck</servlet-class>
     </servlet>
 
     <servlet-mapping>
