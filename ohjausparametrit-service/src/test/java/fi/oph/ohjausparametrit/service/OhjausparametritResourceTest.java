@@ -33,7 +33,6 @@ public class OhjausparametritResourceTest {
         String target = "TARGET";
         String param = "PARAM";
         String value1 = "{ " + param + ": { foo: true } }";
-        String value2 = "{ foo: false }";
 
         // Find
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
@@ -50,26 +49,9 @@ public class OhjausparametritResourceTest {
                 "    \"foo\": true\n" +
                 "  }"));
 
-        // Save
-        op.doPost(target, param, value2);
-
-        // Find
-        res = op.doGet(target);
-        MatcherAssert.assertThat(res, StringContains.containsString("\"PARAM\": {\n" +
-                "    \"foo\": false\n" +
-                "  }"));
-
-        // Save
-        op.doPost(target, param, value2);
-
-        // Delete
-        op.doPost(target, param, null);
-
-        // Find
-        exception = assertThrows(ResponseStatusException.class, () -> {
-            op.doGet(param);
-        });
-        assertEquals("404 NOT_FOUND \"target not found\"", exception.getMessage());
+        // Find all
+        res = op.doGetAll();
+        MatcherAssert.assertThat(res, StringContains.containsString("{\"TARGET\":{\"PARAM\":{\"foo\":true}"));
 
     }
     

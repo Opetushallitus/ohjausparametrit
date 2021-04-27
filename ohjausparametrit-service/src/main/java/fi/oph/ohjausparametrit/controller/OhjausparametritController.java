@@ -43,7 +43,6 @@ public class OhjausparametritController {
     @GetMapping("/authorize")
     @PreAuthorize("hasAnyRole('ROLE_APP_TARJONTA_READ', 'ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA')")
     public String doAuthorize() {
-        LOG.debug("GET /authorize");
         return getCurrentUserName();
     }
     
@@ -54,11 +53,9 @@ public class OhjausparametritController {
     public String doGetAll() {
         try {
             JSONObject result = new JSONObject();
-        
             for (JSONParameter jSONParameter : dao.findAll()) {
                 result.put(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
             }
-
             return result.toString();
         } catch (JSONException ex) {
             LOG.error("Failed to produce json output...?", ex);
@@ -74,11 +71,11 @@ public class OhjausparametritController {
      */
     @GetMapping("/{target}")
     public String doGet(@PathVariable String target) {
-        String value = getParametersAsString(target);
-        if (value == null) {
+        JSONParameter parameter = dao.findByTarget(target);
+        if (parameter == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "target not found");
         }
-        return value;
+        return parameter.getJsonValue();
     }
 
     /**
@@ -103,59 +100,6 @@ public class OhjausparametritController {
         }
     }
 
-    /**
-     * Partial parameters update.
-     * 
-     * @param target ex. haku oid
-     * @param paramName ex. PH_HKMT
-     * @param value parameter value as json
-     * @return success == OK, failure == NOT_AUTHORIZED or NOT_ACCEPTABLE
-     */
-    @PostMapping("/{target}/{paramName}")
-    @PreAuthorize("hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA')")
-    public void doPost(@PathVariable String target, @PathVariable String paramName, @RequestBody String value) {
-        // Find existing parameters
-        JSONObject jsonParameters = getParameters(target);
-        if (jsonParameters == null) {
-            jsonParameters = getAsJSON("{}");
-        }
-
-        // Remove named parameter?
-        if (value == null || value.trim().isEmpty()) {
-            // Remove selected parameter in parameters
-            jsonParameters.remove(paramName);
-        } else {
-            // Add / modify
-            JSONObject jsonParam = getAsJSON(value);
-            if (jsonParam == null) {
-                LOG.error("Could not parse json for {}, {}: {}", target, paramName, value);
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-            }
-            // Modify parameters object
-            try {
-                jsonParameters.put(paramName, jsonParam);
-            } catch (JSONException ex) {
-                LOG.error("Failed to add/change parameter", ex);
-                // Some other JSON error?
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-            }
-        }
-        
-        // Save modified parameters
-        setParameters(target, jsonParameters);
-
-    }
-
-    //
-    // Helpers
-    //
-
-    /**
-     * Parse string to JSONObject.
-     * 
-     * @param data
-     * @return null on error
-     */
     private JSONObject getAsJSON(String data) {
         try {
             if (data == null) {
@@ -167,12 +111,6 @@ public class OhjausparametritController {
         }
     }
 
-    /**
-     * Format JSON to string.
-     * 
-     * @param json
-     * @return null on error
-     */
     private String getJSONAsString(JSONObject json) {
         try {
             if (json == null) {
@@ -184,140 +122,10 @@ public class OhjausparametritController {
         }
     }
 
-    /**
-     * Saves role to given json to field "__role__".
-     * 
-     * @param json
-     * @param role 
-     */
-    private void setRoleToJson(JSONObject json, String role) {
-        try {
-            if (json != null && role != null) {
-                json.put("__role__", role);
-            }
-        } catch (JSONException ex) {
-            LOG.error("Invalid role def: " + role, ex);
-        }
-    }
-
-    /**
-     * Returns field "__role__" from JSON.
-     * 
-     * @param json
-     * @return 
-     */
-    private String getRoleFromJson(JSONObject json) {
-        if (json == null) {
-            return null;
-        }
-        try {
-            return json.getString("__role__");
-        } catch (JSONException ex) {
-            return null;
-        }
-    }
-
-    /**
-     * Verifies that "role" equals "__role__" in JSON.
-     * 
-     * @param role
-     * @param target
-     * @param json
-     * @return 
-     */
-    private boolean verifyRoleInParameters(String role, String target, JSONObject json) {
-        if (role == null) {
-            return false;
-        }
-
-        if (json == null) {
-            json = getParameters(target);
-        }
-
-        if (json == null) {
-            // New parameter
-            return true;
-        }
-
-        return role.equalsIgnoreCase(getRoleFromJson(json));
-    }
-
-    /**
-     * Gets current username - for "auditing" purposes.
-     *
-     * @return
-     */
     private String getCurrentUserName() {
-        if (isLoggedInUser()) {
-            return SecurityContextHolder.getContext().getAuthentication().getName();
-        } else {
-            return "NA";
-        }
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    /**
-     * @return true if user has been logged in AND is not "anonymousUser"
-     */
-    private boolean isLoggedInUser() {
-        boolean result = true;
-
-        result = result && SecurityContextHolder.getContext() != null;
-        result = result && SecurityContextHolder.getContext().getAuthentication() != null;
-        result = result && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
-        result = result && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null;
-        result = result && SecurityContextHolder.getContext().getAuthentication().getAuthorities() != null;
-        result = result && SecurityContextHolder.getContext().getAuthentication().getAuthorities().isEmpty() == false;
-
-        // TODO how to make this check more robust?
-        result = result && !"anonymousUser".equalsIgnoreCase(SecurityContextHolder.getContext().getAuthentication().getName());
-
-        LOG.debug("isLoggedInUser(): {} - {}", result, result ? SecurityContextHolder.getContext().getAuthentication().getName() : "NA");
-        // LOG.debug("  authorities = {}", result ? SecurityContextHolder.getContext().getAuthentication().getAuthorities() : null);
-
-        return result;
-    }
-   
-    /**
-     * Returns true if user has given role / authority
-     * 
-     * @param role
-     * @return true if has
-     */
-    private boolean userHasRole(String role)  {
-        // No empty roles
-        if (role == null || role.trim().isEmpty()) {
-            return false;
-        }
-
-        // Is user logged in?
-        if (!isLoggedInUser()) {
-            return false;
-        }
-        
-        // Does he have the required role?
-        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
-            String grantedRole = grantedAuthority.getAuthority();
-            boolean hasRole = grantedRole != null && grantedRole.startsWith(role);
-            LOG.info("checking: {} ==? {} --> {}", new Object[] {grantedAuthority, role, hasRole});
-            if (hasRole) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    
-    
-    //
-    // "DAO" Layer
-    //
-    
-    /**
-     * Insert / update parameters for given "target"
-     * 
-     * @param target ex. Haku oid
-     * @param value parameters (multiple) as JSON
-     */
     private void setParameters(String target, String value) {
 
         // Find existing parameter if any
@@ -339,12 +147,6 @@ public class OhjausparametritController {
         }
     }
 
-    /**
-     * Save params.
-     * 
-     * @param target
-     * @param value 
-     */
     private void setParameters(String target, JSONObject value) {
         if (value != null) {
             try {
@@ -356,36 +158,6 @@ public class OhjausparametritController {
         }
         
         setParameters(target, getJSONAsString(value));
-    }
-
-    /**
-     * Load params by target
-     * 
-     * @param target ex. Haku oid
-     * @return JSON
-     */
-    private JSONObject getParameters(String target) {
-        return getAsJSON(getParametersAsString(target));
-    }
-
-    /**
-     * Load params as JSON.
-     * 
-     * @param target ex. Haku oid
-     * @return JSON as string
-     */
-    private String getParametersAsString(String target) {
-        String result;
-
-        JSONParameter p = dao.findByTarget(target);
-        if (p != null) {
-            result = p.getJsonValue();
-        } else {
-            result = null;
-        }
-
-        LOG.debug("getParametersAsString({}) --> {}", target, result);
-        return result;
     }
 
 }
