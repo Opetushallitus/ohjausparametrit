@@ -15,7 +15,6 @@
 
 package fi.vm.sade.ohjausparametrit.service.beans;
 
-import org.activiti.bpmn.model.ThrowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

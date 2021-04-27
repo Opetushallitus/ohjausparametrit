@@ -39,16 +39,6 @@
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
     <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
 
-
-    <!-- Activiti DS -->
-    <bean id="dbDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-        <property name="driverClass" value="org.h2.Driver" />
-        <property name="url" value="jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000" />
-        <property name="username" value="sa" />
-        <property name="password" value="" />
-    </bean>
-
-    <import resource="classpath:META-INF/spring/context/ohjausparametrit-activiti-context.xml"/>
     <import resource="classpath:test-dao-context.xml"/>
     
     <context:annotation-config />
