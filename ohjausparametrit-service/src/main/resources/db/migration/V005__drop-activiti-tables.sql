@@ -1,0 +1,26 @@
+drop table if exists act_evt_log cascade;
+drop table if exists act_ge_bytearray cascade;
+drop table if exists act_ge_property cascade;
+drop table if exists act_hi_actinst cascade;
+drop table if exists act_hi_attachment cascade;
+drop table if exists act_hi_comment cascade;
+drop table if exists act_hi_detail cascade;
+drop table if exists act_hi_identitylink cascade;
+drop table if exists act_hi_procinst cascade;
+drop table if exists act_hi_taskinst cascade;
+drop table if exists act_hi_varinst cascade;
+drop table if exists act_id_group cascade;
+drop table if exists act_id_info cascade;
+drop table if exists act_id_membership cascade;
+drop table if exists act_id_user cascade;
+drop table if exists act_re_deployment cascade;
+drop table if exists act_re_model cascade;
+drop table if exists act_re_procdef cascade;
+drop table if exists act_ru_event_subscr cascade;
+drop table if exists act_ru_execution cascade;
+drop table if exists act_ru_identitylink cascade;
+drop table if exists act_ru_job cascade;
+drop table if exists act_ru_task cascade;
+drop table if exists act_ru_variable cascade;
+
+drop sequence if exists act_evt_log_log_nr__seq cascade;
