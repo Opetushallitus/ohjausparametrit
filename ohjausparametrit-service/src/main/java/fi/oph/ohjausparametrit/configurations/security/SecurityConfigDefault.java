@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAuthenticationProvider;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
@@ -128,6 +129,7 @@ public class SecurityConfigDefault extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/springfox-swagger-ui/**").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/rest/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(casAuthenticationFilter())
