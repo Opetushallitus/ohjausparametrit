@@ -9,5 +9,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = {"fi.oph.ohjausparametrit.repository"})
 @EntityScan({"fi.oph.ohjausparametrit.model"})
 @EnableTransactionManagement
-public class JpaConfiguration {
-}
+public class JpaConfiguration {}

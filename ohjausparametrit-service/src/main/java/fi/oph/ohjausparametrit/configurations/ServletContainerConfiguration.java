@@ -10,34 +10,33 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Servlet containeriin liittyvät konfiguraatiot.
- */
+/** Servlet containeriin liittyvät konfiguraatiot. */
 @Configuration
 public class ServletContainerConfiguration {
 
-    /**
-     * Konfiguraatio kun palvelua ajetaan HTTPS proxyn läpi. Käytännössä tämä
-     * muuttaa {@link javax.servlet.ServletRequest#getScheme()} palauttamaan
-     * `https` jolloin palvelun kautta luodut urlit muodostuvat oikein.
-     *
-     * Aktivointi: `ohjausparametrit.uses-ssl-proxy` arvoon `true`.
-     *
-     * @return EmbeddedServletContainerCustomizer jonka Spring automaattisesti
-     * tunnistaa ja lisää servlet containerin konfigurointiin
-     */
-    @Bean
-    @ConditionalOnProperty("ohjausparametrit.uses-ssl-proxy")
-    public WebServerFactoryCustomizer sslProxyCustomizer() {
-        return (WebServerFactory container) -> {
-            if (container instanceof ConfigurableServletWebServerFactory) {
-                TomcatServletWebServerFactory tomcat = (TomcatServletWebServerFactory) container;
-                tomcat.addConnectorCustomizers((TomcatConnectorCustomizer) (Connector connector) -> {
-                    connector.setScheme("https");
-                    connector.setSecure(true);
+  /**
+   * Konfiguraatio kun palvelua ajetaan HTTPS proxyn läpi. Käytännössä tämä muuttaa {@link
+   * javax.servlet.ServletRequest#getScheme()} palauttamaan `https` jolloin palvelun kautta luodut
+   * urlit muodostuvat oikein.
+   *
+   * <p>Aktivointi: `ohjausparametrit.uses-ssl-proxy` arvoon `true`.
+   *
+   * @return EmbeddedServletContainerCustomizer jonka Spring automaattisesti tunnistaa ja lisää
+   *     servlet containerin konfigurointiin
+   */
+  @Bean
+  @ConditionalOnProperty("ohjausparametrit.uses-ssl-proxy")
+  public WebServerFactoryCustomizer sslProxyCustomizer() {
+    return (WebServerFactory container) -> {
+      if (container instanceof ConfigurableServletWebServerFactory) {
+        TomcatServletWebServerFactory tomcat = (TomcatServletWebServerFactory) container;
+        tomcat.addConnectorCustomizers(
+            (TomcatConnectorCustomizer)
+                (Connector connector) -> {
+                  connector.setScheme("https");
+                  connector.setSecure(true);
                 });
-            }
-        };
-    }
+      }
+    };
+  }
 }
-

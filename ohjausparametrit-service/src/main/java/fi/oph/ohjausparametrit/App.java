@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class App {
 
-    public static void main (String[] args) {
-        System.setProperty("server.servlet.context-path", "/ohjausparametrit-service");
-        SpringApplication.run(App.class, args);
-    }
+  public static void main(String[] args) {
+    System.setProperty("server.servlet.context-path", "/ohjausparametrit-service");
+    SpringApplication.run(App.class, args);
+  }
 }
-

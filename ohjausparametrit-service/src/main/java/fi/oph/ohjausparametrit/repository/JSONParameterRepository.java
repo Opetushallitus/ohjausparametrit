@@ -12,15 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional(readOnly = true)
-public interface JSONParameterRepository extends
-        PagingAndSortingRepository<JSONParameter, String> {
+public interface JSONParameterRepository extends PagingAndSortingRepository<JSONParameter, String> {
 
-    /**
-     * Find by "primary key".
-     * 
-     * @param target
-     * @return 
-     */
-    public JSONParameter findByTarget(String target);
-
+  /**
+   * Find by "primary key".
+   *
+   * @param target
+   * @return
+   */
+  public JSONParameter findByTarget(String target);
 }

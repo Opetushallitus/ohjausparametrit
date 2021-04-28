@@ -14,16 +14,14 @@
  */
 package fi.oph.ohjausparametrit.service.dao;
 
+import fi.oph.ohjausparametrit.TestApplication;
+import fi.oph.ohjausparametrit.configurations.H2Configuration;
+import fi.oph.ohjausparametrit.model.JSONParameter;
+import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import fi.oph.ohjausparametrit.TestApplication;
-import fi.oph.ohjausparametrit.configurations.H2Configuration;
-import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
-import fi.oph.ohjausparametrit.model.JSONParameter;
 import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,51 +31,47 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {TestApplication.class, H2Configuration.class})
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.NONE,
+    classes = {TestApplication.class, H2Configuration.class})
 @ActiveProfiles("test")
 public class ParameterRepositoryTest {
 
-    @Autowired
-    private JSONParameterRepository dao;
+  @Autowired private JSONParameterRepository dao;
 
-    @Before
-    public void setup(){
-        dao.deleteAll();
-    }
-    
-    @Test
-    public void testCrud() {
+  @Before
+  public void setup() {
+    dao.deleteAll();
+  }
 
-        {
+  @Test
+  public void testCrud() {
 
-            List<JSONParameter> ps = StreamSupport
-                    .stream(dao.findAll().spliterator(), false)
-                    .collect(Collectors.toList());
-            Assert.assertEquals("Param repo should be empty", ps.size(), 0);
-        }
-
-        {
-            JSONParameter p = new JSONParameter();
-            p.setTarget("A");
-            p.setJsonValue("{ foo: false}");
-            dao.save(p);
-        }
-
-        {
-            List<JSONParameter> ps = StreamSupport
-                    .stream(dao.findAll().spliterator(), false)
-                    .collect(Collectors.toList());
-            Assert.assertEquals("Param repo should be populated with one entry", ps.size(), 1);
-        }
-
-        dao.deleteById("A");
-        
-        {
-            List<JSONParameter> ps = StreamSupport
-                    .stream(dao.findAll().spliterator(), false)
-                    .collect(Collectors.toList());
-            Assert.assertEquals("Param repo should be empty", ps.size(), 0);
-        }
+    {
+      List<JSONParameter> ps =
+          StreamSupport.stream(dao.findAll().spliterator(), false).collect(Collectors.toList());
+      Assert.assertEquals("Param repo should be empty", ps.size(), 0);
     }
 
+    {
+      JSONParameter p = new JSONParameter();
+      p.setTarget("A");
+      p.setJsonValue("{ foo: false}");
+      dao.save(p);
+    }
+
+    {
+      List<JSONParameter> ps =
+          StreamSupport.stream(dao.findAll().spliterator(), false).collect(Collectors.toList());
+      Assert.assertEquals("Param repo should be populated with one entry", ps.size(), 1);
+    }
+
+    dao.deleteById("A");
+
+    {
+      List<JSONParameter> ps =
+          StreamSupport.stream(dao.findAll().spliterator(), false).collect(Collectors.toList());
+      Assert.assertEquals("Param repo should be empty", ps.size(), 0);
+    }
+  }
 }
