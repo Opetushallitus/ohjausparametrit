@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"fi.oph.ohjausparametrit.service.dao"})
-@EntityScan({"fi.oph.ohjausparametrit.service.model"})
+@EnableJpaRepositories(basePackages = {"fi.oph.ohjausparametrit.repository"})
+@EntityScan({"fi.oph.ohjausparametrit.model"})
 @EnableTransactionManagement
 public class JpaConfiguration {
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package fi.oph.ohjausparametrit.service.model;
+package fi.oph.ohjausparametrit.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

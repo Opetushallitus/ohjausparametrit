@@ -14,20 +14,16 @@
  */
 package fi.oph.ohjausparametrit.service.dao;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import fi.oph.ohjausparametrit.TestApplication;
 import fi.oph.ohjausparametrit.configurations.H2Configuration;
-import fi.oph.ohjausparametrit.service.model.JSONParameter;
+import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
+import fi.oph.ohjausparametrit.model.JSONParameter;
 import junit.framework.Assert;
 
-import org.flywaydb.test.annotation.FlywayTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

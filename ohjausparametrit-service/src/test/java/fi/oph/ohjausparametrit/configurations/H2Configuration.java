@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "fi.oph.ohjausparametrit.service.dao")
+@EnableJpaRepositories(basePackages = "fi.oph.ohjausparametrit.repository")
 @EnableTransactionManagement
 public class H2Configuration {
     @Bean

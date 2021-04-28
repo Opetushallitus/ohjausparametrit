@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
 public class TestApplication {
 
     @Configuration
-    @EnableJpaRepositories(basePackages = "fi.oph.ohjausparametrit.service.dao")
+    @EnableJpaRepositories(basePackages = "fi.oph.ohjausparametrit.repository")
     @PropertySource("application.yml")
     @EnableTransactionManagement
     public class H2JpaConfig {

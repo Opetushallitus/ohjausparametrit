@@ -1,6 +1,6 @@
-package fi.oph.ohjausparametrit.service.dao;
+package fi.oph.ohjausparametrit.repository;
 
-import fi.oph.ohjausparametrit.service.model.JSONParameter;
+import fi.oph.ohjausparametrit.model.JSONParameter;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
