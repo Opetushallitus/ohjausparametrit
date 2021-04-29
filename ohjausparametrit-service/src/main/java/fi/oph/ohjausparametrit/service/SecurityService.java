@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.cas.authentication.CasAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,16 +27,19 @@ public class SecurityService {
   private KoutaClient koutaClient;
   private OrganisaatioClient organisaatioClient;
 
+  @Autowired
   public SecurityService(KoutaClient koutaClient, OrganisaatioClient organisaatioClient) {
     this.koutaClient = koutaClient;
     this.organisaatioClient = organisaatioClient;
   }
 
   public boolean isAuthorizedToModifyHaku(String hakuOid, List<String> requiredRoles) {
+    if (isSuperuser()) return true;
     if (!KoutaUtil.isKoutaHakuOid(hakuOid)) return true;
     KoutaHaku haku = koutaClient.getHaku(hakuOid);
     if (haku == null) return false;
     List<String> hakuOrgansationOids = organisaatioClient.getChildOids(haku.getOrganisaatio());
+    hakuOrgansationOids.add(haku.getOrganisaatio());
     List<String> roleOrganisationOids = getOrganisationOidsForAuthentication(requiredRoles);
     return roleOrganisationOids.stream().anyMatch(o -> hakuOrgansationOids.contains(o));
   }
@@ -53,7 +57,12 @@ public class SecurityService {
     return organisationOids;
   }
 
-  private List<String> getRolesFromAuthentication() {
+  private boolean isSuperuser() {
+    List<String> roles = getRolesFromAuthentication();
+    return roles.stream().anyMatch(r -> r.contains("APP_KOUTA_OPHPAAKAYTTAJA"));
+  }
+
+  protected List<String> getRolesFromAuthentication() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication instanceof CasAuthenticationToken) {
       CasAuthenticationToken casAuthenticationToken = (CasAuthenticationToken) authentication;

@@ -10,18 +10,16 @@ import fi.oph.ohjausparametrit.service.ParameterService;
 import fi.oph.ohjausparametrit.service.SecurityService;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
+import java.util.Arrays;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Arrays;
 
 /**
  * Simpler parameters:
@@ -61,10 +59,12 @@ public class OhjausparametritController {
   private KoutaClient koutaClient;
   private OrganisaatioClient organisaatioClient;
 
-  public OhjausparametritController(ParameterService parameterService, SecurityService securityService, OhjausparametritAuditLogger auditLogger, OrganisaatioClient organisaatioClient, KoutaClient koutaClient) {
-    LOG.info("1 " + parameterService);
-    LOG.info("2 " + securityService);
-    LOG.info("3 " + auditLogger);
+  public OhjausparametritController(
+      ParameterService parameterService,
+      SecurityService securityService,
+      OhjausparametritAuditLogger auditLogger,
+      OrganisaatioClient organisaatioClient,
+      KoutaClient koutaClient) {
     this.parameterService = parameterService;
     this.securityService = securityService;
     this.auditLogger = auditLogger;
@@ -124,11 +124,12 @@ public class OhjausparametritController {
    */
   @PostMapping("/{target}")
   @PreAuthorize(
-      "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA')")
+      "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA', 'APP_KOUTA_HAKU_CRUD', 'APP_KOUTA_HAKU_READ_UPDATE')")
   public void doPost(@PathVariable String target, @RequestBody String value) {
-    LOG.info("4 " + securityService);
     if (!securityService.isAuthorizedToModifyHaku(
-        target, Arrays.asList("ROLE_APP_KOUTA_OPHPAAKAYTTAJA")))
+        target,
+        Arrays.asList(
+            "ROLE_APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_READ_UPDATE")))
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     if (value == null || value.trim().isEmpty()) {
       parameterService.setParameters(target, (String) null);
