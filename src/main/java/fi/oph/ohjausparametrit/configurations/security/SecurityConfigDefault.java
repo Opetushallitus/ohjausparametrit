@@ -136,6 +136,8 @@ public class SecurityConfigDefault extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/actuator/health")
         .permitAll()
+        .antMatchers("/swagger**")
+        .permitAll()
         .antMatchers("/swagger-ui/**")
         .permitAll()
         .antMatchers("/swagger-resources/**")

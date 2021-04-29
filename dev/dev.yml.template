@@ -12,12 +12,9 @@ spring:
     url: jdbc:postgresql://localhost:5489/ohjausparametrit?ApplicationName=ohjausparametrit-service
     username: oph
     password: oph
-    hikari:
-      maximum-pool-size: {{host_postgresql_ohjausparametrit_max_active | default('20')}}
-      connection-timeout: {{host_postgresql_ohjausparametrit_max_wait | default('10000')}}
-      max-lifetime: {{postgresql_ohjausparametrit_max_lifetime | default('900000')}}
+
 cas:
-  service: https://{{host_virkailija}}/ohjausparametrit-service
+  service: http://localhost:8080/ohjausparametrit-service
 
 kouta:
   username: DUMMY
