@@ -29,7 +29,7 @@ public class HttpClient {
     try {
       return callToFuture(call).get();
     } catch (Exception e) {
-        logger.error("Request to organisaatiopalvelu failed | Request: {}", request);
+      logger.error("Request to organisaatiopalvelu failed | Request: {}", request);
       throw new RuntimeException(e);
     }
   }

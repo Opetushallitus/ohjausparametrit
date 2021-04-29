@@ -10,5 +10,4 @@ import org.springframework.transaction.annotation.Transactional;
 public interface JSONParameterRepository extends PagingAndSortingRepository<JSONParameter, String> {
 
   JSONParameter findByTarget(String target);
-
 }

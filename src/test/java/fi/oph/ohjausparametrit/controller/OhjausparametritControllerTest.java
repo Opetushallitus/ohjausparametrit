@@ -1,4 +1,4 @@
-package fi.oph.ohjausparametrit.service;
+package fi.oph.ohjausparametrit.controller;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -8,7 +8,6 @@ import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
 import fi.oph.ohjausparametrit.configurations.H2Configuration;
-import fi.oph.ohjausparametrit.controller.OhjausparametritController;
 import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
     classes = {TestApplication.class, H2Configuration.class})
 @EnableConfigurationProperties
 @ActiveProfiles("test")
-public class OhjausparametritResourceTest {
+public class OhjausparametritControllerTest {
 
   @Autowired private OhjausparametritController op;
 
@@ -48,18 +46,16 @@ public class OhjausparametritResourceTest {
     MockitoAnnotations.openMocks(this);
   }
 
-  @BeforeEach
-  void beforeEach() {
-    repository.deleteAll();
-  }
+  private static final String VALUE_1 = "{ key1: true, key2: false }";
+  private static final String VALUE_2 = "{ key1: true, key2: true }";
 
   @Test
-  @WithMockUser(roles = "APP_TARJONTA_CRUD")
+  @WithMockUser(username = "1.2.246.562.24.25763910658", roles = "APP_TARJONTA_CRUD")
   public void testCreateReadParam() {
     repository.deleteAll();
     String target = "TARGET";
     String param = "PARAM";
-    String value1 = "{ PARAM: { foo: true } }";
+    String value = "{ PARAM: { foo: true } }";
 
     // Find
     Exception exception =
@@ -71,7 +67,7 @@ public class OhjausparametritResourceTest {
     assertEquals("404 NOT_FOUND \"target not found\"", exception.getMessage());
 
     // Save
-    op.doPost(target, value1);
+    op.doPost(target, value);
 
     // Find
     String res = op.doGet(target);
@@ -85,9 +81,10 @@ public class OhjausparametritResourceTest {
   }
 
   @Test
-  @WithMockUser(roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.59078453392"})
+  @WithMockUser(
+      username = "1.2.246.562.24.25763910658",
+      roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.59078453392"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesToimipiste() {
-    String value = "{}";
     when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
         .thenReturn(new ArrayList<>());
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
@@ -97,27 +94,29 @@ public class OhjausparametritResourceTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              op.doPost("1.2.246.562.29.00000000000000000800", value);
+              op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
             });
     assertEquals("403 FORBIDDEN", exception.getMessage());
   }
 
   @Test
-  @WithMockUser(roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.59078453392"})
+  @WithMockUser(
+      username = "1.2.246.562.24.25763910658",
+      roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.59078453392"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesToimipisteAllowed() {
-    String value = "{}";
     when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
         .thenReturn(new ArrayList<>());
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000801"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000801", "1.2.246.562.10.59078453392"));
-    op.doPost("1.2.246.562.29.00000000000000000801", value);
+    op.doPost("1.2.246.562.29.00000000000000000801", VALUE_1);
   }
 
   @Test
-  @WithMockUser(roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
+  @WithMockUser(
+      username = "1.2.246.562.24.25763910658",
+      roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesOppilaitosForbidden() {
-    String value = "{}";
     when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
         .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.67476956288")));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
@@ -127,33 +126,35 @@ public class OhjausparametritResourceTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              op.doPost("1.2.246.562.29.00000000000000000800", value);
+              op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
             });
     assertEquals("403 FORBIDDEN", exception.getMessage());
   }
 
   @Test
-  @WithMockUser(roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
+  @WithMockUser(
+      username = "1.2.246.562.24.25763910658",
+      roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesOppilaitosAllowed() {
-    String value = "{}";
     when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
         .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.67476956288")));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000802"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000802", "1.2.246.562.10.59078453392"));
-    op.doPost("1.2.246.562.29.00000000000000000802", value);
+    op.doPost("1.2.246.562.29.00000000000000000802", VALUE_1);
   }
 
   @Test
   @WithMockUser(
+      username = "1.2.246.562.24.25763910658",
       roles = {"APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_OPHPAAKAYTTAJA_1.2.246.562.10.00000000001"})
   public void testCreateReadParamWithAuthorizationWithOphPaakayttajaRole() {
-    String value = "{}";
     when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
         .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.67476956288")));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.59078453392"));
-    op.doPost("1.2.246.562.29.00000000000000000800", value);
+    op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
+    op.doPost("1.2.246.562.29.00000000000000000800", VALUE_2);
   }
 }

@@ -114,6 +114,13 @@ public class OhjausparametritController {
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA', 'APP_KOUTA_HAKU_CRUD', 'APP_KOUTA_HAKU_READ_UPDATE')")
   public void doPost(@PathVariable String target, @RequestBody String value) {
+
+    logger.info(
+        "Saving ohjausparmetrit for target {} by {} [ {}",
+        target,
+        SecurityUtil.getCurrentUserName(),
+        value);
+
     if (!securityService.isAuthorizedToModifyHaku(
         target,
         Arrays.asList(

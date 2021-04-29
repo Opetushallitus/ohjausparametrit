@@ -12,12 +12,11 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  */
-package fi.oph.ohjausparametrit.service.dao;
+package fi.oph.ohjausparametrit.repository;
 
 import fi.oph.ohjausparametrit.TestApplication;
 import fi.oph.ohjausparametrit.configurations.H2Configuration;
 import fi.oph.ohjausparametrit.model.JSONParameter;
-import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
