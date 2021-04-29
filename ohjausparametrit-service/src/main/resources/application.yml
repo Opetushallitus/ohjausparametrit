@@ -11,9 +11,6 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5489/ohjausparametrit?ApplicationName=ohjausparametrit-service
-    username: oph
-    password: oph
     hikari:
       maximum-pool-size: 10
       connection-timeout: 10000
@@ -56,8 +53,6 @@ ohjausparametrit:
   disable-same-site-cookie: false
 
 kouta:
-  username: ohjausparametrit
-  password: u8Tqp858GsNLV73sIa5a!
   service: /kouta-internal
   securityUriSuffix: auth/login
   cookie: session
@@ -66,14 +61,6 @@ cas:
   service: http://localhost:${server.port}/ohjausparametrit-service
   send-renew: false
   key: ohjausparametrit-service
-
-host:
-  host-virkailija: localhost:${server.port}
-  host-cas: localhost:${server.port}
-  host-alb: http://localhost:${server.port}
-  #host-virkailija: virkailija.testiopintopolku.fi
-  #host-cas: virkailija.testiopintopolku.fi
-  #host-alb: https://virkailija.testiopintopolku.fi
 
 logging:
   level:

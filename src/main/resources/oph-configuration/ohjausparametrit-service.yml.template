@@ -23,3 +23,7 @@ host:
   host-virkailija: {{host_virkailija}}
   host-cas: {{host_cas}}
   host-alb: {{host_alb}}
+
+kouta:
+  username: {{ohjausparametrit_cas_username}}
+  password: {{ohjausparametrit_cas_password}}
