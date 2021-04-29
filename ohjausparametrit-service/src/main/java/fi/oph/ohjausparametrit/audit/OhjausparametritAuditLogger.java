@@ -10,9 +10,11 @@ import org.ietf.jgss.Oid;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Component
 public class OhjausparametritAuditLogger extends Audit {
 
   private static final org.slf4j.Logger log = LoggerFactory.getLogger(AuditHelper.class);

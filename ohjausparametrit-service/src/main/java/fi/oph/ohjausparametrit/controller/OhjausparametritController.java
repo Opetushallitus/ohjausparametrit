@@ -2,6 +2,7 @@ package fi.oph.ohjausparametrit.controller;
 
 import static fi.oph.ohjausparametrit.util.JsonUtil.*;
 
+import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.ParameterService;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
@@ -34,6 +35,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class OhjausparametritController {
 
   private static final Logger LOG = LoggerFactory.getLogger(OhjausparametritController.class);
+
+  @Autowired private OhjausparametritAuditLogger auditLogger;
 
   @Autowired private ParameterService parameterService;
 
