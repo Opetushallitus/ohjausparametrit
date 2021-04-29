@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HttpClient {
 
-  private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
+  private static final Logger logger = LoggerFactory.getLogger(HttpClient.class);
 
   private OkHttpClient okHttpClient;
 
@@ -29,7 +29,7 @@ public class HttpClient {
     try {
       return callToFuture(call).get();
     } catch (Exception e) {
-      LOG.error("Request to organisaatiopalvelu failed | Request: {}", request);
+        logger.error("Request to organisaatiopalvelu failed | Request: {}", request);
       throw new RuntimeException(e);
     }
   }

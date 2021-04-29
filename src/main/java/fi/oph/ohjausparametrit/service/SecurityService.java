@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecurityService {
 
-  private static Logger LOG = LoggerFactory.getLogger(SecurityService.class);
+  private static Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
   private static final String ORGANISATION_OID_PREFIX = "1.2.246.562.10";
 
@@ -70,7 +70,7 @@ public class SecurityService {
           .map(a -> a.getAuthority())
           .collect(Collectors.toList());
     } else {
-      LOG.error(
+      logger.error(
           "Tried to get authorities from spring authentication token but token wasn't CAS authentication token");
       return Collections.emptyList();
     }

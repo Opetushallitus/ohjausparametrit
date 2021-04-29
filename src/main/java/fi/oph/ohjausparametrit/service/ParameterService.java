@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParameterService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ParameterService.class);
+  private static final Logger logger = LoggerFactory.getLogger(ParameterService.class);
 
   @Autowired private JSONParameterRepository parameterRepository;
 
@@ -55,7 +55,7 @@ public class ParameterService {
         value.put("__modified__", new Date().getTime());
         value.put("__modifiedBy__", SecurityUtil.getCurrentUserName());
       } catch (JSONException ex) {
-        LOG.error("Failed to set modified / modified by");
+        logger.error("Failed to set modified / modified by");
       }
     }
 

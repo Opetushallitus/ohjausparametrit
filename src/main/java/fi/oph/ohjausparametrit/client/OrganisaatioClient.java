@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrganisaatioClient {
 
-  private static final Logger LOG = LoggerFactory.getLogger(OrganisaatioClient.class);
+  private static final Logger logger = LoggerFactory.getLogger(OrganisaatioClient.class);
 
   private HttpClient httpClient;
   private OphProperties ophProperties;
@@ -33,10 +33,10 @@ public class OrganisaatioClient {
     Response response = httpClient.get(ophProperties.url("organisaatio.jalkelaiset", oid));
     try {
       String body = response.body().string();
-      LOG.info("Body: {}", body);
+      logger.info("Body: {}", body);
       OrganisaatioChildren dto =
           gson.fromJson(body, new TypeToken<OrganisaatioChildren>() {}.getType());
-      LOG.info(
+      logger.info(
           "Organisaatio children oids of {}: {}",
           oid,
           dto.getOrganisaatiot().stream()

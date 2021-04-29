@@ -37,19 +37,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Transactional
 public class OhjausparametritController {
 
-  private static final Logger LOG = LoggerFactory.getLogger(OhjausparametritController.class);
-
-  /*
-  @Autowired private OhjausparametritAuditLogger auditLogger;
-
-  @Autowired private ParameterService parameterService;
-
-  @Autowired private KoutaClient koutaClient;
-
-  @Autowired private OrganisaatioClient organisaatioClient;
-
-  @Autowired private SecurityService securityService;
-   */
+  private static final Logger logger = LoggerFactory.getLogger(OhjausparametritController.class);
 
   private OhjausparametritAuditLogger auditLogger;
 
@@ -81,7 +69,7 @@ public class OhjausparametritController {
 
   @GetMapping("/test")
   public void test() {
-    // koutaClient.test();
+    koutaClient.test();
     organisaatioClient.getChildOids("1.2.246.562.10.53642770753");
   }
 
@@ -95,7 +83,7 @@ public class OhjausparametritController {
       }
       return result.toString();
     } catch (JSONException ex) {
-      LOG.error("Failed to produce json output...?", ex);
+      logger.error("Failed to produce json output...?", ex);
       throw new RuntimeException(ex);
     }
   }
@@ -136,7 +124,7 @@ public class OhjausparametritController {
     } else {
       JSONObject json = getAsJSON(value);
       if (json == null) {
-        LOG.error("Could not parse json for {}: {}", target, value);
+        logger.error("Could not parse json for {}: {}", target, value);
         throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
       }
       parameterService.setParameters(target, json);

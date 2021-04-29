@@ -17,7 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class OhjausparametritAuditLogger extends Audit {
 
-  private static final org.slf4j.Logger log = LoggerFactory.getLogger(AuditHelper.class);
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AuditHelper.class);
 
   OhjausparametritAuditLogger() {
     super(new AuditHelper(), ConfigEnums.SERVICENAME.value(), ApplicationType.VIRKAILIJA);
@@ -61,18 +61,18 @@ public class OhjausparametritAuditLogger extends Audit {
         if (forwardedFor != null) {
           return InetAddress.getByName(forwardedFor);
         }
-        log.warn(
+        logger.warn(
             "X-Real-IP or X-Forwarded-For was not set. Defaulting to Request.getRemoteAddr().");
 
         String remoteAddr = request.getRemoteAddr();
         if (remoteAddr != null) {
           return InetAddress.getByName(remoteAddr);
         }
-        log.warn("RemoteAddr was null. Defaulting to localhost/127.0.0.1.");
+        logger.warn("RemoteAddr was null. Defaulting to localhost/127.0.0.1.");
       }
       return InetAddress.getLocalHost();
     } catch (UnknownHostException e) {
-      log.error("Error creating InetAddress: ", e);
+      logger.error("Error creating InetAddress: ", e);
       return null;
     }
   }
@@ -83,7 +83,7 @@ public class OhjausparametritAuditLogger extends Audit {
       try {
         return new Oid(authentication.getName());
       } catch (GSSException e) {
-        log.error("Error creating Oid-object out of {}", authentication.getName());
+        logger.error("Error creating Oid-object out of {}", authentication.getName());
       }
     }
     return null;

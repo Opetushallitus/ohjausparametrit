@@ -11,16 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * Simple model for parameter storage - target has attached
- *
- * @author mlyly
- */
 @Entity
-@Table(name = JSONParameter.TABLE_NAME)
+@Table(name = "parameter")
 public class JSONParameter {
-
-  public static final String TABLE_NAME = "parameter";
 
   @Id private String target;
 

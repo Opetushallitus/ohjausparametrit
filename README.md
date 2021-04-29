@@ -50,4 +50,4 @@ Avaa selaimessa: http://localhost:8080/ohjausparametrit-service/swagger-ui/index
 
 - Spring Boot
 - Flyway
-- Postgreqql
+- Postgresql

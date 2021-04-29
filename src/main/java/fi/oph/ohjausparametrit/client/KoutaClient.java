@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class KoutaClient {
 
-  private static final Logger LOG = LoggerFactory.getLogger(KoutaClient.class);
+  private static final Logger logger = LoggerFactory.getLogger(KoutaClient.class);
 
   private static final Duration AUTHENTICATION_TIMEOUT = Duration.ofSeconds(10);
 
@@ -61,9 +61,9 @@ public class KoutaClient {
 
     try {
       Response response = casHttpClient.call(request).get();
-      LOG.info("RESPONSE: {}", response);
+      logger.info("RESPONSE: {}", response);
     } catch (Exception e) {
-      LOG.error("Kouta-internal-pyyntö epäonnistui: ", e);
+      logger.error("Kouta-internal-pyyntö epäonnistui: ", e);
     }
   }
 
@@ -77,7 +77,7 @@ public class KoutaClient {
 
     try {
       Response response = casHttpClient.call(request).get();
-      LOG.info("RESPONSE: {}", response);
+      logger.info("RESPONSE: {}", response);
       KoutaHaku haku = gson.fromJson(response.body().string(), KoutaHaku.class);
       return haku;
     } catch (Exception e) {
