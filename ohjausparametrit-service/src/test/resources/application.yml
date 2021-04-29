@@ -27,3 +27,10 @@ cas:
 dev:
   username: username
   password: password
+
+kouta:
+  username: username
+  password: password
+  service: /kouta-internal
+  securityUriSuffix: auth/login
+  cookie: session

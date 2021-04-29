@@ -2,6 +2,13 @@ package fi.oph.ohjausparametrit.client.dto;
 
 public class KoutaHaku {
 
+  public KoutaHaku() {}
+
+  public KoutaHaku(String oid, String organisaatio) {
+    this.oid = oid;
+    this.organisaatio = organisaatio;
+  }
+
   private String oid;
   private String organisaatio;
 

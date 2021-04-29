@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
+
 /**
  * Simpler parameters:
  *
@@ -39,6 +41,7 @@ public class OhjausparametritController {
 
   private static final Logger LOG = LoggerFactory.getLogger(OhjausparametritController.class);
 
+  /*
   @Autowired private OhjausparametritAuditLogger auditLogger;
 
   @Autowired private ParameterService parameterService;
@@ -48,6 +51,26 @@ public class OhjausparametritController {
   @Autowired private OrganisaatioClient organisaatioClient;
 
   @Autowired private SecurityService securityService;
+   */
+
+  private OhjausparametritAuditLogger auditLogger;
+
+  private ParameterService parameterService;
+  private SecurityService securityService;
+
+  private KoutaClient koutaClient;
+  private OrganisaatioClient organisaatioClient;
+
+  public OhjausparametritController(ParameterService parameterService, SecurityService securityService, OhjausparametritAuditLogger auditLogger, OrganisaatioClient organisaatioClient, KoutaClient koutaClient) {
+    LOG.info("1 " + parameterService);
+    LOG.info("2 " + securityService);
+    LOG.info("3 " + auditLogger);
+    this.parameterService = parameterService;
+    this.securityService = securityService;
+    this.auditLogger = auditLogger;
+    this.organisaatioClient = organisaatioClient;
+    this.koutaClient = koutaClient;
+  }
 
   @GetMapping("/authorize")
   @PreAuthorize(
@@ -103,11 +126,10 @@ public class OhjausparametritController {
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA')")
   public void doPost(@PathVariable String target, @RequestBody String value) {
-    /*
+    LOG.info("4 " + securityService);
     if (!securityService.isAuthorizedToModifyHaku(
         target, Arrays.asList("ROLE_APP_KOUTA_OPHPAAKAYTTAJA")))
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-     */
     if (value == null || value.trim().isEmpty()) {
       parameterService.setParameters(target, (String) null);
     } else {

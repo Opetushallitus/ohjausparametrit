@@ -12,5 +12,6 @@ public class UrlConfiguration extends OphProperties {
   public UrlConfiguration(Environment environment) {
     addFiles("/ohjausparametrit-service-oph.properties");
     addOverride("host-cas", environment.getRequiredProperty("host.host-cas"));
+    addOverride("host-virkailija", environment.getRequiredProperty("host.host-virkailija"));
   }
 }

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class HttpConfiguration {
 
   @Bean
-  public OkHttpClient getHttpClient() {
+  public OkHttpClient commonHttpClient() {
     OkHttpClient client = new OkHttpClient.Builder().build();
     return client;
   }

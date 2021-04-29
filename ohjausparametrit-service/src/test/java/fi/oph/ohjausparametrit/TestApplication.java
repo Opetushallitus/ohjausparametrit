@@ -2,6 +2,7 @@ package fi.oph.ohjausparametrit;
 
 import static org.mockito.Mockito.mock;
 
+import fi.oph.ohjausparametrit.service.SecurityService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
