@@ -12,4 +12,4 @@ target
 **/nb-configuration.xml
 *.iml
 .idea
-**/ohjausparametrit-service.yml
+dev/dev.yml

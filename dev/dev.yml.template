@@ -1,0 +1,29 @@
+#
+# TÄHÄN TIEDOSTOON EI SAA TALLENTAA YMPÄRISTÖKOHTAISIA ARVOJA MUUTOIN KUIN MUUTTUJINA!!!
+#
+# Tämä tiedosto toimii pohjana oph-configuration/common.properties tiedostolle,
+# joka asettaa tomcatin ympäristökohtaiset arvot.
+#
+
+# Aseta vähintään nämä ympäristökohtaiset arvot
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5489/ohjausparametrit?ApplicationName=ohjausparametrit-service
+    username: oph
+    password: oph
+    hikari:
+      maximum-pool-size: {{host_postgresql_ohjausparametrit_max_active | default('20')}}
+      connection-timeout: {{host_postgresql_ohjausparametrit_max_wait | default('10000')}}
+      max-lifetime: {{postgresql_ohjausparametrit_max_lifetime | default('900000')}}
+cas:
+  service: https://{{host_virkailija}}/ohjausparametrit-service
+
+kouta:
+  username: DUMMY
+  password: DUMMY
+
+host:
+  host-virkailija: virkailija.testiopintopolku.fi
+  host-cas: virkailija.testiopintopolku.fi
+  host-alb: https://virkailija.testiopintopolku.fi

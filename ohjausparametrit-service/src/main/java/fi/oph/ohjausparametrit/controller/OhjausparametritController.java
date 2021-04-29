@@ -3,8 +3,11 @@ package fi.oph.ohjausparametrit.controller;
 import static fi.oph.ohjausparametrit.util.JsonUtil.*;
 
 import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
+import fi.oph.ohjausparametrit.client.KoutaClient;
+import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.ParameterService;
+import fi.oph.ohjausparametrit.service.SecurityService;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import org.codehaus.jettison.json.JSONException;
@@ -40,6 +43,12 @@ public class OhjausparametritController {
 
   @Autowired private ParameterService parameterService;
 
+  @Autowired private KoutaClient koutaClient;
+
+  @Autowired private OrganisaatioClient organisaatioClient;
+
+  @Autowired private SecurityService securityService;
+
   @GetMapping("/authorize")
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ', 'ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA')")
@@ -47,8 +56,14 @@ public class OhjausparametritController {
     return SecurityUtil.getCurrentUserName();
   }
 
+  @GetMapping("/test")
+  public void test() {
+    // koutaClient.test();
+    organisaatioClient.getChildOids("1.2.246.562.10.53642770753");
+  }
+
   /** @return all parameters to all targets as JSON. */
-  @GetMapping("/ALL")
+  @GetMapping(value = "/ALL", produces = "application/json; charset=utf-8")
   public String doGetAll() {
     try {
       JSONObject result = new JSONObject();
@@ -68,7 +83,7 @@ public class OhjausparametritController {
    * @param target ex. Haku oid
    * @return parameters as JSON
    */
-  @GetMapping("/{target}")
+  @GetMapping(value = "/{target}", produces = "application/json; charset=utf-8")
   public String doGet(@PathVariable String target) {
     JSONParameter parameter = parameterService.findByTarget(target);
     if (parameter == null) {
@@ -88,6 +103,11 @@ public class OhjausparametritController {
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA')")
   public void doPost(@PathVariable String target, @RequestBody String value) {
+    /*
+    if (!securityService.isAuthorizedToModifyHaku(
+        target, Arrays.asList("ROLE_APP_KOUTA_OPHPAAKAYTTAJA")))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+     */
     if (value == null || value.trim().isEmpty()) {
       parameterService.setParameters(target, (String) null);
     } else {
