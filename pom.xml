@@ -177,13 +177,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.jettison</groupId>
-            <artifactId>jettison</artifactId>
-            <version>1.4.1</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
             <groupId>com.vladmihalcea</groupId>
             <artifactId>hibernate-types-52</artifactId>
             <version>2.10.4</version>

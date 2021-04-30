@@ -2,17 +2,15 @@ package fi.oph.ohjausparametrit.controller;
 
 import static fi.oph.ohjausparametrit.util.JsonUtil.*;
 
+import com.google.gson.Gson;
 import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
-import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.ParameterService;
 import fi.oph.ohjausparametrit.service.SecurityService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -47,6 +45,8 @@ public class OhjausparametritController {
   private KoutaClient koutaClient;
   private OrganisaatioClient organisaatioClient;
 
+  private Gson gson = new Gson();
+
   public OhjausparametritController(
       ParameterService parameterService,
       SecurityService securityService,
@@ -76,16 +76,7 @@ public class OhjausparametritController {
   /** @return all parameters to all targets as JSON. */
   @GetMapping(value = "/ALL", produces = "application/json; charset=utf-8")
   public String doGetAll() {
-    try {
-      JSONObject result = new JSONObject();
-      for (JSONParameter jSONParameter : parameterService.findAll()) {
-        result.put(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
-      }
-      return result.toString();
-    } catch (JSONException ex) {
-      logger.error("Failed to produce json output...?", ex);
-      throw new RuntimeException(ex);
-    }
+    return parameterService.getAll();
   }
 
   @PostMapping(value = "/ALL")
@@ -102,11 +93,10 @@ public class OhjausparametritController {
    */
   @GetMapping(value = "/{target}", produces = "application/json; charset=utf-8")
   public String doGet(@PathVariable String target) {
-    JSONParameter parameter = parameterService.findByTarget(target);
-    if (parameter == null) {
+    String response = parameterService.get(target);
+    if (response == null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "target not found");
-    }
-    return parameter.getJsonValue();
+    return parameterService.get(target);
   }
 
   /**

@@ -1,5 +1,8 @@
 package fi.oph.ohjausparametrit.service;
 
+import static fi.oph.ohjausparametrit.util.JsonUtil.getAsJSON;
+
+import com.google.gson.JsonObject;
 import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.audit.OhjausparametritOperation;
 import fi.oph.ohjausparametrit.model.JSONParameter;
@@ -26,12 +29,23 @@ public class ParameterService {
     this.auditLogger = auditLogger;
   }
 
-  public JSONParameter findByTarget(String target) {
-    return parameterRepository.findByTarget(target);
+  public String get(String target) {
+    JSONParameter jsonParameter = parameterRepository.findByTarget(target);
+    if (jsonParameter != null) return jsonParameter.getJsonValue();
+    else return null;
   }
 
-  public Iterable<JSONParameter> findAll() {
-    return parameterRepository.findAll();
+  public String getAll() {
+    try {
+      JsonObject result = new JsonObject();
+      for (JSONParameter jSONParameter : parameterRepository.findAll()) {
+        result.add(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
+      }
+      return result.toString();
+    } catch (Exception e) {
+      logger.error("Failed to produce json output...?", e);
+      throw new RuntimeException(e);
+    }
   }
 
   public void setParameters(String target, String value) {
