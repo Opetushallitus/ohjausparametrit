@@ -89,6 +89,12 @@ public class OhjausparametritController {
     }
   }
 
+  @PostMapping(value = "/ALL")
+  public String doGetAllPost() {
+    throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST, "Not allowed to save ohjausparametrit fro target ALL!");
+  }
+
   /**
    * Load parameters for given target.
    *
