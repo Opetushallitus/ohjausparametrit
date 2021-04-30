@@ -15,7 +15,6 @@
 package fi.oph.ohjausparametrit.repository;
 
 import fi.oph.ohjausparametrit.TestApplication;
-import fi.oph.ohjausparametrit.configurations.H2Configuration;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +31,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.NONE,
-    classes = {TestApplication.class, H2Configuration.class})
+    classes = {TestApplication.class})
 @ActiveProfiles("test")
 public class ParameterRepositoryTest {
 
@@ -55,7 +54,7 @@ public class ParameterRepositoryTest {
     {
       JSONParameter p = new JSONParameter();
       p.setTarget("A");
-      p.setJsonValue("{ foo: false}");
+      p.setJsonValue("{ \"foo\": false}");
       dao.save(p);
     }
 

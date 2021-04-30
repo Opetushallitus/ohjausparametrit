@@ -7,7 +7,6 @@ import fi.oph.ohjausparametrit.TestApplication;
 import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
-import fi.oph.ohjausparametrit.configurations.H2Configuration;
 import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.NONE,
-    classes = {TestApplication.class, H2Configuration.class})
+    classes = {TestApplication.class})
 @EnableConfigurationProperties
 @ActiveProfiles("test")
 public class OhjausparametritControllerTest {
@@ -46,8 +45,8 @@ public class OhjausparametritControllerTest {
     MockitoAnnotations.openMocks(this);
   }
 
-  private static final String VALUE_1 = "{ key1: true, key2: false }";
-  private static final String VALUE_2 = "{ key1: true, key2: true }";
+  private static final String VALUE_1 = "{ \"key1\": true, \"key2\": false }";
+  private static final String VALUE_2 = "{ \"key1\": true, \"key2\": true }";
 
   @Test
   @WithMockUser(username = "1.2.246.562.24.25763910658", roles = "APP_TARJONTA_CRUD")
@@ -55,7 +54,7 @@ public class OhjausparametritControllerTest {
     repository.deleteAll();
     String target = "TARGET";
     String param = "PARAM";
-    String value = "{ PARAM: { foo: true } }";
+    String value = "{ \"PARAM\": { \"foo\": true } }";
 
     // Find
     Exception exception =
@@ -71,8 +70,7 @@ public class OhjausparametritControllerTest {
 
     // Find
     String res = op.doGet(target);
-    MatcherAssert.assertThat(
-        res, StringContains.containsString("\"PARAM\": {\n" + "    \"foo\": true\n" + "  }"));
+    MatcherAssert.assertThat(res, StringContains.containsString("{\"PARAM\": {\"foo\": true}}"));
 
     // Find all
     res = op.doGetAll();

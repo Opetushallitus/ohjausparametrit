@@ -5,14 +5,29 @@ spring:
     serialization:
       write-dates-as-timestamps: true
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:bootexample;MODE=PostgreSQL
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql://localhost/ohjausparametrit?ApplicationName=ohjausparametrit-service
   autoconfigure:
     exclude: org.spring
   cache:
     type: NONE
   flyway:
-    enabled: false
+    enabled: true
+    table: schema_version
+    out-of-order: true
+    # Only for initial production release, set false afterwards
+    baseline-on-migrate: false
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+      ddl-auto: validate
+      use-new-id-generator-mappings: true
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      # https://hibernate.atlassian.net/browse/HHH-12368
+      hibernate.jdbc.lob.non_contextual_creation: true
 host:
   host-cas: localhost
   host-virkailija: localhost

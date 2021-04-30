@@ -8,6 +8,7 @@ import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.ParameterService;
 import fi.oph.ohjausparametrit.service.SecurityService;
+import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import java.util.Arrays;
@@ -110,31 +111,25 @@ public class OhjausparametritController {
    * @param value parameters (multiple) of given target as json
    * @return success == OK, failure NOT_ACCEPTABLE or UNAUTHORIZED
    */
-  @PostMapping("/{target}")
+  @PostMapping(value = "/{target}")
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA', 'APP_KOUTA_HAKU_CRUD', 'APP_KOUTA_HAKU_READ_UPDATE')")
   public void doPost(@PathVariable String target, @RequestBody String value) {
-
     logger.info(
         "Saving ohjausparmetrit for target {} by {} [ {}",
         target,
         SecurityUtil.getCurrentUserName(),
         value);
-
+    JsonUtil.validateIsJson(target, value);
     if (!securityService.isAuthorizedToModifyHaku(
         target,
         Arrays.asList(
             "ROLE_APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_READ_UPDATE")))
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     if (value == null || value.trim().isEmpty()) {
-      parameterService.setParameters(target, (String) null);
+      parameterService.setParameters(target, null);
     } else {
-      JSONObject json = getAsJSON(value);
-      if (json == null) {
-        logger.error("Could not parse json for {}: {}", target, value);
-        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-      }
-      parameterService.setParameters(target, json);
+      parameterService.setParameters(target, value);
     }
   }
 }

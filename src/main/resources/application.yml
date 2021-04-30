@@ -75,3 +75,4 @@ logging:
     io.swagger.models.parameters.AbstractSerializableParameter: error
     org.springframework.web: info
     org.hibernate: info
+    com.github.dockerjava: info

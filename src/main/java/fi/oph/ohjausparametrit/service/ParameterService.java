@@ -1,7 +1,5 @@
 package fi.oph.ohjausparametrit.service;
 
-import static fi.oph.ohjausparametrit.util.JsonUtil.getJSONAsString;
-
 import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.audit.OhjausparametritOperation;
 import fi.oph.ohjausparametrit.model.JSONParameter;
@@ -10,8 +8,6 @@ import fi.oph.ohjausparametrit.util.SecurityUtil;
 import fi.vm.sade.auditlog.Changes;
 import fi.vm.sade.auditlog.Target;
 import java.util.Date;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,45 +36,32 @@ public class ParameterService {
 
   public void setParameters(String target, String value) {
 
-    // Find existing parameter if any
-    JSONParameter p = parameterRepository.findByTarget(target);
+    JSONParameter parameter = parameterRepository.findByTarget(target);
 
-    String oldValue = (p == null ? null : p.getJsonValue());
-    auditLog(target, value, oldValue);
+    String oldValue = (parameter == null ? null : parameter.getJsonValue());
 
     if (value == null || value.trim().isEmpty()) {
-      if (p != null) {
-        parameterRepository.delete(p);
+      if (parameter != null) {
+        parameterRepository.delete(parameter);
       }
     } else {
-      if (p == null) {
-        // New target
-        p = new JSONParameter();
-        p.setTarget(target);
+      if (parameter == null) {
+        parameter = new JSONParameter();
+        parameter.setTarget(target);
       }
-      p.setJsonValue(value);
-      parameterRepository.save(p);
-    }
-  }
-
-  public void setParameters(String target, JSONObject value) {
-    if (value != null) {
-      try {
-        value.put("__modified__", new Date().getTime());
-        value.put("__modifiedBy__", SecurityUtil.getCurrentUserName());
-      } catch (JSONException ex) {
-        logger.error("Failed to set modified / modified by");
-      }
+      parameter.setJsonValue(value);
+      parameter.setMuokattu(new Date());
+      parameter.setMuokkaaja(SecurityUtil.getCurrentUserName());
+      parameterRepository.save(parameter);
     }
 
-    setParameters(target, getJSONAsString(value));
+    auditLog(target, value, oldValue);
   }
 
   private void auditLog(String target, String newValue, String oldValue) {
     try {
       OhjausparametritOperation operation;
       Changes changes;
-      logger.info("NEW: {} | OLD: {}", newValue, oldValue);
       if (newValue != null && oldValue != null) {
         operation = OhjausparametritOperation.UPDATE;
         changes = Changes.updatedDto(newValue, oldValue);
