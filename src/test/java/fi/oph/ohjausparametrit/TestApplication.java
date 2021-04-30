@@ -14,22 +14,15 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.session.jdbc.JdbcOperationsSessionRepository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 @SpringBootApplication
 public class TestApplication {
-
-  public static PostgreSQLContainer postgreSQLContainer =
-      new PostgreSQLContainer("postgres:11.1")
-          .withDatabaseName("ohjausparametrit")
-          .withUsername("oph")
-          .withPassword("oph");
 
   @Configuration
   @EnableJpaRepositories(basePackages = "fi.oph.ohjausparametrit.repository")
   @PropertySource("application.yml")
   @EnableTransactionManagement
-  public class H2JpaConfig {}
+  public class JpaConfig {}
 
   @Bean
   public JdbcOperationsSessionRepository jdbcOperationsSessionRepository() {

@@ -6,7 +6,7 @@ spring:
       write-dates-as-timestamps: true
   datasource:
     driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:postgresql://localhost/ohjausparametrit?ApplicationName=ohjausparametrit-service
+    url: jdbc:tc:postgresql:11.10:///
   autoconfigure:
     exclude: org.spring
   cache:
@@ -24,7 +24,7 @@ spring:
       ddl-auto: validate
       use-new-id-generator-mappings: true
     show-sql: false
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:
       # https://hibernate.atlassian.net/browse/HHH-12368
       hibernate.jdbc.lob.non_contextual_creation: true
