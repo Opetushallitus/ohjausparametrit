@@ -38,8 +38,8 @@ public class SecurityService {
     if (!KoutaUtil.isKoutaHakuOid(hakuOid)) return true;
     KoutaHaku haku = koutaClient.getHaku(hakuOid);
     if (haku == null) return false;
-    List<String> hakuOrgansationOids = organisaatioClient.getChildOids(haku.getOrganisaatio());
-    hakuOrgansationOids.add(haku.getOrganisaatio());
+    List<String> hakuOrgansationOids = organisaatioClient.getChildOids(haku.getOrganisaatioOid());
+    hakuOrgansationOids.add(haku.getOrganisaatioOid());
     List<String> roleOrganisationOids = getOrganisationOidsForAuthentication(requiredRoles);
     return roleOrganisationOids.stream().anyMatch(o -> hakuOrgansationOids.contains(o));
   }

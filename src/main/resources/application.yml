@@ -55,7 +55,7 @@ ohjausparametrit:
 kouta:
   service: https://${host.host-virkailija}/kouta-internal
   securityUriSuffix: /auth/login
-  cookie: session
+  sessionCookie: session
 
 cas:
   service: http://localhost:${server.port}/ohjausparametrit-service

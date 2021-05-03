@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
+import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
 import fi.oph.ohjausparametrit.service.ParameterService;
 import fi.oph.ohjausparametrit.service.SecurityService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
@@ -71,6 +72,8 @@ public class OhjausparametritController {
   @GetMapping("/test")
   public void test() {
     koutaClient.test();
+    KoutaHaku haku = koutaClient.getHaku("1.2.246.562.29.00000000000000000001");
+    logger.info("Kouta: {} {}", haku.getOid(), haku.getOrganisaatioOid());
     organisaatioClient.getChildOids("1.2.246.562.10.53642770753");
   }
 

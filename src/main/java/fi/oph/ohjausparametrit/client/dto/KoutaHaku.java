@@ -6,11 +6,11 @@ public class KoutaHaku {
 
   public KoutaHaku(String oid, String organisaatio) {
     this.oid = oid;
-    this.organisaatio = organisaatio;
+    this.organisaatioOid = organisaatioOid;
   }
 
   private String oid;
-  private String organisaatio;
+  private String organisaatioOid;
 
   public String getOid() {
     return oid;
@@ -20,11 +20,11 @@ public class KoutaHaku {
     this.oid = oid;
   }
 
-  public String getOrganisaatio() {
-    return organisaatio;
+  public String getOrganisaatioOid() {
+    return organisaatioOid;
   }
 
   public void setOrganisaatio(String organisaatio) {
-    this.organisaatio = organisaatio;
+    this.organisaatioOid = organisaatioOid;
   }
 }
