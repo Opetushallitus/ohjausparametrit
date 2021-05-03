@@ -9,7 +9,7 @@
         <version>2.4.5</version>
     </parent>
 
-    <groupId>fi.vm.sade.ohjausparametrit</groupId>
+    <groupId>fi.oph.ohjausparametrit</groupId>
     <artifactId>ohjausparametrit</artifactId>
     <version>10.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -250,6 +250,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
                 <executions>
                     <execution>
                         <id>enforce-versions</id>
@@ -283,6 +284,7 @@
                         <configuration>
                             <target>
                                 <echo message="writing target/${project.build.finalName}/${buildversion_prefix}buildversion.txt"/>
+                                <!--suppress UnresolvedMavenProperty -->
                                 <echo file="target/${project.build.finalName}/${buildversion_prefix}buildversion.txt">
                                     <![CDATA[artifactId=${project.artifactId}
 version=${project.version}
@@ -294,6 +296,7 @@ buildTtime=${maven.build.timestamp}
                                 </echo>
                                 <loadfile property="buildversiontxt"
                                           srcFile="target/${project.build.finalName}/${buildversion_prefix}buildversion.txt"/>
+                                <!--suppress UnresolvedMavenProperty -->
                                 <echo message="${buildversiontxt}"/>
                                 <echo file="target/mavenversion.txt">${project.version}</echo>
                             </target>
@@ -312,6 +315,7 @@ buildTtime=${maven.build.timestamp}
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${project.parent.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
