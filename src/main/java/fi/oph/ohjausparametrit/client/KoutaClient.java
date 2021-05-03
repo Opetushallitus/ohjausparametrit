@@ -4,12 +4,13 @@ import com.google.gson.Gson;
 import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
 import fi.oph.ohjausparametrit.configurations.ConfigEnums;
 import fi.oph.ohjausparametrit.configurations.properties.KoutaProperties;
-import fi.vm.sade.javautils.cas.CasHttpClient;
+import fi.vm.sade.javautils.nio.cas.CasClient;
+import fi.vm.sade.javautils.nio.cas.CasConfig;
 import fi.vm.sade.properties.OphProperties;
 import java.time.Duration;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,43 +25,42 @@ public class KoutaClient {
 
   private final OphProperties ophProperties;
   private final KoutaProperties koutaProperties;
-  private final OkHttpClient httpClient;
-  private final CasHttpClient casHttpClient;
   private final Gson gson;
+  private final CasClient casClient;
 
   @Autowired
-  public KoutaClient(
-      OphProperties ophProperties, KoutaProperties koutaProperties, OkHttpClient httpClient) {
+  public KoutaClient(OphProperties ophProperties, KoutaProperties koutaProperties) {
 
     this.ophProperties = ophProperties;
     this.koutaProperties = koutaProperties;
-    this.httpClient = httpClient;
 
-    this.casHttpClient =
-        new CasHttpClient(
-            this.httpClient,
-            ConfigEnums.CALLER_ID.value(),
-            koutaProperties.getSessionCookie(),
-            koutaProperties.getService(),
-            ophProperties.url("cas.url"),
-            koutaProperties.getSecurityUriSuffix(),
+    logger.info("CAS-URL: {}", ophProperties.url("cas.url"));
+
+    CasConfig casConfig =
+        new CasConfig(
             koutaProperties.getUsername(),
             koutaProperties.getPassword(),
-            AUTHENTICATION_TIMEOUT);
+            ophProperties.url("cas.url"),
+            koutaProperties.getService(),
+            ConfigEnums.CALLER_ID.value(),
+            ConfigEnums.CALLER_ID.value(),
+            koutaProperties.getSessionCookie(),
+            koutaProperties.getSecurityUriSuffix());
+
+    this.casClient = new CasClient(casConfig);
 
     this.gson = new Gson();
   }
 
   public void test() {
     Request request =
-        new Request.Builder()
-            .url(ophProperties.url("kouta.haku.search.tarjoaja", "1.2.246.562.10.00000000001"))
-            .header("Caller-id", ConfigEnums.CALLER_ID.value())
-            .header("CSRF", ConfigEnums.CALLER_ID.value())
+        new RequestBuilder()
+            .setMethod("GET")
+            .setUrl(ophProperties.url("kouta.haku.search.tarjoaja", "1.2.246.562.10.00000000001"))
             .build();
 
     try {
-      Response response = casHttpClient.call(request).get();
+      Response response = casClient.executeBlocking(request);
       logger.info("RESPONSE: {}", response);
     } catch (Exception e) {
       logger.error("Kouta-internal-pyyntö epäonnistui: ", e);
@@ -69,16 +69,12 @@ public class KoutaClient {
 
   public KoutaHaku getHaku(String oid) {
     Request request =
-        new Request.Builder()
-            .url(ophProperties.url("kouta.haku", oid))
-            .header("Caller-id", ConfigEnums.CALLER_ID.value())
-            .header("CSRF", ConfigEnums.CALLER_ID.value())
-            .build();
+        new RequestBuilder().setMethod("GET").setUrl(ophProperties.url("kouta.haku", oid)).build();
 
     try {
-      Response response = casHttpClient.call(request).get();
+      Response response = casClient.executeBlocking(request);
       logger.info("RESPONSE: {}", response);
-      KoutaHaku haku = gson.fromJson(response.body().string(), KoutaHaku.class);
+      KoutaHaku haku = gson.fromJson(response.getResponseBody(), KoutaHaku.class);
       return haku;
     } catch (Exception e) {
       throw new RuntimeException(

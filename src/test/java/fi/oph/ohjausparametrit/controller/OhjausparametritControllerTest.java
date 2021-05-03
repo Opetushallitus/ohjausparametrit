@@ -13,7 +13,6 @@ import java.util.Arrays;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -79,7 +78,6 @@ public class OhjausparametritControllerTest {
         res, StringContains.containsString("{\"TARGET\":{\"PARAM\":{\"foo\":true}"));
   }
 
-  @Ignore
   @Test
   @WithMockUser(
       username = "1.2.246.562.24.25763910658",
@@ -112,7 +110,6 @@ public class OhjausparametritControllerTest {
     op.doPost("1.2.246.562.29.00000000000000000801", VALUE_1);
   }
 
-  @Ignore
   @Test
   @WithMockUser(
       username = "1.2.246.562.24.25763910658",

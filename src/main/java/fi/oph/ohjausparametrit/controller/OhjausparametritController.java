@@ -11,6 +11,7 @@ import fi.oph.ohjausparametrit.service.SecurityService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
+import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -116,13 +117,11 @@ public class OhjausparametritController {
         SecurityUtil.getCurrentUserName(),
         value);
     JsonUtil.validateIsJson(target, value);
-    /*
     if (!securityService.isAuthorizedToModifyHaku(
         target,
         Arrays.asList(
             "ROLE_APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_READ_UPDATE")))
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-     */
     if (value == null || value.trim().isEmpty()) {
       parameterService.setParameters(target, null);
     } else {

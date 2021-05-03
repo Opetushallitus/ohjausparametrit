@@ -53,8 +53,8 @@ ohjausparametrit:
   disable-same-site-cookie: false
 
 kouta:
-  service: /kouta-internal
-  securityUriSuffix: auth/login
+  service: https://${host.host-virkailija}/kouta-internal
+  securityUriSuffix: /auth/login
   cookie: session
 
 cas:

@@ -7,7 +7,7 @@ import fi.oph.ohjausparametrit.client.dto.OrganisaatioChildren;
 import fi.vm.sade.properties.OphProperties;
 import java.util.List;
 import java.util.stream.Collectors;
-import okhttp3.*;
+import org.asynchttpclient.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class OrganisaatioClient {
   public List<OrganisaatioChild> getChildren(String oid) {
     Response response = httpClient.get(ophProperties.url("organisaatio.jalkelaiset", oid));
     try {
-      String body = response.body().string();
+      String body = response.getResponseBody();
       logger.info("Body: {}", body);
       OrganisaatioChildren dto =
           gson.fromJson(body, new TypeToken<OrganisaatioChildren>() {}.getType());

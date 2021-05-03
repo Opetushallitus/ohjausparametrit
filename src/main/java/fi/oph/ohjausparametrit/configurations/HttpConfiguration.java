@@ -1,6 +1,7 @@
 package fi.oph.ohjausparametrit.configurations;
 
-import okhttp3.OkHttpClient;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.Dsl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class HttpConfiguration {
 
   @Bean
-  public OkHttpClient commonHttpClient() {
-    OkHttpClient client = new OkHttpClient.Builder().build();
+  public AsyncHttpClient commonHttpClient() {
+    AsyncHttpClient client = Dsl.asyncHttpClient();
     return client;
   }
 }
