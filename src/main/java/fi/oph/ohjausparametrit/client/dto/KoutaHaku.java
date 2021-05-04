@@ -4,7 +4,7 @@ public class KoutaHaku {
 
   public KoutaHaku() {}
 
-  public KoutaHaku(String oid, String organisaatio) {
+  public KoutaHaku(String oid, String organisaatioOid) {
     this.oid = oid;
     this.organisaatioOid = organisaatioOid;
   }
@@ -24,7 +24,7 @@ public class KoutaHaku {
     return organisaatioOid;
   }
 
-  public void setOrganisaatio(String organisaatio) {
+  public void setOrganisaatioOid(String organisaatioOid) {
     this.organisaatioOid = organisaatioOid;
   }
 }
