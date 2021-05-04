@@ -38,23 +38,23 @@ public class SecurityService {
     if (!KoutaUtil.isKoutaHakuOid(hakuOid)) return true;
     KoutaHaku haku = koutaClient.getHaku(hakuOid);
     if (haku == null) return false;
-    List<String> hakuOrgansationOids = organisaatioClient.getChildOids(haku.getOrganisaatioOid());
-    hakuOrgansationOids.add(haku.getOrganisaatioOid());
-    List<String> roleOrganisationOids = getOrganisationOidsForAuthentication(requiredRoles);
-    return roleOrganisationOids.stream().anyMatch(o -> hakuOrgansationOids.contains(o));
+    List<String> hakuOrganisaatioOids = organisaatioClient.getChildOids(haku.getOrganisaatioOid());
+    hakuOrganisaatioOids.add(haku.getOrganisaatioOid());
+    List<String> roleOrganisaatioOids = getOrganisaatioOidsForAuthentication(requiredRoles);
+    return roleOrganisaatioOids.stream().anyMatch(o -> hakuOrganisaatioOids.contains(o));
   }
 
-  private List<String> getOrganisationOidsForAuthentication(List<String> requiredRoles) {
+  private List<String> getOrganisaatioOidsForAuthentication(List<String> requiredRoles) {
     List<String> roles =
         getRolesFromAuthentication().stream()
             .filter(r -> requiredRoles.stream().anyMatch(vr -> r.contains(vr)))
             .collect(Collectors.toList());
-    List<String> organisationOids =
+    List<String> organisaatioOids =
         roles.stream()
-            .map(this::parseOrganisationOidFromSecurityRole)
+            .map(this::parseOrganisaatioOidFromSecurityRole)
             .flatMap(Optional::stream)
             .collect(Collectors.toList());
-    return organisationOids;
+    return organisaatioOids;
   }
 
   private boolean isSuperuser() {
@@ -76,7 +76,7 @@ public class SecurityService {
     }
   }
 
-  private Optional<String> parseOrganisationOidFromSecurityRole(String role) {
+  private Optional<String> parseOrganisaatioOidFromSecurityRole(String role) {
     return parseOidFromSecurityRole(role, ORGANISATION_OID_PREFIX);
   }
 

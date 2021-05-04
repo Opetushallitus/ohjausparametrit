@@ -82,7 +82,7 @@ public class OhjausparametritControllerTest {
   @WithMockUser(
       username = "1.2.246.562.24.25763910658",
       roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.59078453392"})
-  public void testCreateReadParamWithAuthorizationWithRequiredRolesToimipiste() {
+  public void testCreateReadParamWithAuthorizationWithRequiredRolesToimipisteForbidden() {
     when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
         .thenReturn(new ArrayList<>());
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))

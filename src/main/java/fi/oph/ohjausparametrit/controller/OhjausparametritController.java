@@ -21,16 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-/**
- * Simpler parameters:
- *
- * <pre>
- * GET  /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING -> json of all parameters
- *
- * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING <- json of all parameters updated/inserted/removed (replaces existing)
- * POST /v1/rest/parametri/TARGET_KEY_OID_OR_SOMETHING/PARAM_NAME <- json of single parameter updated/inserted/removed
- * </pre>
- */
 @RestController
 @RequestMapping(value = "/api/v1/rest/parametri")
 @Api(tags = "Henkilöön liittyvät operaatiot")
@@ -77,7 +67,6 @@ public class OhjausparametritController {
     organisaatioClient.getChildOids("1.2.246.562.10.53642770753");
   }
 
-  /** @return all parameters to all targets as JSON. */
   @GetMapping(value = "/ALL", produces = "application/json; charset=utf-8")
   public String doGetAll() {
     return parameterService.getAll();
@@ -89,12 +78,6 @@ public class OhjausparametritController {
         HttpStatus.BAD_REQUEST, "Not allowed to save ohjausparametrit fro target ALL!");
   }
 
-  /**
-   * Load parameters for given target.
-   *
-   * @param target ex. Haku oid
-   * @return parameters as JSON
-   */
   @GetMapping(value = "/{target}", produces = "application/json; charset=utf-8")
   public String doGet(@PathVariable String target) {
     String response = parameterService.get(target);
@@ -103,13 +86,6 @@ public class OhjausparametritController {
     return parameterService.get(target);
   }
 
-  /**
-   * Save parameters for given "target"
-   *
-   * @param target ex. Haku oid
-   * @param value parameters (multiple) of given target as json
-   * @return success == OK, failure NOT_ACCEPTABLE or UNAUTHORIZED
-   */
   @PostMapping(value = "/{target}")
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA', 'APP_KOUTA_HAKU_CRUD', 'APP_KOUTA_HAKU_READ_UPDATE')")
