@@ -27,3 +27,6 @@ host:
 kouta:
   username: {{ohjausparametrit_cas_username}}
   password: {{ohjausparametrit_cas_password}}
+
+ohjausparametrit:
+  uses-ssl-proxy: true
