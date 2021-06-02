@@ -33,7 +33,6 @@ public class OrganisaatioClient {
     Response response = httpClient.get(ophProperties.url("organisaatio.jalkelaiset", oid));
     try {
       String body = response.getResponseBody();
-      logger.info("Body: {}", body);
       OrganisaatioChildren dto =
           gson.fromJson(body, new TypeToken<OrganisaatioChildren>() {}.getType());
       logger.info(

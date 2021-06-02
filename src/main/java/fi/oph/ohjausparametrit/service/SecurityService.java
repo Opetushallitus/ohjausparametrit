@@ -5,10 +5,12 @@ import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
 import fi.oph.ohjausparametrit.util.KoutaUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,21 +59,18 @@ public class SecurityService {
           SecurityUtil.getCurrentUserName());
       return false;
     }
-    List<String> hakuOrganisaatioOids = organisaatioClient.getChildOids(haku.getOrganisaatioOid());
-    hakuOrganisaatioOids.add(haku.getOrganisaatioOid());
     logger.info(
         "Authorization for user {}, haku {} | Organisaatiot of haku: {}",
         SecurityUtil.getCurrentUserName(),
         hakuOid,
-        hakuOrganisaatioOids);
+        haku.getOrganisaatioOid());
     List<String> roleOrganisaatioOids = getOrganisaatioOidsForAuthentication(requiredRoles);
     logger.info(
         "Authorization for user {}, haku {} | Organisaatiot of required roles: {}",
         SecurityUtil.getCurrentUserName(),
         hakuOid,
         roleOrganisaatioOids);
-    boolean isAllowed =
-        roleOrganisaatioOids.stream().anyMatch(o -> hakuOrganisaatioOids.contains(o));
+    boolean isAllowed = roleOrganisaatioOids.contains(haku.getOrganisaatioOid());
     if (isAllowed) {
       logger.info(
           "Authorization for user {}, haku {} | User is allowed to modify ohjausparametrit",
@@ -96,7 +95,15 @@ public class SecurityService {
             .map(this::parseOrganisaatioOidFromSecurityRole)
             .flatMap(Optional::stream)
             .collect(Collectors.toList());
-    return organisaatioOids;
+    List<String> childOrganisaatioOids =
+        organisaatioOids.stream()
+            .map(organisaatioClient::getChildOids)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+
+    return Stream.concat(organisaatioOids.stream(), childOrganisaatioOids.stream())
+        .distinct()
+        .collect(Collectors.toList());
   }
 
   private boolean isSuperuser() {

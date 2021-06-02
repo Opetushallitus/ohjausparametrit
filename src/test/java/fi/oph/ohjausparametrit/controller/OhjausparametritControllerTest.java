@@ -115,8 +115,8 @@ public class OhjausparametritControllerTest {
       username = "1.2.246.562.24.25763910658",
       roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesOppilaitosForbidden() {
-    when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
-        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.67476956288")));
+    when(organisaatioClient.getChildOids("1.2.246.562.10.67476956288"))
+        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.59078453392")));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.00000000001"));
@@ -134,8 +134,8 @@ public class OhjausparametritControllerTest {
       username = "1.2.246.562.24.25763910658",
       roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesOppilaitosAllowed() {
-    when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
-        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.67476956288")));
+    when(organisaatioClient.getChildOids("1.2.246.562.10.67476956288"))
+        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.59078453392")));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000802"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000802", "1.2.246.562.10.59078453392"));
@@ -147,8 +147,8 @@ public class OhjausparametritControllerTest {
       username = "1.2.246.562.24.25763910658",
       roles = {"APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_OPHPAAKAYTTAJA_1.2.246.562.10.00000000001"})
   public void testCreateReadParamWithAuthorizationWithOphPaakayttajaRole() {
-    when(organisaatioClient.getChildOids("1.2.246.562.10.59078453392"))
-        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.67476956288")));
+    when(organisaatioClient.getChildOids("1.2.246.562.10.67476956288"))
+        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.59078453392")));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.59078453392"));
