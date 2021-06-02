@@ -4,6 +4,7 @@ import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
 import fi.oph.ohjausparametrit.util.KoutaUtil;
+import fi.oph.ohjausparametrit.util.SecurityUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +35,55 @@ public class SecurityService {
   }
 
   public boolean isAuthorizedToModifyHaku(String hakuOid, List<String> requiredRoles) {
-    if (isSuperuser()) return true;
-    if (!KoutaUtil.isKoutaHakuOid(hakuOid)) return true;
+    if (isSuperuser()) {
+      logger.info(
+          "User {} is super user. Modifying ohjausparametrit ({}) allowed",
+          SecurityUtil.getCurrentUserName(),
+          hakuOid);
+      return true;
+    }
+    if (!KoutaUtil.isKoutaHakuOid(hakuOid)) {
+      logger.info(
+          "Haku {} is not kouta-haku. User {} allowed to modify ohjausparametrit",
+          hakuOid,
+          SecurityUtil.getCurrentUserName());
+      return true;
+    }
     KoutaHaku haku = koutaClient.getHaku(hakuOid);
-    if (haku == null) return false;
+    if (haku == null) {
+      logger.info(
+          "Haku {} is not found from Kouta. User {} ais not allowed to modify ohjausparametrit",
+          hakuOid,
+          SecurityUtil.getCurrentUserName());
+      return false;
+    }
     List<String> hakuOrganisaatioOids = organisaatioClient.getChildOids(haku.getOrganisaatioOid());
     hakuOrganisaatioOids.add(haku.getOrganisaatioOid());
+    logger.info(
+        "Authorization for user {}, haku {} | Organisaatiot of haku: {}",
+        SecurityUtil.getCurrentUserName(),
+        hakuOid,
+        hakuOrganisaatioOids);
     List<String> roleOrganisaatioOids = getOrganisaatioOidsForAuthentication(requiredRoles);
-    return roleOrganisaatioOids.stream().anyMatch(o -> hakuOrganisaatioOids.contains(o));
+    logger.info(
+        "Authorization for user {}, haku {} | Organisaatiot of required roles: {}",
+        SecurityUtil.getCurrentUserName(),
+        hakuOid,
+        roleOrganisaatioOids);
+    boolean isAllowed =
+        roleOrganisaatioOids.stream().anyMatch(o -> hakuOrganisaatioOids.contains(o));
+    if (isAllowed) {
+      logger.info(
+          "Authorization for user {}, haku {} | User is allowed to modify ohjausparametrit",
+          SecurityUtil.getCurrentUserName(),
+          hakuOid);
+    } else {
+      logger.info(
+          "Authorization for user {}, haku {} | User is not allowed to modify ohjausparametrit",
+          SecurityUtil.getCurrentUserName(),
+          hakuOid);
+    }
+    return isAllowed;
   }
 
   private List<String> getOrganisaatioOidsForAuthentication(List<String> requiredRoles) {
