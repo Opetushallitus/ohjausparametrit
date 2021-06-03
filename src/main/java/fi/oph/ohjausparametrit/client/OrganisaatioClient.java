@@ -35,12 +35,6 @@ public class OrganisaatioClient {
       String body = response.getResponseBody();
       OrganisaatioChildren dto =
           gson.fromJson(body, new TypeToken<OrganisaatioChildren>() {}.getType());
-      logger.info(
-          "Organisaatio children oids of {}: {}",
-          oid,
-          dto.getOrganisaatiot().stream()
-              .map(org -> org.getOid())
-              .collect(Collectors.joining(",")));
       return dto.getOrganisaatiot();
     } catch (Exception e) {
       throw new RuntimeException(

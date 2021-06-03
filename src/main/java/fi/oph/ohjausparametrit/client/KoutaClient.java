@@ -62,7 +62,6 @@ public class KoutaClient {
 
     try {
       Response response = casClient.executeBlocking(request);
-      logger.info("RESPONSE: {}", response);
     } catch (Exception e) {
       logger.error("Kouta-internal-pyyntö epäonnistui: ", e);
     }
@@ -74,7 +73,6 @@ public class KoutaClient {
 
     try {
       Response response = casClient.executeBlocking(request);
-      logger.info("RESPONSE: {}", response);
       KoutaHaku haku = gson.fromJson(response.getResponseBody(), KoutaHaku.class);
       return haku;
     } catch (Exception e) {
