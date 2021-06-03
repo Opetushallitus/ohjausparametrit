@@ -20,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/api/v1/rest/parametri")
-@Api(tags = "Henkilöön liittyvät operaatiot")
+@Api(tags = "Ohjausparametreihin liittyvät operaatiot")
 @Transactional
 public class OhjausparametritController {
 
