@@ -1,7 +1,7 @@
 sudo: required
 language: java
 jdk:
-- openjdk8
+- openjdk11
 services:
 - docker
 cache:
@@ -20,14 +20,14 @@ install:
 - export ARTIFACT_NAME="ohjausparametrit"
 
 script:
-- mvn clean install -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
+- mvn clean spotless:check package -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
 
-- mv ohjausparametrit-service/target/ohjausparametrit-service.war $DOCKER_BUILD_DIR/artifact/ohjausparametrit-service.war
+- mv target/ohjausparametrit.jar $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}.jar
 - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
 
-- export BASE_IMAGE="baseimage-war-openjdk8:master"
+- export BASE_IMAGE="baseimage-fatjar-openjdk11:master"
 - ./ci-tools/common/pull-image.sh
-- ./ci-tools/build/build-war.sh $ARTIFACT_NAME
+- ./ci-tools/build/build-fatjar.sh $ARTIFACT_NAME
 
 deploy:
   provider: script

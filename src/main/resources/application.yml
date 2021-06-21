@@ -1,0 +1,78 @@
+spring:
+  main:
+    banner-mode: "off"
+  mandatory-file-encoding: UTF-8
+  profiles.active: default
+  session:
+    store-type: jdbc
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 10000
+      max-lifetime: 900000
+  flyway:
+    enabled: true
+    table: schema_version
+    out-of-order: true
+    # Only for initial production release, set false afterwards
+    baseline-on-migrate: false
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+      ddl-auto: validate
+      use-new-id-generator-mappings: true
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    properties:
+      # https://hibernate.atlassian.net/browse/HHH-12368
+      hibernate.jdbc.lob.non_contextual_creation: true
+
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+
+server:
+  servlet:
+    context-path: /ohjausparametrit-service
+    session:
+      cookie:
+        name: JSESSIONID
+  port: 8080
+
+ohjausparametrit:
+  uses-ssl-proxy: false
+  disable-same-site-cookie: false
+
+kouta:
+  service: https://${host.host-virkailija}/kouta-internal
+  securityUriSuffix: /auth/login
+  sessionCookie: session
+
+cas:
+  service: http://localhost:${server.port}/ohjausparametrit-service
+  send-renew: false
+  key: ohjausparametrit-service
+
+logging:
+  level:
+    root: info
+    org.springframework: warn
+    org.springframework.security: warn
+    org.springframework.boot.autoconfigure.security.AuthenticationManagerConfiguration: warn
+    org.hibernate.SQL: error
+    fi.vm.sade.auditlog.Audit: info
+    fi.vm.sade.java_utils.security.OpintopolkuCasAuthenticationFilter: warn
+    org.apache.http.client.protocol.ResponseProcessCookies: error
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+    org.springframework.web: info
+    org.hibernate: info
+    com.github.dockerjava: info
