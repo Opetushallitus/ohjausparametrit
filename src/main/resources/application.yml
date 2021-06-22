@@ -43,9 +43,6 @@ management:
 server:
   servlet:
     context-path: /ohjausparametrit-service
-    session:
-      cookie:
-        name: JSESSIONID
   port: 8080
 
 ohjausparametrit:
