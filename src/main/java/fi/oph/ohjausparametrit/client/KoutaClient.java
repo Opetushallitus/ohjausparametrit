@@ -46,6 +46,7 @@ public class KoutaClient {
             ConfigEnums.CALLER_ID.value(),
             koutaProperties.getSessionCookie(),
             koutaProperties.getSecurityUriSuffix(),
+            null,
             null);
 
     this.casClient = new CasClient(casConfig);
