@@ -54,20 +54,6 @@ public class KoutaClient {
     this.gson = new Gson();
   }
 
-  public void test() {
-    Request request =
-        new RequestBuilder()
-            .setMethod("GET")
-            .setUrl(ophProperties.url("kouta.haku.search.tarjoaja", "1.2.246.562.10.00000000001"))
-            .build();
-
-    try {
-      Response response = casClient.executeBlocking(request);
-    } catch (Exception e) {
-      logger.error("Kouta-internal-pyyntö epäonnistui: ", e);
-    }
-  }
-
   public KoutaHaku getHaku(String oid) {
     Request request =
         new RequestBuilder().setMethod("GET").setUrl(ophProperties.url("kouta.haku", oid)).build();
