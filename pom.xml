@@ -92,7 +92,7 @@
         <dependency>
             <groupId>com.github.kagkarlsson</groupId>
             <artifactId>db-scheduler</artifactId>
-            <version>10.2</version>
+            <version>10.3</version>
         </dependency>
 
         <dependency>
@@ -295,8 +295,7 @@ vcsRevision=${revision}
 buildTtime=${maven.build.timestamp}
 ]]>
                                 </echo>
-                                <loadfile property="buildversiontxt"
-                                          srcFile="target/${project.build.finalName}/${buildversion_prefix}buildversion.txt"/>
+                                <loadfile property="buildversiontxt" srcFile="target/${project.build.finalName}/${buildversion_prefix}buildversion.txt"/>
                                 <!--suppress UnresolvedMavenProperty -->
                                 <echo message="${buildversiontxt}"/>
                                 <echo file="target/mavenversion.txt">${project.version}</echo>
