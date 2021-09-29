@@ -44,6 +44,9 @@ server:
   servlet:
     context-path: /ohjausparametrit-service
   port: 8080
+  tomcat:
+    threads:
+      max: 20
 
 ohjausparametrit:
   uses-ssl-proxy: false
