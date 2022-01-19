@@ -52,3 +52,4 @@ Avaa selaimessa: http://localhost:8080/ohjausparametrit-service/swagger-ui/index
 - Flyway
 - Postgresql
 - Docker
+
