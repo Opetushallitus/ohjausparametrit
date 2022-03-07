@@ -32,7 +32,9 @@ jobs:
           timezoneLinux: "Europe/Helsinki"
 
       - name: Build with Maven
-        run: mvn clean spotless:check package -B
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn clean spotless:check package sonar:sonar -Dsonar.projectKey=Opetushallitus_ohjausparametrit -B
 
       - uses: actions/cache@v2
         id: restore-build
