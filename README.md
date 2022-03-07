@@ -6,6 +6,10 @@ Palvelu tarjoaa REST-rajapinnan.
 
 Yksi keskeinen käyttökohde on haun aikatauluasetukset.
 
+[![Ohjausparametrit](https://github.com/Opetushallitus/ohjausparametrit/actions/workflows/build.yml/badge.svg)](https://github.com/Opetushallitus/ohjausparametrit/actions/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Opetushallitus_ohjausparametrit&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Opetushallitus_ohjausparametrit)
+
+
 ## Käynnistys lokaalisti
 
 1. Luo ohjausparametreille tyhjä postgre kanta lokaalisti. Esim dockerilla: 
