@@ -53,13 +53,9 @@ public class ParameterService {
     try {
       logger.info("getForOids: {}", oids);
       JsonObject result = new JsonObject();
-      for (String oid : oids) {
-        JSONParameter params = parameterRepository.findByTarget(oid);
-        if (params != null) {
-          result.add(oid, getAsJSON(params.getJsonValue()));
-        } else {
-          logger.warn("no params found for oid {}", oid);
-        }
+      List<JSONParameter> dbResult = parameterRepository.findByTargetIn(oids);
+      for (JSONParameter jSONParameter : dbResult) {
+        result.add(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
       }
       return result.toString();
     } catch (Exception e) {
