@@ -80,7 +80,7 @@ public class OhjausparametritController {
         HttpStatus.BAD_REQUEST, "Not allowed to save ohjausparametrit for target ALL!");
   }
 
-  @PostMapping(value = "/OIDS", produces = "application/json; charset=utf-8")
+  @PostMapping(value = "/oids", produces = "application/json; charset=utf-8")
   public String doPostForOids(@RequestBody List<String> oids) {
     return parameterService.getForOids(oids);
   }
