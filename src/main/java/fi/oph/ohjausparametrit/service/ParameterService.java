@@ -11,6 +11,7 @@ import fi.oph.ohjausparametrit.util.SecurityUtil;
 import fi.vm.sade.auditlog.Changes;
 import fi.vm.sade.auditlog.Target;
 import java.util.Date;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,21 @@ public class ParameterService {
     try {
       JsonObject result = new JsonObject();
       for (JSONParameter jSONParameter : parameterRepository.findAll()) {
+        result.add(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
+      }
+      return result.toString();
+    } catch (Exception e) {
+      logger.error("Failed to produce json output...?", e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  public String getForOids(List<String> oids) {
+    try {
+      logger.info("getForOids: {}", oids);
+      JsonObject result = new JsonObject();
+      List<JSONParameter> dbResult = parameterRepository.findByTargetIn(oids);
+      for (JSONParameter jSONParameter : dbResult) {
         result.add(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
       }
       return result.toString();

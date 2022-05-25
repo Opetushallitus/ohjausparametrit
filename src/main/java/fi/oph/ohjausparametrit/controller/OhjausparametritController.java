@@ -10,6 +10,7 @@ import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,11 @@ public class OhjausparametritController {
   public String doGetAllPost() {
     throw new ResponseStatusException(
         HttpStatus.BAD_REQUEST, "Not allowed to save ohjausparametrit for target ALL!");
+  }
+
+  @PostMapping(value = "/oids", produces = "application/json; charset=utf-8")
+  public String doPostForOids(@RequestBody List<String> oids) {
+    return parameterService.getForOids(oids);
   }
 
   @GetMapping(value = "/{target}", produces = "application/json; charset=utf-8")
