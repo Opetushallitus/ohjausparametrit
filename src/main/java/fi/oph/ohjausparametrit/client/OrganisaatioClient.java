@@ -43,6 +43,9 @@ public class OrganisaatioClient {
   }
 
   public List<String> getChildOids(String oid) {
-    return getChildren(oid).stream().map(org -> org.getOid()).collect(Collectors.toList());
+    return getChildren(oid).stream()
+        .flatMap(OrganisaatioChild::flattened)
+        .map(org -> org.getOid())
+        .collect(Collectors.toList());
   }
 }
