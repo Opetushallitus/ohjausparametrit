@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,6 +61,25 @@ public class ParameterService {
       return result.toString();
     } catch (Exception e) {
       logger.error("Failed to produce json output...?", e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  public List<JSONParameter> getPartitionByModifyDatetime(
+      Date startDateTime, Date endDateTime, int limit, int page) {
+    logger.info(
+        "getPartitionByModifyDatetime, start {} end {} limit {} page {}",
+        startDateTime,
+        endDateTime,
+        limit,
+        page);
+    try {
+      return startDateTime != null
+          ? parameterRepository.findByTimeRange(
+              startDateTime, endDateTime, PageRequest.of(page, limit))
+          : parameterRepository.findByEndTime(endDateTime, PageRequest.of(page, limit));
+    } catch (Exception e) {
+      logger.error("Database query failed; ", e);
       throw new RuntimeException(e);
     }
   }

@@ -30,3 +30,8 @@ kouta:
 
 ohjausparametrit:
   uses-ssl-proxy: true
+
+siirtotiedostot:
+  aws-region: {{ohjausparametrit_s3_region}}
+  s3-bucket-name: {{ohjausparametrit_siirtotiedosto_bucket}}
+  max-itemcount-in-file: {{ohjausparametrit_max_itemcount_in_file}}

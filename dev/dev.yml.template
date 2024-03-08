@@ -15,3 +15,8 @@ host:
   host-virkailija: virkailija.testiopintopolku.fi
   host-cas: virkailija.testiopintopolku.fi
   host-alb: https://virkailija.testiopintopolku.fi
+
+siirtotiedostot:
+  aws-region: eu-west-1
+  s3-bucket-name: opintopolku-pallero-siirtotiedostot
+  max-itemcount-in-file: 20000
