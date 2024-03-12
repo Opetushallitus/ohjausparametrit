@@ -28,16 +28,14 @@ public class SiirtotiedostoService {
             siirtotiedostoProperties.getAwsRegion(), siirtotiedostoProperties.getS3BucketName());
   }
 
-  public String createSiirtotiedosto(
-      String startDatetime, String endDatetime, List<JSONParameter> data) {
+  public String createSiirtotiedosto(List<JSONParameter> data) {
     try {
       JsonObject jsonObject = new JsonObject();
       data.forEach(item -> jsonObject.add(item.getTarget(), getAsJSON(item.getJsonValue())));
       ObjectMetadata result =
           siirtotiedostoPalvelu.saveSiirtotiedosto(
-              startDatetime,
-              endDatetime,
-              "Ohjausparametrit",
+              "ohjausparametrit",
+              "parameter",
               "",
               new ByteArrayInputStream(jsonObject.toString().getBytes()),
               2);

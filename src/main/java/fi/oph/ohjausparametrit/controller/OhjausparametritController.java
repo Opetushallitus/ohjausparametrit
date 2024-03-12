@@ -142,7 +142,7 @@ public class OhjausparametritController {
         parameterService.getPartitionByModifyDatetime(start, end, partitionSize, page++);
     while (!dbResults.isEmpty()) {
       total += dbResults.size();
-      keys.add(siirtotiedostoService.createSiirtotiedosto(startDatetime, endDatetime, dbResults));
+      keys.add(siirtotiedostoService.createSiirtotiedosto(dbResults));
       dbResults = parameterService.getPartitionByModifyDatetime(start, end, partitionSize, page++);
     }
 
