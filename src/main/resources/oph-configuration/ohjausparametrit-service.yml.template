@@ -34,4 +34,5 @@ ohjausparametrit:
 siirtotiedostot:
   aws-region: {{ohjausparametrit_s3_region}}
   s3-bucket-name: {{ohjausparametrit_siirtotiedosto_bucket}}
+  s3-bucket-target-role-arn: {{ohjausparametrit_siirtotiedosto_target_role_arn}}
   max-itemcount-in-file: {{ohjausparametrit_max_itemcount_in_file}}
