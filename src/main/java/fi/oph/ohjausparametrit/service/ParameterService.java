@@ -78,9 +78,9 @@ public class ParameterService {
           ? parameterRepository.findByTimeRange(
               startDateTime, endDateTime, PageRequest.of(page, limit))
           : parameterRepository.findByEndTime(endDateTime, PageRequest.of(page, limit));
-    } catch (Exception exp) {
-      logger.error("Database query failed; ", exp);
-      throw new RuntimeException(exp);
+    } catch (Exception e) {
+      logger.error("Database query failed; ", e);
+      throw new RuntimeException(e);
     }
   }
 
