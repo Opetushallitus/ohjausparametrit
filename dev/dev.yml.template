@@ -18,5 +18,6 @@ host:
 
 siirtotiedostot:
   aws-region: eu-west-1
-  s3-bucket-name: opintopolku-pallero-siirtotiedostot
+  s3-bucket-name: testi-siirtotiedostot
+  s3-bucket-target-role-arn: arn:aws:iam::654654623010:role/testi-s3-access-role
   max-itemcount-in-file: 20000

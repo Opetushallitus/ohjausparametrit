@@ -17,15 +17,17 @@ import org.springframework.stereotype.Service;
 public class SiirtotiedostoService {
   private static final Logger logger = LoggerFactory.getLogger(SiirtotiedostoService.class);
 
-  private SiirtotiedostoProperties siirtotiedostoProperties;
+  private final SiirtotiedostoProperties siirtotiedostoProperties;
 
-  private SiirtotiedostoPalvelu siirtotiedostoPalvelu;
+  private final SiirtotiedostoPalvelu siirtotiedostoPalvelu;
 
   public SiirtotiedostoService(SiirtotiedostoProperties siirtotiedostoProperties) {
     this.siirtotiedostoProperties = siirtotiedostoProperties;
     siirtotiedostoPalvelu =
         new SiirtotiedostoPalvelu(
-            siirtotiedostoProperties.getAwsRegion(), siirtotiedostoProperties.getS3BucketName());
+            siirtotiedostoProperties.getAwsRegion(),
+            siirtotiedostoProperties.getS3BucketName(),
+            siirtotiedostoProperties.getS3bucketTargetRoleArn());
   }
 
   public String createSiirtotiedosto(List<JSONParameter> data) {
