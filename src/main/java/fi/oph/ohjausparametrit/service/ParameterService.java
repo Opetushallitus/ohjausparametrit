@@ -59,9 +59,9 @@ public class ParameterService {
         result.add(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
       }
       return result.toString();
-    } catch (Exception e) {
-      logger.error("Failed to produce json output...?", e);
-      throw new RuntimeException(e);
+    } catch (Exception exp) {
+      logger.error("Failed to produce json output...?", exp);
+      throw new RuntimeException(exp);
     }
   }
 
