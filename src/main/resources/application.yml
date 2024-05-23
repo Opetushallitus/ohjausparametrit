@@ -26,12 +26,13 @@ spring:
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
       ddl-auto: validate
-      use-new-id-generator-mappings: true
     show-sql: false
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:
-      # https://hibernate.atlassian.net/browse/HHH-12368
       hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.id.db_structure_naming_strategy: single
+      hibernate.id.new_generator_mappings: true
+      hibernate.integration.envers.enabled: true
+      org.hibernate.envers.store_data_at_delete: true
 
 management:
   endpoints:

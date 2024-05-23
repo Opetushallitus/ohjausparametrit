@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,7 +40,7 @@ public class ParameterService {
   public String getAll() {
     try {
       JsonObject result = new JsonObject();
-      for (JSONParameter jSONParameter : parameterRepository.findAll()) {
+      for (JSONParameter jSONParameter : parameterRepository.findAll(Sort.by("target"))) {
         result.add(jSONParameter.getTarget(), getAsJSON(jSONParameter.getJsonValue()));
       }
       return result.toString();

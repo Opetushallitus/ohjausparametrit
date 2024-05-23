@@ -14,7 +14,7 @@ Yksi keskeinen käyttökohde on haun aikatauluasetukset.
 
 1. Luo ohjausparametreille tyhjä postgre kanta lokaalisti. Esim dockerilla: 
 ```
-docker run --rm --name ohjausparametrit-db -p 5489:5432 -e POSTGRES_USER=oph -e POSTGRES_PASSWORD=oph -e POSTGRES_DB=ohjausparametrit -d postgres:11.5
+docker run --rm --name ohjausparametrit-db -p 5489:5432 -e POSTGRES_USER=oph -e POSTGRES_PASSWORD=oph -e POSTGRES_DB=ohjausparametrit -d postgres:15.5
 ```
 ja lisää halutessasi testidataa tietokantaan: `tools/add_test_data_to_local_db.sh` (koneella pitää olla asennettuna psql)
 2. Luo `dev/dev.yml`-tiedosto. Käytä pohjana `dev/dev.yml.template`-tiedostoa. Aseta puuttuvat arvot.

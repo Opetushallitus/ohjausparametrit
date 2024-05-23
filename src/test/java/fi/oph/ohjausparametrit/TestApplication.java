@@ -10,10 +10,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.session.jdbc.JdbcOperationsSessionRepository;
+import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @SpringBootApplication
 public class TestApplication {
@@ -25,8 +27,8 @@ public class TestApplication {
   public class JpaConfig {}
 
   @Bean
-  public JdbcOperationsSessionRepository jdbcOperationsSessionRepository() {
-    return mock(JdbcOperationsSessionRepository.class);
+  public JdbcIndexedSessionRepository jdbcOperationsSessionRepository() {
+    return mock(JdbcIndexedSessionRepository.class);
   }
 
   @Bean
@@ -40,8 +42,14 @@ public class TestApplication {
   }
 
   @Bean
+  @Primary
   SecurityService securityService(KoutaClient koutaClient, OrganisaatioClient organisaatioClient) {
     return new TestSecurityService(koutaClient, organisaatioClient);
+  }
+
+  @Bean(name = "mvcHandlerMappingIntrospector")
+  public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+    return new HandlerMappingIntrospector();
   }
 
   public static void main(String[] args) {
