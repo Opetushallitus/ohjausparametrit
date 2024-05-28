@@ -1,16 +1,24 @@
 package fi.oph.ohjausparametrit.controller;
 
-import com.google.gson.Gson;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
+import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.ParameterService;
 import fi.oph.ohjausparametrit.service.SecurityService;
+import fi.oph.ohjausparametrit.service.SiirtotiedostoService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
-import java.util.Arrays;
-import java.util.List;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -31,20 +39,25 @@ public class OhjausparametritController {
 
   private ParameterService parameterService;
   private SecurityService securityService;
-
+  private SiirtotiedostoService siirtotiedostoService;
   private KoutaClient koutaClient;
   private OrganisaatioClient organisaatioClient;
 
-  private Gson gson = new Gson();
+  private static String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+  private static ZoneId TIMEZONE = ZoneId.of("Europe/Helsinki");
+  private DateTimeFormatter dateTimeFormatter =
+      DateTimeFormatter.ofPattern(DATETIME_FORMAT).withZone(TIMEZONE);
 
   public OhjausparametritController(
       ParameterService parameterService,
       SecurityService securityService,
+      SiirtotiedostoService siirtotiedostoService,
       OhjausparametritAuditLogger auditLogger,
       OrganisaatioClient organisaatioClient,
       KoutaClient koutaClient) {
     this.parameterService = parameterService;
     this.securityService = securityService;
+    this.siirtotiedostoService = siirtotiedostoService;
     this.auditLogger = auditLogger;
     this.organisaatioClient = organisaatioClient;
     this.koutaClient = koutaClient;
@@ -91,6 +104,53 @@ public class OhjausparametritController {
     if (response == null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "target not found");
     return parameterService.get(target);
+  }
+
+  private Date parseDateTime(String dateTimeStr, String fieldName, ZonedDateTime defaultDateTime) {
+    try {
+      ZonedDateTime dateTime =
+          isBlank(dateTimeStr) ? null : ZonedDateTime.parse(dateTimeStr, dateTimeFormatter);
+      if (dateTime != null) {
+        return Date.from(dateTime.toInstant());
+      } else if (defaultDateTime != null) {
+        return Date.from(defaultDateTime.toInstant());
+      }
+      return null;
+    } catch (DateTimeParseException dtpe) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST,
+          String.format(
+              "Illegal value for '%s', allowed format is '%s'", fieldName, DATETIME_FORMAT));
+    }
+  }
+
+  @GetMapping(value = "siirtotiedosto", produces = "application/json; charset=utf-8")
+  public String doGet(
+      @RequestParam(required = false) String startDatetime,
+      @RequestParam(required = false) String endDatetime) {
+    Date start = parseDateTime(startDatetime, "startDateTime", null);
+    Date end = parseDateTime(endDatetime, "endDateTime", ZonedDateTime.now(TIMEZONE));
+    int partitionSize = siirtotiedostoService.getMaxItemcountInTransferFile();
+    int page = 0;
+    List<String> keys = new ArrayList<>();
+    int total = 0;
+    String operationId = UUID.randomUUID().toString();
+
+    List<JSONParameter> dbResults =
+        parameterService.getPartitionByModifyDatetime(start, end, partitionSize, page++);
+    while (!dbResults.isEmpty()) {
+      total += dbResults.size();
+      keys.add(siirtotiedostoService.createSiirtotiedosto(dbResults, operationId, page));
+      dbResults = parameterService.getPartitionByModifyDatetime(start, end, partitionSize, page++);
+    }
+
+    JsonObject result = new JsonObject();
+    JsonArray keyJson = new JsonArray();
+    keys.forEach(key -> keyJson.add(key));
+    result.add("keys", keyJson);
+    result.addProperty("total", total);
+    result.addProperty("success", true);
+    return result.toString();
   }
 
   @PostMapping(value = "/{target}")
