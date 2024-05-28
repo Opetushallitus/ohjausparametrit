@@ -18,10 +18,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -137,12 +134,13 @@ public class OhjausparametritController {
     int page = 0;
     List<String> keys = new ArrayList<>();
     int total = 0;
+    String operationId = UUID.randomUUID().toString();
 
     List<JSONParameter> dbResults =
         parameterService.getPartitionByModifyDatetime(start, end, partitionSize, page++);
     while (!dbResults.isEmpty()) {
       total += dbResults.size();
-      keys.add(siirtotiedostoService.createSiirtotiedosto(dbResults));
+      keys.add(siirtotiedostoService.createSiirtotiedosto(dbResults, operationId, page));
       dbResults = parameterService.getPartitionByModifyDatetime(start, end, partitionSize, page++);
     }
 

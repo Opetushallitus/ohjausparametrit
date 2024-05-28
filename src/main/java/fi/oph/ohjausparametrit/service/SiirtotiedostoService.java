@@ -30,7 +30,8 @@ public class SiirtotiedostoService {
             siirtotiedostoProperties.getS3bucketTargetRoleArn());
   }
 
-  public String createSiirtotiedosto(List<JSONParameter> data) {
+  public String createSiirtotiedosto(
+      List<JSONParameter> data, String operationId, int operationSubId) {
     try {
       JsonObject jsonObject = new JsonObject();
       data.forEach(item -> jsonObject.add(item.getTarget(), getAsJSON(item.getJsonValue())));
@@ -39,6 +40,8 @@ public class SiirtotiedostoService {
               "ohjausparametrit",
               "parameter",
               "",
+              operationId,
+              operationSubId,
               new ByteArrayInputStream(jsonObject.toString().getBytes()),
               2);
       return result.key;
