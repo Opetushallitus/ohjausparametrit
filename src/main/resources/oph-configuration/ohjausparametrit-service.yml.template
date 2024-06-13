@@ -32,7 +32,7 @@ ohjausparametrit:
   uses-ssl-proxy: true
 
 siirtotiedostot:
-  aws-region: {{aws-region}}
+  aws-region: {{aws_region}}
   s3-bucket-name: {{ovara_siirtotiedosto_s3_bucket}}
   s3-bucket-target-role-arn: {{ovara_siirtotiedosto_s3_target_role_arn}}
   max-itemcount-in-file: {{ohjausparametrit_max_itemcount_in_file}}
