@@ -2,6 +2,8 @@ package fi.oph.ohjausparametrit.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
+import fi.oph.ohjausparametrit.model.JSONParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,5 +38,11 @@ public class JsonUtil {
       logger.error(errorMessage, e);
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
     }
+  }
+
+  public static void toJson(JSONParameter parameter, JsonWriter writer) {
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.add(parameter.getTarget(), getAsJSON(parameter.getJsonValue()));
+    gson.toJson(jsonObject, writer);
   }
 }

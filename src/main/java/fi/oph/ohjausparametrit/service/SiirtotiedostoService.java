@@ -1,13 +1,12 @@
 package fi.oph.ohjausparametrit.service;
 
-import static fi.oph.ohjausparametrit.util.JsonUtil.getAsJSON;
-
-import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 import fi.oph.ohjausparametrit.configurations.properties.SiirtotiedostoProperties;
 import fi.oph.ohjausparametrit.model.JSONParameter;
+import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.vm.sade.valinta.dokumenttipalvelu.SiirtotiedostoPalvelu;
 import fi.vm.sade.valinta.dokumenttipalvelu.dto.ObjectMetadata;
-import java.io.ByteArrayInputStream;
+import java.io.*;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,21 +31,34 @@ public class SiirtotiedostoService {
 
   public String createSiirtotiedosto(
       List<JSONParameter> data, String operationId, int operationSubId) {
+    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+      try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream)) {
+        JsonWriter jsonWriter = new JsonWriter(outputStreamWriter);
+        jsonWriter.beginArray();
+        for (JSONParameter parameter : data) {
+          JsonUtil.toJson(parameter, jsonWriter);
+        }
+        jsonWriter.endArray();
+        jsonWriter.close();
+
+        try (ByteArrayInputStream inputStream =
+            new ByteArrayInputStream(outputStream.toByteArray())) {
+          return doCreateSiirtotiedosto(inputStream, operationId, operationSubId);
+        }
+      }
+    } catch (IOException ioe) {
+      throw new RuntimeException("JSONin muodostaminen epäonnistui;", ioe);
+    }
+  }
+
+  private String doCreateSiirtotiedosto(InputStream inputStream, String opId, int opSubId) {
     try {
-      JsonObject jsonObject = new JsonObject();
-      data.forEach(item -> jsonObject.add(item.getTarget(), getAsJSON(item.getJsonValue())));
       ObjectMetadata result =
           siirtotiedostoPalvelu.saveSiirtotiedosto(
-              "ohjausparametrit",
-              "parameter",
-              "",
-              operationId,
-              operationSubId,
-              new ByteArrayInputStream(jsonObject.toString().getBytes()),
-              2);
+              "ohjausparametrit", "parameter", "", opId, opSubId, inputStream, 2);
       return result.key;
     } catch (Exception e) {
-      logger.error("Failed to create siirtotiedosto; ", e);
+      logger.error("Siirtotiedoston luonti epäonnistui; ", e);
       throw new RuntimeException(e);
     }
   }
