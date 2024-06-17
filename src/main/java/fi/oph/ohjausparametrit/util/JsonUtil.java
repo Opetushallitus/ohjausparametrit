@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class JsonUtil {
 
   private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
@@ -40,9 +43,12 @@ public class JsonUtil {
     }
   }
 
-  public static void toJson(JSONParameter parameter, JsonWriter writer) {
+  public static void toSiirtotiedostoJson(JSONParameter parameter, JsonWriter writer, SimpleDateFormat simpleDateFormat) {
+    Date lastModified = parameter.getMuokattu();
     JsonObject jsonObject = new JsonObject();
-    jsonObject.add(parameter.getTarget(), getAsJSON(parameter.getJsonValue()));
+    jsonObject.addProperty("key", parameter.getTarget());
+    jsonObject.addProperty("lastModified", lastModified != null ? simpleDateFormat.format(lastModified) : null);
+    jsonObject.add("values", getAsJSON(parameter.getJsonValue()));
     gson.toJson(jsonObject, writer);
   }
 }

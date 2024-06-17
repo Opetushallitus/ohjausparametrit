@@ -1,12 +1,14 @@
 package fi.oph.ohjausparametrit.service;
 
 import com.google.gson.stream.JsonWriter;
+import fi.oph.ohjausparametrit.configurations.SiirtotiedostoConstants;
 import fi.oph.ohjausparametrit.configurations.properties.SiirtotiedostoProperties;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.vm.sade.valinta.dokumenttipalvelu.SiirtotiedostoPalvelu;
 import fi.vm.sade.valinta.dokumenttipalvelu.dto.ObjectMetadata;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +33,13 @@ public class SiirtotiedostoService {
 
   public String createSiirtotiedosto(
       List<JSONParameter> data, String operationId, int operationSubId) {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(SiirtotiedostoConstants.SIIRTOTIEDOSTO_DATETIME_FORMAT);
     try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream)) {
         JsonWriter jsonWriter = new JsonWriter(outputStreamWriter);
         jsonWriter.beginArray();
         for (JSONParameter parameter : data) {
-          JsonUtil.toJson(parameter, jsonWriter);
+          JsonUtil.toSiirtotiedostoJson(parameter, jsonWriter, simpleDateFormat);
         }
         jsonWriter.endArray();
         jsonWriter.close();
