@@ -33,7 +33,8 @@ public class SiirtotiedostoService {
 
   public String createSiirtotiedosto(
       List<JSONParameter> data, String operationId, int operationSubId) {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(SiirtotiedostoConstants.SIIRTOTIEDOSTO_DATETIME_FORMAT);
+    SimpleDateFormat simpleDateFormat =
+        new SimpleDateFormat(SiirtotiedostoConstants.SIIRTOTIEDOSTO_DATETIME_FORMAT);
     try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream)) {
         JsonWriter jsonWriter = new JsonWriter(outputStreamWriter);

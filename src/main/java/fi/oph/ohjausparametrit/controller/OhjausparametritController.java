@@ -16,7 +16,6 @@ import fi.oph.ohjausparametrit.service.SiirtotiedostoService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -120,7 +119,8 @@ public class OhjausparametritController {
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST,
           String.format(
-              "Illegal value for '%s', allowed format is '%s'", fieldName, SIIRTOTIEDOSTO_DATETIME_FORMAT));
+              "Illegal value for '%s', allowed format is '%s'",
+              fieldName, SIIRTOTIEDOSTO_DATETIME_FORMAT));
     }
   }
 
@@ -129,7 +129,8 @@ public class OhjausparametritController {
       @RequestParam(required = false) String startDatetime,
       @RequestParam(required = false) String endDatetime) {
     Date start = parseDateTime(startDatetime, "startDateTime", null);
-    Date end = parseDateTime(endDatetime, "endDateTime", ZonedDateTime.now(SIIRTOTIEDOSTO_TIMEZONE));
+    Date end =
+        parseDateTime(endDatetime, "endDateTime", ZonedDateTime.now(SIIRTOTIEDOSTO_TIMEZONE));
     int partitionSize = siirtotiedostoService.getMaxItemcountInTransferFile();
     int page = 0;
     List<String> keys = new ArrayList<>();
