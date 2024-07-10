@@ -5,7 +5,9 @@ import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
 import fi.oph.ohjausparametrit.configurations.ConfigEnums;
 import fi.oph.ohjausparametrit.configurations.properties.KoutaProperties;
 import fi.vm.sade.javautils.nio.cas.CasClient;
+import fi.vm.sade.javautils.nio.cas.CasClientBuilder;
 import fi.vm.sade.javautils.nio.cas.CasConfig;
+import fi.vm.sade.javautils.nio.cas.CasConfig.CasConfigBuilder;
 import fi.vm.sade.properties.OphProperties;
 import java.time.Duration;
 import org.asynchttpclient.Request;
@@ -37,19 +39,18 @@ public class KoutaClient {
     logger.info("CAS-URL: {}", ophProperties.url("cas.url"));
 
     CasConfig casConfig =
-        new CasConfig(
-            koutaProperties.getUsername(),
-            koutaProperties.getPassword(),
-            ophProperties.url("cas.url"),
-            koutaProperties.getService(),
-            ConfigEnums.CALLER_ID.value(),
-            ConfigEnums.CALLER_ID.value(),
-            koutaProperties.getSessionCookie(),
-            koutaProperties.getSecurityUriSuffix(),
-            null,
-            null);
+        new CasConfigBuilder(
+                koutaProperties.getUsername(),
+                koutaProperties.getPassword(),
+                ophProperties.url("cas.url"),
+                koutaProperties.getService(),
+                ConfigEnums.CALLER_ID.value(),
+                ConfigEnums.CALLER_ID.value(),
+                koutaProperties.getSecurityUriSuffix())
+            .setJsessionName(koutaProperties.getSessionCookie())
+            .build();
 
-    this.casClient = new CasClient(casConfig);
+    this.casClient = CasClientBuilder.build(casConfig);
 
     this.gson = new Gson();
   }
