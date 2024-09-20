@@ -1,4 +1,4 @@
-package fi.oph.ohjausparametrit.service;
+package fi.oph.ohjausparametrit.service.ovara;
 
 import com.google.gson.stream.JsonWriter;
 import fi.oph.ohjausparametrit.configurations.SiirtotiedostoConstants;
@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -65,6 +66,11 @@ public class SiirtotiedostoService {
       logger.error("Siirtotiedoston luonti epäonnistui; ", e);
       throw new RuntimeException(e);
     }
+  }
+
+  public String createNextSiirtotiedosto() {
+    logger.info("Creating siirtotiedosto by ajastus!");
+    return "jee " + siirtotiedostoProperties.toString();
   }
 
   public int getMaxItemcountInTransferFile() {

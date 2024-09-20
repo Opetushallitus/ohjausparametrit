@@ -12,7 +12,7 @@ import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.ParameterService;
 import fi.oph.ohjausparametrit.service.SecurityService;
-import fi.oph.ohjausparametrit.service.SiirtotiedostoService;
+import fi.oph.ohjausparametrit.service.ovara.SiirtotiedostoService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
 import io.swagger.annotations.Api;
