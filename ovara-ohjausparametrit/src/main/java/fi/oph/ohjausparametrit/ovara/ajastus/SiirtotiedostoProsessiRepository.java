@@ -37,16 +37,17 @@ where id = :id;
 
 @Repository
 @Transactional
-public interface SiirtotiedostoProsessiRepository extends CrudRepository<SiirtotiedostoProsessi, String> {
+public interface SiirtotiedostoProsessiRepository extends CrudRepository<SiirtotiedostoProsessi, Integer> {
 
-    @Query(value = "SELECT id, execution_uuid, window_start, window_end, run_start, run_end, info, success, error_message from siirtotiedosto where success order by id desc limit 1", nativeQuery = true)
+    @Query(value = "SELECT execution_uuid, window_start, window_end, run_start, run_end, info, success, error_message from siirtotiedosto where success order by run_end desc limit 1", nativeQuery = true)
     SiirtotiedostoProsessi findLatestSuccessful();
 
-    @Modifying
-    @Query(value = "INSERT into siirtotiedosto (id, execution_uuid, window_start, window_end, run_start, run_end, info, success, error_message)\n" +
-            "values (nextval('siirtotiedosto_id_seq'), ?1::uuid, ?2, now(), now(), null,\n" +
+    @Query(value = "INSERT into siirtotiedosto (execution_uuid, window_start, window_end, run_start, run_end, info, success, error_message)\n" +
+            "values (?1::uuid, ?2, now(), now(), null,\n" +
             "        '{}'::jsonb, null, null) returning id, execution_uuid, window_start, window_end, info, success, error_message", nativeQuery = true)
-    SiirtotiedostoProsessi insertNew(UUID uuid, Date windowStart);
+    void insertNew(String uuid, Date windowStart);
+
+    //void save(SiirtotiedostoProsessi sp);
 
     @Modifying
     @Query(value = "UPDATE siirtotiedosto\n" +

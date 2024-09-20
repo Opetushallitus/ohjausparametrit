@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +19,6 @@ public class SiirtotiedostoService {
   private static final Logger logger = LoggerFactory.getLogger(SiirtotiedostoService.class);
 
   private final SiirtotiedostoProperties siirtotiedostoProperties;
-
   private final SiirtotiedostoPalvelu siirtotiedostoPalvelu;
 
   public SiirtotiedostoService(SiirtotiedostoProperties siirtotiedostoProperties) {
@@ -66,11 +64,6 @@ public class SiirtotiedostoService {
       logger.error("Siirtotiedoston luonti epäonnistui; ", e);
       throw new RuntimeException(e);
     }
-  }
-
-  public String createNextSiirtotiedosto() {
-    logger.info("Creating siirtotiedosto by ajastus!");
-    return "jee " + siirtotiedostoProperties.toString();
   }
 
   public int getMaxItemcountInTransferFile() {

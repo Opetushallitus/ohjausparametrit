@@ -5,20 +5,15 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "SIIRTOTIEDOSTO", schema = "PUBLIC")
 public class SiirtotiedostoProsessi {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
     @Column(name = "execution_uuid")
     private String executionUuid;
 
@@ -43,6 +38,20 @@ public class SiirtotiedostoProsessi {
 
     @Column(name = "error_message")
     private String errorMessage;
+
+    public SiirtotiedostoProsessi() {
+    };
+
+    public SiirtotiedostoProsessi(String executionUuid, OffsetDateTime windowStart, OffsetDateTime windodwEnd, OffsetDateTime runStart, OffsetDateTime runEnd, JsonNode info, Boolean success, String errorMessage) {
+        this.executionUuid = executionUuid;
+        this.windowStart = windowStart;
+        this.windowEnd = windodwEnd;
+        this.runStart = runStart;
+        this.runEnd = runEnd;
+        this.info = info;
+        this.success = success;
+        this.errorMessage = errorMessage;
+    }
 
     public String getErrorMessage() {
         return errorMessage;
@@ -92,14 +101,6 @@ public class SiirtotiedostoProsessi {
         this.executionUuid = executionUuid;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public OffsetDateTime getRunEnd() {
         return runEnd;
     }
@@ -116,8 +117,29 @@ public class SiirtotiedostoProsessi {
         this.runStart = runStart;
     }
 
+    public SiirtotiedostoProsessi createNewProcessBasedOnThis() {
+        return new SiirtotiedostoProsessi(
+                UUID.randomUUID().toString(),
+                this.windowEnd,
+                OffsetDateTime.now(),
+                OffsetDateTime.now(),
+                null,
+                null,
+                false,
+                "");
+    }
+
     @Override
     public String toString() {
-        return String.format("Window %s - %s, success %s", windowStart, windowEnd, success);
+        return "SiirtotiedostoProsessi{" +
+                "executionUuid=" + executionUuid +
+                ", windowStart=" + windowStart +
+                ", windowEnd=" + windowEnd +
+                ", runStart=" + runStart +
+                ", runEnd=" + runEnd +
+                ", info=" + info +
+                ", success=" + success +
+                ", errorMessage='" + errorMessage + '\'' +
+                '}';
     }
 }

@@ -10,7 +10,7 @@ import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.model.JSONParameter;
-import fi.oph.ohjausparametrit.service.ParameterService;
+import fi.oph.ohjausparametrit.service.common.ParameterService;
 import fi.oph.ohjausparametrit.service.SecurityService;
 import fi.oph.ohjausparametrit.service.ovara.SiirtotiedostoService;
 import fi.oph.ohjausparametrit.util.JsonUtil;

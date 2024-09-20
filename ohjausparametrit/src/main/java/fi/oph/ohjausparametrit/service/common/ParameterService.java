@@ -1,4 +1,4 @@
-package fi.oph.ohjausparametrit.service;
+package fi.oph.ohjausparametrit.service.common;
 
 import static fi.oph.ohjausparametrit.util.JsonUtil.getAsJSON;
 
