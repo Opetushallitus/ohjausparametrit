@@ -6,13 +6,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {
-        "fi.oph.ohjausparametrit.audit",
-        "fi.oph.ohjausparametrit.service.common",
-        "fi.oph.ohjausparametrit.service.ovara",
-        "fi.oph.ohjausparametrit.configurations.properties",
-        "fi.oph.ohjausparametrit.ovara.ajastus",
-})
+@SpringBootApplication(
+    scanBasePackages = {
+      "fi.oph.ohjausparametrit.audit",
+      "fi.oph.ohjausparametrit.service.common",
+      "fi.oph.ohjausparametrit.service.ovara",
+      "fi.oph.ohjausparametrit.configurations.properties",
+      "fi.oph.ohjausparametrit.ovara.ajastus",
+    })
 public class OvaraApp implements CommandLineRunner {
   final SiirtotiedostoAjastusService siirtotiedostoAjastusService;
 

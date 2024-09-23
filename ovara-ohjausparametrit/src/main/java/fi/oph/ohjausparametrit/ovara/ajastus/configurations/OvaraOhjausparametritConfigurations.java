@@ -13,9 +13,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan({"fi.oph.ohjausparametrit.model", "fi.oph.ohjausparametrit.ovara.ajastus"})
 @EnableTransactionManagement
 public class OvaraOhjausparametritConfigurations {
-    @Bean
-    public AsyncHttpClient commonHttpClient() {
-        AsyncHttpClient client = Dsl.asyncHttpClient();
-        return client;
-    }
+  @Bean
+  public AsyncHttpClient commonHttpClient() {
+    AsyncHttpClient client = Dsl.asyncHttpClient();
+    return client;
+  }
 }
