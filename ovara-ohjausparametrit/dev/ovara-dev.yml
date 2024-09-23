@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5489/ohjausparametrit?ApplicationName=ohjausparametrit-service
+    username: oph
+    password: oph
+
+kouta:
+  username: DUMMY
+  password: DUMMY
+
+siirtotiedostot:
+  aws-region: eu-west-1
+  s3-bucket-name: testi-siirtotiedostot
+  s3-bucket-target-role-arn: arn:aws:iam::xxxxxxxxxxxxx:role/testi-s3-access-role
+  max-itemcount-in-file: 20000

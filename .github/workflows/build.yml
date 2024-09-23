@@ -70,7 +70,7 @@ jobs:
           source ci-tools/common/setup-tools.sh
           export ARTIFACT_NAME="ohjausparametrit"
           mv ohjausparametrit/target/ohjausparametrit-exec.jar $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}.jar
-          cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
+          cp -vr ohjausparametrit/src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
           export BASE_IMAGE="baseimage-fatjar-openjdk11:master"
           ./ci-tools/common/pull-image.sh
           ./ci-tools/github-build/build-fatjar.sh $ARTIFACT_NAME
@@ -82,7 +82,7 @@ jobs:
           source ci-tools/common/setup-tools.sh
           export ARTIFACT_NAME="ovara-ohjausparametrit"
           mv ovara-ohjausparametrit/target/ovara-ohjausparametrit.jar $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}.jar
-          cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
+          cp -vr ovara-ohjausparametrit/src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
           export BASE_IMAGE="baseimage-fatjar-openjdk11:master"
           ./ci-tools/common/pull-image.sh
           ./ci-tools/github-build/build-fatjar.sh $ARTIFACT_NAME
