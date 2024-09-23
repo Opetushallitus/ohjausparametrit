@@ -8,8 +8,6 @@
   <packaging>jar</packaging>
 
   <name>ohjausparametrit</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
 
   <parent>
     <groupId>fi.oph.ohjausparametrit</groupId>
@@ -311,6 +309,14 @@ buildTtime=${maven.build.timestamp}
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>repackage</id>
+            <configuration>
+              <classifier>exec</classifier>
+            </configuration>
+          </execution>
+        </executions>
         <version>2.4.5</version>
       </plugin>
       <plugin>
