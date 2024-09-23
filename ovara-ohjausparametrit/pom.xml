@@ -13,14 +13,14 @@
     <dependency>
       <groupId>fi.oph.ohjausparametrit</groupId>
       <artifactId>ohjausparametrit</artifactId>
-      <version>10.0-SNAPSHOT</version>
+      <version>11.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
   <parent>
     <groupId>fi.oph.ohjausparametrit</groupId>
     <artifactId>ohjausparametrit-parent</artifactId>
-    <version>10.0-SNAPSHOT</version>
+    <version>11.0-SNAPSHOT</version>
   </parent>
 
   <properties>
