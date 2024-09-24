@@ -78,8 +78,6 @@ jobs:
           
           ./ci-tools/common/clean-docker-build-dir.sh
           
-          git clone https://github.com/Opetushallitus/ci-tools.git
-          source ci-tools/common/setup-tools.sh
           export ARTIFACT_NAME="ovara-ohjausparametrit"
           mv ovara-ohjausparametrit/target/ovara-ohjausparametrit.jar $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}.jar
           cp -vr ovara-ohjausparametrit/src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
