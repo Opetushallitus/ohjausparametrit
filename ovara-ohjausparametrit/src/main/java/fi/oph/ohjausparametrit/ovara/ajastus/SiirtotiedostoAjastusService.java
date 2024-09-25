@@ -82,7 +82,7 @@ public class SiirtotiedostoAjastusService {
       infoMap.put("ohjausparametrit", total);
       JsonNode jsonNode = mapper.valueToTree(infoMap);
       uusi.setInfo(jsonNode);
-      logger.info("{} Onnistui! Persistoidaan prosessi.", uusi.getExecutionUuid());
+      logger.info("{} Onnistui! Persistoidaan prosessi {}.", uusi.getExecutionUuid(), uusi);
       uusi.setSuccess(true);
       uusi.setRunEnd(OffsetDateTime.now());
       siirtotiedostoProsessiRepository.save(uusi);
