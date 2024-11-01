@@ -1,12 +1,13 @@
 package fi.oph.ohjausparametrit.ovara.ajastus;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -28,8 +29,8 @@ public class SiirtotiedostoProsessi {
   @Column(name = "run_end")
   private OffsetDateTime runEnd;
 
-  @Column(name = "info")
-  @Type(type = "com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType")
+  @Type(JsonType.class)
+  @Column(name = "info", columnDefinition = "jsonb")
   private JsonNode info;
 
   @Column(name = "success")

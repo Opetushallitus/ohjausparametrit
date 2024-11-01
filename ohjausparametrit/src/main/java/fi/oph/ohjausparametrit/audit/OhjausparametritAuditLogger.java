@@ -2,9 +2,9 @@ package fi.oph.ohjausparametrit.audit;
 
 import fi.oph.ohjausparametrit.configurations.ConfigEnums;
 import fi.vm.sade.auditlog.*;
+import jakarta.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import javax.servlet.http.HttpServletRequest;
 import org.ietf.jgss.GSSException;
 import org.ietf.jgss.Oid;
 import org.slf4j.LoggerFactory;

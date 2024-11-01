@@ -6,7 +6,7 @@ spring:
       write-dates-as-timestamps: true
   datasource:
     driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:postgresql:11.10:///
+    url: jdbc:tc:postgresql:15.3:///
   autoconfigure:
     exclude: org.spring
   cache:
@@ -22,12 +22,15 @@ spring:
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
       ddl-auto: validate
-      use-new-id-generator-mappings: true
     show-sql: false
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       # https://hibernate.atlassian.net/browse/HHH-12368
       hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.id.db_structure_naming_strategy: single
+      hibernate.id.new_generator_mappings: true
+      hibernate.integration.envers.enabled: true
+      org.hibernate.envers.store_data_at_delete: true
 host:
   host-cas: localhost
   host-virkailija: localhost

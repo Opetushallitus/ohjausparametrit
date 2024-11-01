@@ -5,14 +5,14 @@ import fi.oph.ohjausparametrit.configurations.security.OphSessionMappingStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.session.SessionRepository;
+import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 
 @Configuration
 public class SessionMappingStorageConfiguration {
 
   @Bean
   public OphSessionMappingStorage sessionMappingStorage(
-      JdbcTemplate jdbcTemplate, SessionRepository sessionRepository) {
+      JdbcTemplate jdbcTemplate, JdbcIndexedSessionRepository sessionRepository) {
     return new JdbcSessionMappingStorage(jdbcTemplate, sessionRepository);
   }
 }
