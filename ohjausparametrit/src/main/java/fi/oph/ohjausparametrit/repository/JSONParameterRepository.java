@@ -5,13 +5,16 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface JSONParameterRepository extends PagingAndSortingRepository<JSONParameter, String> {
+public interface JSONParameterRepository
+    extends CrudRepository<JSONParameter, String>,
+        PagingAndSortingRepository<JSONParameter, String> {
 
   JSONParameter findByTarget(String target);
 
