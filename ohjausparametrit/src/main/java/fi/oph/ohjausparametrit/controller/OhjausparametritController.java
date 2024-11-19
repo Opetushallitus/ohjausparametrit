@@ -72,7 +72,7 @@ public class OhjausparametritController {
   @GetMapping(value = "/authorize/{target}")
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA', 'APP_KOUTA_HAKU_CRUD', 'APP_KOUTA_HAKU_READ_UPDATE')")
-  public String doAuthorizeForTarget(@PathVariable String target) {
+  public String doAuthorizeForTarget(@PathVariable("target") String target) {
     if (!securityService.isAuthorizedToModifyHaku(
         target,
         Arrays.asList(
@@ -98,7 +98,7 @@ public class OhjausparametritController {
   }
 
   @GetMapping(value = "/{target}", produces = "application/json; charset=utf-8")
-  public String doGet(@PathVariable String target) {
+  public String doGet(@PathVariable("target") String target) {
     String response = parameterService.get(target);
     if (response == null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "target not found");
@@ -126,8 +126,8 @@ public class OhjausparametritController {
 
   @GetMapping(value = "siirtotiedosto", produces = "application/json; charset=utf-8")
   public String doGet(
-      @RequestParam(required = false) String startDatetime,
-      @RequestParam(required = false) String endDatetime) {
+      @RequestParam(name = "startDatetime", required = false) String startDatetime,
+      @RequestParam(name = "endDatetime", required = false) String endDatetime) {
     Date start = parseDateTime(startDatetime, "startDateTime", null);
     Date end =
         parseDateTime(endDatetime, "endDateTime", ZonedDateTime.now(SIIRTOTIEDOSTO_TIMEZONE));
@@ -157,7 +157,7 @@ public class OhjausparametritController {
   @PostMapping(value = "/{target}")
   @PreAuthorize(
       "hasAnyRole('ROLE_APP_TARJONTA_READ_UPDATE', 'ROLE_APP_TARJONTA_CRUD', 'ROLE_APP_KOUTA_OPHPAAKAYTTAJA', 'APP_KOUTA_HAKU_CRUD', 'APP_KOUTA_HAKU_READ_UPDATE')")
-  public void doPost(@PathVariable String target, @RequestBody String value) {
+  public void doPost(@PathVariable("target") String target, @RequestBody String value) {
     logger.info(
         "Saving ohjausparmetrit for target {} by {} [ {}",
         target,
