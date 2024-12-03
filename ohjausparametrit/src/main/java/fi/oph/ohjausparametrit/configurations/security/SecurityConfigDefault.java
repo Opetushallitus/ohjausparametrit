@@ -1,6 +1,5 @@
 package fi.oph.ohjausparametrit.configurations.security;
 
-import fi.oph.ohjausparametrit.configurations.ConfigEnums;
 import fi.oph.ohjausparametrit.configurations.properties.CasProperties;
 import fi.vm.sade.java_utils.security.OpintopolkuCasAuthenticationFilter;
 import fi.vm.sade.javautils.kayttooikeusclient.OphUserDetailsServiceImpl;
@@ -69,8 +68,7 @@ public class SecurityConfigDefault {
     String host =
         environment.getProperty(
             "host.host-alb", "https://" + environment.getRequiredProperty("host.host-virkailija"));
-    casAuthenticationProvider.setUserDetailsService(
-        new OphUserDetailsServiceImpl(host, ConfigEnums.CALLER_ID.value()));
+    casAuthenticationProvider.setAuthenticationUserDetailsService(new OphUserDetailsServiceImpl());
     casAuthenticationProvider.setServiceProperties(serviceProperties());
     casAuthenticationProvider.setTicketValidator(ticketValidator());
     casAuthenticationProvider.setKey(casProperties.getKey());
