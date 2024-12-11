@@ -18,7 +18,7 @@ import fi.oph.ohjausparametrit.service.common.ParameterService;
 import fi.oph.ohjausparametrit.service.ovara.SiirtotiedostoService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -33,7 +33,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/api/v1/rest/parametri")
-@Api(tags = "Ohjausparametreihin liittyvät operaatiot")
+@Tag(name = "Ohjausparametreihin liittyvät operaatiot")
 @Transactional
 public class OhjausparametritController {
 

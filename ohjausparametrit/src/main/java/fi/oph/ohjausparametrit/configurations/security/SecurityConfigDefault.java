@@ -138,8 +138,6 @@ public class SecurityConfigDefault {
         .authorizeHttpRequests(
             (authorizeHttpRequests) ->
                 authorizeHttpRequests
-                    .requestMatchers("/buildversion.txt")
-                    .permitAll()
                     .requestMatchers("/actuator/health")
                     .permitAll()
                     .requestMatchers("/swagger-ui/**")
@@ -148,9 +146,9 @@ public class SecurityConfigDefault {
                     .permitAll()
                     .requestMatchers("/swagger**")
                     .permitAll()
-                    .requestMatchers("/webjars/springfox-swagger-ui/**")
-                    .permitAll()
-                    .requestMatchers("/v2/api-docs")
+                        .requestMatchers("/v3/api-docs")
+                        .permitAll()
+                    .requestMatchers("/v3/api-docs/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/rest/**")
                     .permitAll()
