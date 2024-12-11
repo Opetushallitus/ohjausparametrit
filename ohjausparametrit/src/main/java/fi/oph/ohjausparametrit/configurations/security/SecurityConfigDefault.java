@@ -23,7 +23,9 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 @Profile("!dev")
 @Configuration
@@ -127,31 +129,37 @@ public class SecurityConfigDefault {
   @Bean
   public SecurityFilterChain filterChain(
       HttpSecurity http, CasAuthenticationFilter casAuthenticationFilter) throws Exception {
-    http.headers(headers -> headers.disable())
-        .csrf(csrf -> csrf.disable())
-        .authorizeRequests()
-        .requestMatchers("/buildversion.txt")
-        .permitAll()
-        .requestMatchers("/actuator/health")
-        .permitAll()
-        .requestMatchers("/swagger-ui/**")
-        .permitAll()
-        .requestMatchers("/swagger-resources/**")
-        .permitAll()
-        .requestMatchers("/swagger**")
-        .permitAll()
-        .requestMatchers("/webjars/springfox-swagger-ui/**")
-        .permitAll()
-        .requestMatchers("/v2/api-docs")
-        .permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/v1/rest/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
+
+    HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+    requestCache.setMatchingRequestParameterName(null);
+
+    http.headers(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            (authorizeHttpRequests) ->
+                authorizeHttpRequests
+                    .requestMatchers("/buildversion.txt")
+                    .permitAll()
+                    .requestMatchers("/actuator/health")
+                    .permitAll()
+                    .requestMatchers("/swagger-ui/**")
+                    .permitAll()
+                    .requestMatchers("/swagger-resources/**")
+                    .permitAll()
+                    .requestMatchers("/swagger**")
+                    .permitAll()
+                    .requestMatchers("/webjars/springfox-swagger-ui/**")
+                    .permitAll()
+                    .requestMatchers("/v2/api-docs")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/rest/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .addFilter(casAuthenticationFilter)
         .exceptionHandling(eh -> eh.authenticationEntryPoint(casAuthenticationEntryPoint()))
-        .addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class);
+        .addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
+        .requestCache(cache -> cache.requestCache(requestCache));
 
     return http.build();
   }

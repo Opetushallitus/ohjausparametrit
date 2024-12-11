@@ -9,6 +9,9 @@ import com.google.gson.JsonObject;
 import fi.oph.ohjausparametrit.audit.OhjausparametritAuditLogger;
 import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
+import fi.oph.ohjausparametrit.exception.BadRequestException;
+import fi.oph.ohjausparametrit.exception.ForbiddenException;
+import fi.oph.ohjausparametrit.exception.NotFoundException;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.SecurityService;
 import fi.oph.ohjausparametrit.service.common.ParameterService;
@@ -77,7 +80,7 @@ public class OhjausparametritController {
         target,
         Arrays.asList(
             "ROLE_APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_READ_UPDATE")))
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+      throw new ForbiddenException();
     return SecurityUtil.getCurrentUserName();
   }
 
@@ -100,8 +103,7 @@ public class OhjausparametritController {
   @GetMapping(value = "/{target}", produces = "application/json; charset=utf-8")
   public String doGet(@PathVariable("target") String target) {
     String response = parameterService.get(target);
-    if (response == null)
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "target not found");
+    if (response == null) throw new NotFoundException("target not found");
     return parameterService.get(target);
   }
 
@@ -116,8 +118,7 @@ public class OhjausparametritController {
       }
       return null;
     } catch (DateTimeParseException dtpe) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST,
+      throw new BadRequestException(
           String.format(
               "Illegal value for '%s', allowed format is '%s'",
               fieldName, SIIRTOTIEDOSTO_DATETIME_FORMAT));
@@ -168,7 +169,7 @@ public class OhjausparametritController {
         target,
         Arrays.asList(
             "ROLE_APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_READ_UPDATE")))
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+      throw new ForbiddenException();
     if (value == null || value.trim().isEmpty()) {
       parameterService.setParameters(target, null);
     } else {
