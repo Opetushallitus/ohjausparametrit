@@ -7,6 +7,8 @@ import fi.oph.ohjausparametrit.TestApplication;
 import fi.oph.ohjausparametrit.client.KoutaClient;
 import fi.oph.ohjausparametrit.client.OrganisaatioClient;
 import fi.oph.ohjausparametrit.client.dto.KoutaHaku;
+import fi.oph.ohjausparametrit.exception.ForbiddenException;
+import fi.oph.ohjausparametrit.exception.NotFoundException;
 import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +24,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.server.ResponseStatusException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -57,13 +58,11 @@ public class OhjausparametritControllerTest {
     String value = "{ \"PARAM\": { \"foo\": true } }";
 
     // Find
-    Exception exception =
-        assertThrows(
-            ResponseStatusException.class,
-            () -> {
-              op.doGet(param);
-            });
-    assertEquals("404 NOT_FOUND \"target not found\"", exception.getMessage());
+    assertThrows(
+        NotFoundException.class,
+        () -> {
+          op.doGet(param);
+        });
 
     // Save
     op.doPost(target, value);
@@ -88,13 +87,11 @@ public class OhjausparametritControllerTest {
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.00000000001"));
-    Exception exception =
-        assertThrows(
-            ResponseStatusException.class,
-            () -> {
-              op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
-            });
-    assertEquals("403 FORBIDDEN", exception.getMessage());
+    assertThrows(
+        ForbiddenException.class,
+        () -> {
+          op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
+        });
   }
 
   @Test
@@ -120,13 +117,11 @@ public class OhjausparametritControllerTest {
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.00000000001"));
-    Exception exception =
-        assertThrows(
-            ResponseStatusException.class,
-            () -> {
-              op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
-            });
-    assertEquals("403 FORBIDDEN", exception.getMessage());
+    assertThrows(
+        ForbiddenException.class,
+        () -> {
+          op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
+        });
   }
 
   @Test
