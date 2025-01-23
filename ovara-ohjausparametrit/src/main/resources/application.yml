@@ -13,3 +13,9 @@ spring:
       hibernate.id.new_generator_mappings: true
       hibernate.integration.envers.enabled: true
       org.hibernate.envers.store_data_at_delete: true
+  flyway:
+    enabled: true
+    table: schema_version
+    out-of-order: true
+    # Only for initial production release, set false afterwards
+    baseline-on-migrate: false
