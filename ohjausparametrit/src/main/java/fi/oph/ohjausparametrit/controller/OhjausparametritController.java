@@ -18,6 +18,7 @@ import fi.oph.ohjausparametrit.service.common.ParameterService;
 import fi.oph.ohjausparametrit.service.ovara.SiirtotiedostoService;
 import fi.oph.ohjausparametrit.util.JsonUtil;
 import fi.oph.ohjausparametrit.util.SecurityUtil;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -127,8 +128,10 @@ public class OhjausparametritController {
 
   @GetMapping(value = "siirtotiedosto", produces = "application/json; charset=utf-8")
   public String doGet(
-      @RequestParam(name = "startDatetime", required = false) String startDatetime,
-      @RequestParam(name = "endDatetime", required = false) String endDatetime) {
+          @Parameter(description = "Alkuaika", example = "2024-08-01T00:00:00")
+            @RequestParam(name = "startDatetime", required = false) String startDatetime,
+          @Parameter(description = "Loppuaika", example = "2024-11-13T00:00:00")
+            @RequestParam(name = "endDatetime", required = false) String endDatetime) {
     Date start = parseDateTime(startDatetime, "startDateTime", null);
     Date end =
         parseDateTime(endDatetime, "endDateTime", ZonedDateTime.now(SIIRTOTIEDOSTO_TIMEZONE));
