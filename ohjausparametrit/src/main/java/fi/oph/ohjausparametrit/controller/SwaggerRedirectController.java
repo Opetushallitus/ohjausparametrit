@@ -5,7 +5,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class StaticController implements WebMvcConfigurer {
+public class SwaggerRedirectController implements WebMvcConfigurer {
 
   @Override
   public void addViewControllers(final ViewControllerRegistry registry) {
