@@ -29,7 +29,7 @@ mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.config.additional-l
 ```
 tai 
 ```
-java -Dspring.config.additional-location=$(pwd)/dev/dev.yml -Dlogging.config=file://$(pwd)/dev/logback.xml -jar target/ohjausparametrit.jar
+java -Dspring.config.additional-location=$(pwd)/dev/dev.yml -Dlogging.config=file://$(pwd)/dev/logback.xml -jar ohjausparametrit/target/ohjausparametrit-exec.jar
 ```
 
 ### Käynnistys Intellij IDEA:ssa
