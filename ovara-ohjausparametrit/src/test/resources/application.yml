@@ -6,7 +6,7 @@ spring:
       write-dates-as-timestamps: true
   datasource:
     driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:postgresql:11.10:///
+    url: jdbc:tc:postgresql:15.3:///
   autoconfigure:
     exclude: org.spring
   cache:
