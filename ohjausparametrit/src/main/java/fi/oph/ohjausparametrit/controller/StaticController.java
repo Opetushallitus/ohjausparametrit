@@ -1,16 +1,15 @@
 package fi.oph.ohjausparametrit.controller;
 
-import io.swagger.v3.oas.annotations.Hidden;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@RestController
-@Hidden
-@RequestMapping("/")
-public class StaticController {
-  @GetMapping({"/swagger", "/swagger/**"})
-  public String swagger() {
-    return "redirect:/swagger-ui/index.html";
+@Configuration
+public class StaticController implements WebMvcConfigurer {
+
+  @Override
+  public void addViewControllers(final ViewControllerRegistry registry) {
+    registry.addRedirectViewController("/swagger/**", "/swagger-ui/index.html");
+    registry.addRedirectViewController("/swagger", "/swagger-ui/index.html");
   }
 }
