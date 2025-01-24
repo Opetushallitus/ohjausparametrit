@@ -128,10 +128,12 @@ public class OhjausparametritController {
 
   @GetMapping(value = "siirtotiedosto", produces = "application/json; charset=utf-8")
   public String doGet(
-          @Parameter(description = "Alkuaika", example = "2024-08-01T00:00:00")
-            @RequestParam(name = "startDatetime", required = false) String startDatetime,
-          @Parameter(description = "Loppuaika", example = "2024-11-13T00:00:00")
-            @RequestParam(name = "endDatetime", required = false) String endDatetime) {
+      @Parameter(description = "Alkuaika", example = "2024-08-01T00:00:00")
+          @RequestParam(name = "startDatetime", required = false)
+          String startDatetime,
+      @Parameter(description = "Loppuaika", example = "2024-11-13T00:00:00")
+          @RequestParam(name = "endDatetime", required = false)
+          String endDatetime) {
     Date start = parseDateTime(startDatetime, "startDateTime", null);
     Date end =
         parseDateTime(endDatetime, "endDateTime", ZonedDateTime.now(SIIRTOTIEDOSTO_TIMEZONE));
