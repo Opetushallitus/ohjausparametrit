@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <version>3.4.3</version>
     </parent>
 
     <groupId>fi.oph.ohjausparametrit</groupId>
@@ -29,6 +29,8 @@
         <buildversion_prefix/>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <sonar.coverage.jacoco.xmlReportPaths>**/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <netty.version>4.1.118.Final</netty.version>
+        <log4j.version>2.24.3</log4j.version>
     </properties>
 
     <dependencyManagement>
@@ -36,47 +38,17 @@
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>2.6.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-util</artifactId>
-                <version>10.0.27</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-juli</artifactId>
-                <version>10.0.27</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-jni</artifactId>
-                <version>10.0.27</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-coyote</artifactId>
-                <version>10.1.25</version>
+                <version>2.8.5</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.26.0</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-common</artifactId>
-                <version>4.1.115.Final</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.xml</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>2.1</version>
+                <version>1.27.1</version>
             </dependency>
             <dependency>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-database-postgresql</artifactId>
-                <version>10.20.1</version>
+                <version>11.3.3</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -86,12 +58,12 @@
             <dependency>
                 <groupId>io.hypersistence</groupId>
                 <artifactId>hypersistence-utils-hibernate-63</artifactId>
-                <version>3.8.3</version>
+                <version>3.9.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.13</version>
+                <version>4.5.14</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
@@ -101,27 +73,27 @@
             <dependency>
                 <groupId>net.java.dev.jna</groupId>
                 <artifactId>jna</artifactId>
-                <version>5.8.0</version>
+                <version>5.16.0</version>
             </dependency>
             <dependency>
                 <groupId>fi.vm.sade.java-utils</groupId>
                 <artifactId>java-cas</artifactId>
-                <version>1.2.1-SNAPSHOT</version>
+                <version>1.2.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.14.0</version>
+                <version>2.18.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-to-slf4j</artifactId>
-                <version>2.17.0</version>
+                <version>${log4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
-                <version>2.17.0</version>
+                <version>${log4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>fi.vm.sade.java-utils</groupId>
@@ -131,7 +103,7 @@
             <dependency>
                 <groupId>fi.vm.sade.java-utils</groupId>
                 <artifactId>opintopolku-user-details-service</artifactId>
-                <version>0.5.1-SNAPSHOT</version>
+                <version>0.5.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>fi.vm.sade.dokumenttipalvelu</groupId>
@@ -141,7 +113,7 @@
             <dependency>
                 <groupId>com.github.kagkarlsson</groupId>
                 <artifactId>db-scheduler</artifactId>
-                <version>10.2</version>
+                <version>15.3.0</version>
             </dependency>
             <dependency>
                 <groupId>javax.activation</groupId>
@@ -152,7 +124,7 @@
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>1.20.3</version>
+                <version>1.20.5</version>
                 <scope>runtime</scope>
             </dependency>
 
@@ -164,33 +136,33 @@
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
-                <version>2.8.9</version>
+                <version>2.12.1</version>
                 <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>com.vladmihalcea</groupId>
                 <artifactId>hibernate-types-52</artifactId>
-                <version>2.10.4</version>
+                <version>2.12.1</version>
             </dependency>
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.7.4</version>
+                <version>42.7.5</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback.access</groupId>
-                <artifactId>tomcat</artifactId>
-                <version>2.0.3</version>
+                <artifactId>logback-access-tomcat</artifactId>
+                <version>2.0.6</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-servlet-api</artifactId>
-                <version>10.1.31</version>
+                <version>11.0.4</version>
             </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
-                <version>2.2</version>
+                <version>3.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -198,6 +170,23 @@
                 <artifactId>junit</artifactId>
                 <version>4.13.2</version>
                 <scope>test</scope>
+            </dependency>
+
+            <!-- transitiiviset depsut -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-common</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>26.0.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -237,10 +226,6 @@
             <id>oph-sade-artifactory</id>
             <name>oph-sade-artifactory-releases</name>
             <url>https://artifactory.opintopolku.fi/artifactory/libs-3rd-party</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>smartics</id>
-            <url>https://www.smartics.eu/nexus/content/groups/public-group</url>
         </pluginRepository>
     </pluginRepositories>
 
