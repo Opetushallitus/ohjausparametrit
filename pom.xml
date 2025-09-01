@@ -76,9 +76,9 @@
                 <version>5.16.0</version>
             </dependency>
             <dependency>
-                <groupId>fi.vm.sade.java-utils</groupId>
+                <groupId>opiskelijavalinnat-utils.java-utils</groupId>
                 <artifactId>java-cas</artifactId>
-                <version>1.2.2-SNAPSHOT</version>
+                <version>1.2.4-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
