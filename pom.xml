@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.5.5</version>
     </parent>
 
     <groupId>fi.oph.ohjausparametrit</groupId>
@@ -108,7 +108,13 @@
             <dependency>
                 <groupId>fi.vm.sade.dokumenttipalvelu</groupId>
                 <artifactId>dokumenttipalvelu</artifactId>
-                <version>6.12-SNAPSHOT</version>
+                <version>6.15-SNAPSHOT</version>
+            </dependency>
+            <!-- dokumenttipalvelun aws sdk:sta tulee haavoittuvuuden sisältävä vanhempi versio -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http2</artifactId>
+                <version>4.2.5.Final</version>
             </dependency>
             <dependency>
                 <groupId>com.github.kagkarlsson</groupId>
@@ -147,7 +153,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.7.5</version>
+                <version>42.7.7</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback.access</groupId>
