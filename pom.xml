@@ -26,7 +26,6 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-        <buildversion_prefix/>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <sonar.coverage.jacoco.xmlReportPaths>**/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <netty.version>4.1.118.Final</netty.version>
