@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.5.5</version>
     </parent>
 
     <groupId>fi.oph.ohjausparametrit</groupId>
@@ -26,7 +26,6 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-        <buildversion_prefix/>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <sonar.coverage.jacoco.xmlReportPaths>**/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <netty.version>4.1.118.Final</netty.version>
@@ -108,7 +107,13 @@
             <dependency>
                 <groupId>fi.vm.sade.dokumenttipalvelu</groupId>
                 <artifactId>dokumenttipalvelu</artifactId>
-                <version>6.12-SNAPSHOT</version>
+                <version>6.15-SNAPSHOT</version>
+            </dependency>
+            <!-- dokumenttipalvelun aws sdk:sta tulee haavoittuvuuden sisältävä vanhempi versio -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http2</artifactId>
+                <version>4.2.5.Final</version>
             </dependency>
             <dependency>
                 <groupId>com.github.kagkarlsson</groupId>
@@ -147,7 +152,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.7.5</version>
+                <version>42.7.7</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback.access</groupId>
@@ -215,19 +220,8 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>oph-sade-artifactory-releases</id>
-            <url>https://artifactory.opintopolku.fi/artifactory/oph-sade-release-local</url>
-        </repository>
     </repositories>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>oph-sade-artifactory</id>
-            <name>oph-sade-artifactory-releases</name>
-            <url>https://artifactory.opintopolku.fi/artifactory/libs-3rd-party</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <build>
         <plugins>
