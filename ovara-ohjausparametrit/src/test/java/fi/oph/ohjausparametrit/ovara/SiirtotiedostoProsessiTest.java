@@ -1,41 +1,39 @@
 package fi.oph.ohjausparametrit.ovara;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import fi.oph.ohjausparametrit.ovara.ajastus.SiirtotiedostoProsessi;
 import fi.oph.ohjausparametrit.ovara.ajastus.SiirtotiedostoProsessiRepository;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class SiirtotiedostoProsessiTest {
+class SiirtotiedostoProsessiTest {
 
   @Autowired private SiirtotiedostoProsessiRepository spr;
 
   @Test
-  public void testProcessCreationAndPersisting() {
+  void testProcessCreationAndPersisting() {
     {
       System.out.println("Running SiirtotiedostoProsessiRepository test 2!");
       SiirtotiedostoProsessi edellinenOnnistunut = spr.findLatestSuccessful();
 
       SiirtotiedostoProsessi uusiProsessi = edellinenOnnistunut.createNewProcessBasedOnThis();
-      Assert.assertEquals(
-          "Uuden prosessin ikkuna alkaa siitä mihin edellisen onnistuneen ikkuna loppui",
+      assertEquals(
           uusiProsessi.getWindowStart(),
-          edellinenOnnistunut.getWindowEnd());
+          edellinenOnnistunut.getWindowEnd(),
+          "Uuden prosessin ikkuna alkaa siitä mihin edellisen onnistuneen ikkuna loppui");
       uusiProsessi.setSuccess(true);
       spr.save(uusiProsessi);
 
       edellinenOnnistunut = spr.findLatestSuccessful();
-      Assert.assertEquals(
-          "Seuraava onnistunut prosessi on persistoitu oikein",
+      assertEquals(
           edellinenOnnistunut.getExecutionUuid(),
-          uusiProsessi.getExecutionUuid());
+          uusiProsessi.getExecutionUuid(),
+          "Seuraava onnistunut prosessi on persistoitu oikein");
     }
   }
 }
