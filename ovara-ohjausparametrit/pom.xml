@@ -17,12 +17,7 @@
     </dependency>
     <dependency>
       <groupId>io.hypersistence</groupId>
-      <artifactId>hypersistence-utils-hibernate-63</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <scope>provided</scope>
+      <artifactId>hypersistence-utils-hibernate-71</artifactId>
     </dependency>
 
     <!-- tests -->

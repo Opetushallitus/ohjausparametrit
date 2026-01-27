@@ -27,7 +27,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
-@Profile("!dev")
+@Profile("!dev & !test")
 @Configuration
 @Order(2)
 @EnableMethodSecurity(jsr250Enabled = false, prePostEnabled = true, securedEnabled = true)
