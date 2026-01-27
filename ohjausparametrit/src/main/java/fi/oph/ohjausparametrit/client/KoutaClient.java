@@ -9,7 +9,6 @@ import fi.vm.sade.javautils.nio.cas.CasClientBuilder;
 import fi.vm.sade.javautils.nio.cas.CasConfig;
 import fi.vm.sade.javautils.nio.cas.CasConfig.CasConfigBuilder;
 import fi.vm.sade.properties.OphProperties;
-import java.time.Duration;
 import org.asynchttpclient.Request;
 import org.asynchttpclient.RequestBuilder;
 import org.asynchttpclient.Response;
@@ -23,10 +22,7 @@ public class KoutaClient {
 
   private static final Logger logger = LoggerFactory.getLogger(KoutaClient.class);
 
-  private static final Duration AUTHENTICATION_TIMEOUT = Duration.ofSeconds(10);
-
   private final OphProperties ophProperties;
-  private final KoutaProperties koutaProperties;
   private final Gson gson;
   private final CasClient casClient;
 
@@ -34,7 +30,6 @@ public class KoutaClient {
   public KoutaClient(OphProperties ophProperties, KoutaProperties koutaProperties) {
 
     this.ophProperties = ophProperties;
-    this.koutaProperties = koutaProperties;
 
     logger.info("CAS-URL: {}", ophProperties.url("cas.url"));
 
