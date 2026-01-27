@@ -8,8 +8,9 @@ spring:
   session:
     store-type: jdbc
   jackson:
-    serialization:
-      write-dates-as-timestamps: true
+    datatype:
+      datetime:
+        write-dates-as-timestamps: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver

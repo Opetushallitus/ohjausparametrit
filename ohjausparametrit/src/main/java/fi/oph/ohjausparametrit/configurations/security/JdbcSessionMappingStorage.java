@@ -135,18 +135,4 @@ public class JdbcSessionMappingStorage implements OphSessionMappingStorage {
       return false;
     }
   }
-
-  @SuppressWarnings("deprecation")
-  private static class EmptyHttpSessionContext implements javax.servlet.http.HttpSessionContext {
-
-    @Override
-    public javax.servlet.http.HttpSession getSession(String sessionId) {
-      return null;
-    }
-
-    @Override
-    public Enumeration<String> getIds() {
-      return Collections.emptyEnumeration();
-    }
-  }
 }

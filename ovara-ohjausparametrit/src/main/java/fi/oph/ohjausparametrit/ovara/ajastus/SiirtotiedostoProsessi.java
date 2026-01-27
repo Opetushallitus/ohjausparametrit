@@ -1,6 +1,5 @@
 package fi.oph.ohjausparametrit.ovara.ajastus;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +8,7 @@ import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.hibernate.annotations.Type;
+import tools.jackson.databind.JsonNode;
 
 @Entity
 @Table(name = "SIIRTOTIEDOSTO", schema = "PUBLIC")

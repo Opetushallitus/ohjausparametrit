@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.9</version>
+        <version>4.0.2</version>
     </parent>
 
     <groupId>fi.oph.ohjausparametrit</groupId>
@@ -30,6 +30,7 @@
         <sonar.coverage.jacoco.xmlReportPaths>**/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <netty.version>4.1.129.Final</netty.version>
         <log4j.version>2.24.3</log4j.version>
+        <hibernate.version>7.3.0.Final</hibernate.version>
     </properties>
 
     <dependencyManagement>
@@ -54,11 +55,6 @@
                 <version>2.13.2</version>
             </dependency>
             <dependency>
-                <groupId>com.vladmihalcea</groupId>
-                <artifactId>hibernate-types-60</artifactId>
-                <version>2.21.1</version>
-            </dependency>
-            <dependency>
                 <groupId>fi.vm.sade</groupId>
                 <artifactId>auditlogger</artifactId>
                 <version>9.2.6-SNAPSHOT</version>
@@ -71,7 +67,7 @@
             <dependency>
                 <groupId>fi.vm.sade.java-utils</groupId>
                 <artifactId>opintopolku-cas-servlet-filter</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>fi.vm.sade.java-utils</groupId>
@@ -80,18 +76,13 @@
             </dependency>
             <dependency>
                 <groupId>io.hypersistence</groupId>
-                <artifactId>hypersistence-utils-hibernate-63</artifactId>
-                <version>3.14.1</version>
+                <artifactId>hypersistence-utils-hibernate-73</artifactId>
+                <version>3.15.0</version>
             </dependency>
             <dependency>
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
                 <version>1.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>4.0.1</version>
             </dependency>
             <dependency>
                 <groupId>opiskelijavalinnat-utils</groupId>
@@ -106,7 +97,7 @@
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>2.8.15</version>
+                <version>3.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
@@ -116,12 +107,6 @@
 
             <!-- Testien riippuvuudet -->
 
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.13.2</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
