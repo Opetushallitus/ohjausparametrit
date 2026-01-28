@@ -1,7 +1,6 @@
 package fi.oph.ohjausparametrit.configurations.security;
 
 import fi.oph.ohjausparametrit.configurations.properties.CasProperties;
-import fi.vm.sade.java_utils.security.OpintopolkuCasAuthenticationFilter;
 import fi.vm.sade.javautils.kayttooikeusclient.OphUserDetailsServiceImpl;
 import fi.vm.sade.properties.OphProperties;
 import org.apereo.cas.client.session.SessionMappingStorage;
@@ -34,10 +33,10 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 @EnableWebSecurity
 public class SecurityConfigDefault {
 
-  private CasProperties casProperties;
-  private OphProperties ophProperties;
-  private Environment environment;
-  private SessionMappingStorage sessionMappingStorage;
+  private final CasProperties casProperties;
+  private final OphProperties ophProperties;
+  private final Environment environment;
+  private final SessionMappingStorage sessionMappingStorage;
 
   @Autowired
   public SecurityConfigDefault(
@@ -91,9 +90,9 @@ public class SecurityConfigDefault {
 
   @Bean
   public CasAuthenticationFilter casAuthenticationFilter(
-      AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    OpintopolkuCasAuthenticationFilter casAuthenticationFilter =
-        new OpintopolkuCasAuthenticationFilter(serviceProperties());
+      AuthenticationConfiguration authenticationConfiguration) {
+    CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
+    casAuthenticationFilter.setServiceProperties(serviceProperties());
     casAuthenticationFilter.setAuthenticationManager(
         authenticationConfiguration.getAuthenticationManager());
     casAuthenticationFilter.setFilterProcessesUrl("/j_spring_cas_security_check");
