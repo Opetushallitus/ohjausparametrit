@@ -28,7 +28,7 @@
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <sonar.coverage.jacoco.xmlReportPaths>**/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <netty.version>4.1.129.Final</netty.version>
+        <netty.version>4.1.132.Final</netty.version>
         <log4j.version>2.24.3</log4j.version>
         <hibernate.version>7.3.0.Final</hibernate.version>
     </properties>
@@ -131,7 +131,7 @@
                 <!-- Dokumenttipalvelu 6.15 tulee haavoittuva versio. -->
                 <groupId>io.netty</groupId>
                 <artifactId>netty-codec-http2</artifactId>
-                <version>4.1.128.Final</version>
+                <version>${netty.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
