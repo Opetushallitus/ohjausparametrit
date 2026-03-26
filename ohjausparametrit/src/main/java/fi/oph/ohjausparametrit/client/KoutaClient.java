@@ -32,6 +32,7 @@ public class KoutaClient {
     this.ophProperties = ophProperties;
 
     logger.info("CAS-URL: {}", ophProperties.url("cas.url"));
+    logger.info("Kouta-service: {}", koutaProperties.getService());
 
     CasConfig casConfig =
         new CasConfigBuilder(
