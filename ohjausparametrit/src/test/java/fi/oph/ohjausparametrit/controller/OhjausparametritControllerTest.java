@@ -1,7 +1,8 @@
 package fi.oph.ohjausparametrit.controller;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import fi.oph.ohjausparametrit.TestApplication;
 import fi.oph.ohjausparametrit.client.KoutaClient;
@@ -11,21 +12,17 @@ import fi.oph.ohjausparametrit.exception.ForbiddenException;
 import fi.oph.ohjausparametrit.exception.NotFoundException;
 import fi.oph.ohjausparametrit.repository.JSONParameterRepository;
 import java.util.ArrayList;
-import java.util.Arrays;
-import org.hamcrest.MatcherAssert;
+import java.util.List;
 import org.hamcrest.core.StringContains;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.NONE,
     classes = {TestApplication.class})
@@ -41,7 +38,7 @@ public class OhjausparametritControllerTest {
 
   @Autowired private JSONParameterRepository repository;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     MockitoAnnotations.openMocks(this);
   }
@@ -58,23 +55,18 @@ public class OhjausparametritControllerTest {
     String value = "{ \"PARAM\": { \"foo\": true } }";
 
     // Find
-    assertThrows(
-        NotFoundException.class,
-        () -> {
-          op.doGet(param);
-        });
+    assertThrows(NotFoundException.class, () -> op.doGet(param));
 
     // Save
     op.doPost(target, value);
 
     // Find
     String res = op.doGet(target);
-    MatcherAssert.assertThat(res, StringContains.containsString("{\"PARAM\": {\"foo\": true}}"));
+    assertThat(res, StringContains.containsString("{\"PARAM\": {\"foo\": true}}"));
 
     // Find all
     res = op.doGetAll();
-    MatcherAssert.assertThat(
-        res, StringContains.containsString("{\"TARGET\":{\"PARAM\":{\"foo\":true}"));
+    assertThat(res, StringContains.containsString("{\"TARGET\":{\"PARAM\":{\"foo\":true}"));
   }
 
   @Test
@@ -88,10 +80,7 @@ public class OhjausparametritControllerTest {
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.00000000001"));
     assertThrows(
-        ForbiddenException.class,
-        () -> {
-          op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
-        });
+        ForbiddenException.class, () -> op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1));
   }
 
   @Test
@@ -113,15 +102,12 @@ public class OhjausparametritControllerTest {
       roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesOppilaitosForbidden() {
     when(organisaatioClient.getChildOids("1.2.246.562.10.67476956288"))
-        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.59078453392")));
+        .thenReturn(List.of("1.2.246.562.10.59078453392"));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.00000000001"));
     assertThrows(
-        ForbiddenException.class,
-        () -> {
-          op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1);
-        });
+        ForbiddenException.class, () -> op.doPost("1.2.246.562.29.00000000000000000800", VALUE_1));
   }
 
   @Test
@@ -130,7 +116,7 @@ public class OhjausparametritControllerTest {
       roles = {"APP_KOUTA_HAKU_CRUD", "APP_KOUTA_HAKU_CRUD_1.2.246.562.10.67476956288"})
   public void testCreateReadParamWithAuthorizationWithRequiredRolesOppilaitosAllowed() {
     when(organisaatioClient.getChildOids("1.2.246.562.10.67476956288"))
-        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.59078453392")));
+        .thenReturn(List.of("1.2.246.562.10.59078453392"));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000802"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000802", "1.2.246.562.10.59078453392"));
@@ -143,7 +129,7 @@ public class OhjausparametritControllerTest {
       roles = {"APP_KOUTA_OPHPAAKAYTTAJA", "APP_KOUTA_OPHPAAKAYTTAJA_1.2.246.562.10.00000000001"})
   public void testCreateReadParamWithAuthorizationWithOphPaakayttajaRole() {
     when(organisaatioClient.getChildOids("1.2.246.562.10.67476956288"))
-        .thenReturn(new ArrayList<>(Arrays.asList("1.2.246.562.10.59078453392")));
+        .thenReturn(List.of("1.2.246.562.10.59078453392"));
     when(koutaClient.getHaku("1.2.246.562.29.00000000000000000800"))
         .thenReturn(
             new KoutaHaku("1.2.246.562.29.00000000000000000800", "1.2.246.562.10.59078453392"));

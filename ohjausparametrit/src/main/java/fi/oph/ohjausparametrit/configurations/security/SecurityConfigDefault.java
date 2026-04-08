@@ -1,7 +1,6 @@
 package fi.oph.ohjausparametrit.configurations.security;
 
 import fi.oph.ohjausparametrit.configurations.properties.CasProperties;
-import fi.vm.sade.java_utils.security.OpintopolkuCasAuthenticationFilter;
 import fi.vm.sade.javautils.kayttooikeusclient.OphUserDetailsServiceImpl;
 import fi.vm.sade.properties.OphProperties;
 import org.apereo.cas.client.session.SessionMappingStorage;
@@ -20,7 +19,7 @@ import org.springframework.security.cas.authentication.CasAuthenticationProvider
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,14 +29,14 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 @Profile("!dev")
 @Configuration
 @Order(2)
-@EnableGlobalMethodSecurity(jsr250Enabled = false, prePostEnabled = true, securedEnabled = true)
+@EnableMethodSecurity(jsr250Enabled = false, prePostEnabled = true, securedEnabled = true)
 @EnableWebSecurity
 public class SecurityConfigDefault {
 
-  private CasProperties casProperties;
-  private OphProperties ophProperties;
-  private Environment environment;
-  private SessionMappingStorage sessionMappingStorage;
+  private final CasProperties casProperties;
+  private final OphProperties ophProperties;
+  private final Environment environment;
+  private final SessionMappingStorage sessionMappingStorage;
 
   @Autowired
   public SecurityConfigDefault(
@@ -91,9 +90,9 @@ public class SecurityConfigDefault {
 
   @Bean
   public CasAuthenticationFilter casAuthenticationFilter(
-      AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    OpintopolkuCasAuthenticationFilter casAuthenticationFilter =
-        new OpintopolkuCasAuthenticationFilter(serviceProperties());
+      AuthenticationConfiguration authenticationConfiguration) {
+    CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
+    casAuthenticationFilter.setServiceProperties(serviceProperties());
     casAuthenticationFilter.setAuthenticationManager(
         authenticationConfiguration.getAuthenticationManager());
     casAuthenticationFilter.setFilterProcessesUrl("/j_spring_cas_security_check");

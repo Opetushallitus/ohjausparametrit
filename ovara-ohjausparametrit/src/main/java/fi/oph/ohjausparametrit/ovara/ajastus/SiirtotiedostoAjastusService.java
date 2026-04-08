@@ -1,7 +1,5 @@
 package fi.oph.ohjausparametrit.ovara.ajastus;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.oph.ohjausparametrit.configurations.properties.SiirtotiedostoProperties;
 import fi.oph.ohjausparametrit.model.JSONParameter;
 import fi.oph.ohjausparametrit.service.common.ParameterService;
@@ -16,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 @EnableJpaRepositories(basePackages = {"fi.oph.ohjausparametrit.ovara.ajastus"})

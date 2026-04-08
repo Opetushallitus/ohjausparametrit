@@ -2,11 +2,10 @@ package fi.oph.ohjausparametrit.configurations;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,11 +30,10 @@ public class ServletContainerConfiguration {
       if (container instanceof ConfigurableServletWebServerFactory) {
         TomcatServletWebServerFactory tomcat = (TomcatServletWebServerFactory) container;
         tomcat.addConnectorCustomizers(
-            (TomcatConnectorCustomizer)
-                (Connector connector) -> {
-                  connector.setScheme("https");
-                  connector.setSecure(true);
-                });
+            (Connector connector) -> {
+              connector.setScheme("https");
+              connector.setSecure(true);
+            });
       }
     };
   }
