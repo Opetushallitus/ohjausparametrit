@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.2</version>
+        <version>4.0.6</version>
     </parent>
 
     <groupId>fi.oph.ohjausparametrit</groupId>
@@ -28,7 +28,7 @@
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <sonar.coverage.jacoco.xmlReportPaths>**/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <netty.version>4.1.132.Final</netty.version>
+        <netty.version>4.1.133.Final</netty.version>
         <log4j.version>2.24.3</log4j.version>
         <hibernate.version>7.3.0.Final</hibernate.version>
     </properties>
@@ -92,7 +92,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.7.9</version>
+                <version>42.7.11</version>
             </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>
@@ -126,13 +126,6 @@
             </dependency>
 
             <!-- Tietoturvapäivitykset -->
-
-            <dependency>
-                <!-- Dokumenttipalvelu 6.15 tulee haavoittuva versio. -->
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http2</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
