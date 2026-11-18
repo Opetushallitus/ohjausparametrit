@@ -57,7 +57,7 @@
             <dependency>
                 <groupId>fi.vm.sade</groupId>
                 <artifactId>auditlogger</artifactId>
-                <version>9.2.6-SNAPSHOT</version>
+                <version>9.2.7-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>fi.vm.sade.dokumenttipalvelu</groupId>
